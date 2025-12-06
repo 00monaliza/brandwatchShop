@@ -1,0 +1,107 @@
+.favorites-page {
+  min-height: calc(100vh - 80px);
+  background-color: #30333A;
+  padding: 2rem;
+}
+
+.favorites-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.favorites-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.favorites-header h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.favorites-count {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  color: #B79D9B;
+  font-weight: 600;
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Пустой список избранного */
+.favorites-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  color: #E0E0E0;
+}
+
+.favorites-empty svg {
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.favorites-empty h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+}
+
+.favorites-empty p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  color: #999;
+  margin: 0 0 2rem 0;
+}
+
+.favorites-continue-btn {
+  background-color: #B79D9B;
+  color: #30333A;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.favorites-continue-btn:hover {
+  background-color: #c9afa8;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+  .favorites-page {
+    padding: 1rem;
+  }
+
+  .favorites-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .favorites-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .favorites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+}

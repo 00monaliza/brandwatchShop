@@ -1,0 +1,147 @@
+{
+  "nav": {
+    "main": "Main",
+    "catalog": "Catalog",
+    "sales": "Sales",
+    "aboutUs": "About Us",
+    "contacts": "Contacts"
+  },
+  "header": {
+    "search": "Search",
+    "cart": "Cart",
+    "favorites": "Favorites"
+  },
+  "filters": {
+    "title": "Filters",
+    "brand": "Brand",
+    "diameter": "Diameter",
+    "gender": "Gender",
+    "caseShape": "Case Shape",
+    "movement": "Movement Type",
+    "dialColor": "Dial Color",
+    "caseMaterial": "Case Material",
+    "glass": "Glass",
+    "strapMaterial": "Strap Material",
+    "claspType": "Clasp Type",
+    "waterResistance": "Water Resistance",
+    "reset": "Reset Filters",
+    "search": "Search...",
+    "noResults": "No results found"
+  },
+  "sort": {
+    "title": "Sort",
+    "popularity": "Popularity",
+    "priceLow": "Price: Low to High",
+    "priceHigh": "Price: High to Low",
+    "newest": "Newest",
+    "maxDiscount": "Max Discount"
+  },
+  "product": {
+    "new": "New",
+    "discount": "Sale",
+    "price": "Price",
+    "oldPrice": "Old Price",
+    "addToCart": "Add to Cart",
+    "added": "Added!",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites"
+  },
+  "catalog": {
+    "title": "Watch Catalog",
+    "noProducts": "No products found"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "emptyText": "Add items to your cart to checkout",
+    "continueShopping": "Continue Shopping",
+    "clearAll": "Clear All",
+    "summary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "checkout": "Proceed to Checkout"
+  },
+  "favorites": {
+    "title": "Favorites",
+    "empty": "No favorites yet",
+    "emptyText": "Add items you like to your favorites",
+    "continueShopping": "Continue Shopping",
+    "item": "item",
+    "items": "items"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "loginSubtitle": "Sign in to place your order",
+    "registerSubtitle": "Create an account to shop",
+    "name": "Name",
+    "namePlaceholder": "Enter your name",
+    "phone": "Phone",
+    "email": "Email",
+    "emailPlaceholder": "example@mail.com",
+    "password": "Password",
+    "passwordPlaceholder": "Minimum 6 characters",
+    "loginBtn": "Sign In",
+    "registerBtn": "Register",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "registerLink": "Register",
+    "loginLink": "Sign In",
+    "logout": "Logout",
+    "errors": {
+      "nameRequired": "Name is required",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Invalid phone format",
+      "emailInvalid": "Invalid email format",
+      "passwordRequired": "Password is required",
+      "passwordShort": "Password must be at least 6 characters",
+      "userNotFound": "User with this phone number not found",
+      "wrongPassword": "Wrong password",
+      "phoneExists": "User with this phone number already exists",
+      "emailExists": "User with this email already exists"
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "subtitle": "Fill in your contact details",
+    "name": "Name",
+    "namePlaceholder": "How should we call you?",
+    "phone": "Phone",
+    "email": "Email",
+    "emailPlaceholder": "For order notifications",
+    "city": "City",
+    "cityPlaceholder": "Enter delivery city",
+    "comment": "Comment",
+    "commentPlaceholder": "Additional requests...",
+    "total": "Total",
+    "submitBtn": "Submit Order",
+    "errors": {
+      "nameRequired": "Name is required",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Invalid phone format",
+      "cityRequired": "City is required"
+    },
+    "success": {
+      "title": "Order Submitted!",
+      "message": "Thank you! Our manager will contact you shortly.",
+      "btn": "Great!"
+    }
+  },
+  "footer": {
+    "recentlyViewed": "Recently Viewed",
+    "description": "SWISS TIME, CHRONOS and TISSOT stores are a network of 20 official sales points of Swiss watch brands in the Kazakhstan market",
+    "navigation": "Navigation",
+    "categories": "Categories",
+    "delivery": "Delivery & Payment",
+    "service": "Service Center",
+    "stores": "Stores",
+    "watches": "Watches",
+    "accessories": "Accessories",
+    "blog": "Blog",
+    "copyright": "Any use of content without written permission is prohibited",
+    "privacy": "Privacy Policy",
+    "offer": "Public Offer"
+  }
+}

@@ -1,0 +1,137 @@
+.sort-dropdown-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background-color: #30333A;
+  border-bottom: 1px solid #444;
+}
+
+.sort-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #E0E0E0;
+}
+
+.sort-dropdown {
+  position: relative;
+  min-width: 250px;
+}
+
+.sort-button {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #B79D9B;
+  color: #FFFFFF;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.sort-button:hover {
+  background-color: rgba(183, 157, 155, 0.1);
+  border-color: #c9afa8;
+}
+
+.sort-button:focus {
+  outline: none;
+  background-color: rgba(183, 157, 155, 0.15);
+}
+
+.sort-icon {
+  transition: transform 0.3s ease;
+  color: #B79D9B;
+}
+
+.sort-icon.open {
+  transform: rotate(180deg);
+}
+
+.sort-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background-color: #3c3f46;
+  border: 1px solid #B79D9B;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+  animation: dropdownIn 0.2s ease;
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sort-option {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #E0E0E0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #444;
+}
+
+.sort-option:last-child {
+  border-bottom: none;
+}
+
+.sort-option:hover {
+  background-color: rgba(183, 157, 155, 0.15);
+  color: #B79D9B;
+}
+
+.sort-option.active {
+  background-color: rgba(183, 157, 155, 0.2);
+  color: #B79D9B;
+  font-weight: 600;
+}
+
+.sort-option svg {
+  width: 16px;
+  height: 16px;
+  color: #B79D9B;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+  .sort-dropdown-container {
+    padding: 1rem 1.5rem;
+    gap: 0.75rem;
+  }
+
+  .sort-dropdown {
+    min-width: 180px;
+  }
+
+  .sort-button {
+    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem;
+  }
+}

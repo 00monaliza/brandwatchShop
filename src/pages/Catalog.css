@@ -1,0 +1,126 @@
+.catalog {
+  display: flex;
+  background-color: #30333A;
+  min-height: calc(100vh - 80px);
+}
+
+.catalog-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.catalog-header {
+  padding: 2rem 2rem 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #30333A;
+}
+
+.catalog-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.filter-burger-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  border: 1px solid #B79D9B;
+  color: #B79D9B;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.filter-burger-btn:hover {
+  background-color: rgba(183, 157, 155, 0.15);
+}
+
+.filter-burger-btn svg {
+  flex-shrink: 0;
+}
+
+.catalog-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.results-info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.active-filters-count {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  color: #B79D9B;
+  font-weight: 600;
+}
+
+/* Адаптив для планшетов */
+@media (max-width: 1024px) {
+  .catalog-title {
+    font-size: 1.7rem;
+  }
+
+  .catalog-header {
+    padding: 1.5rem 1.5rem 0 1.5rem;
+  }
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 768px) {
+  .catalog {
+    flex-direction: column;
+  }
+
+  .catalog-header {
+    padding: 1rem 1rem 0 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .catalog-header-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .filter-burger-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .catalog-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog-title {
+    font-size: 1.3rem;
+  }
+
+  .catalog-header {
+    padding: 1rem 0.75rem 0 0.75rem;
+  }
+
+  .filter-burger-btn {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.8rem;
+  }
+}

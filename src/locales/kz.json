@@ -1,0 +1,147 @@
+{
+  "nav": {
+    "main": "Басты",
+    "catalog": "Каталог",
+    "sales": "Сатулар",
+    "aboutUs": "Біз туралы",
+    "contacts": "Байланыс"
+  },
+  "header": {
+    "search": "Іздеу",
+    "cart": "Себет",
+    "favorites": "Таңдаулылар"
+  },
+  "filters": {
+    "title": "Фильтрлер",
+    "brand": "Бренд",
+    "diameter": "Диаметр",
+    "gender": "Жыны",
+    "caseShape": "Корпус пішіні",
+    "movement": "Механизм түрі",
+    "dialColor": "Циферблат түсі",
+    "caseMaterial": "Корпус материалы",
+    "glass": "Шыны",
+    "strapMaterial": "Ремешок материалы",
+    "claspType": "Құлыпты түрі",
+    "waterResistance": "Су өтпеудіктігі",
+    "reset": "Фильтрлерді көшіру",
+    "search": "Іздеу...",
+    "noResults": "Ештеңе табылмады"
+  },
+  "sort": {
+    "title": "Сұрыптау",
+    "popularity": "Танымдылығы бойынша",
+    "priceLow": "Арзан баға",
+    "priceHigh": "Қымбат баға",
+    "newest": "Жаңа",
+    "maxDiscount": "Ең көп ынамдыру"
+  },
+  "product": {
+    "new": "Жаңа",
+    "discount": "Арнайы ынамдыру",
+    "price": "Баға",
+    "oldPrice": "Ескі баға",
+    "addToCart": "Себетке қосу",
+    "added": "Қосылды!",
+    "addToFavorites": "Таңдаулыларға қосу",
+    "removeFromFavorites": "Таңдаулылардан алу"
+  },
+  "catalog": {
+    "title": "Сағат каталогы",
+    "noProducts": "Өнімі табылмады"
+  },
+  "cart": {
+    "title": "Себет",
+    "empty": "Себет бос",
+    "emptyText": "Тапсырыс беру үшін себетке тауарлар қосыңыз",
+    "continueShopping": "Сатып алуға өту",
+    "clearAll": "Барлығын тазалау",
+    "summary": "Жиынтық",
+    "subtotal": "Аралық сома",
+    "shipping": "Жеткізу",
+    "free": "Тегін",
+    "total": "Барлығы",
+    "checkout": "Тапсырыс беру"
+  },
+  "favorites": {
+    "title": "Таңдаулылар",
+    "empty": "Тізім бос",
+    "emptyText": "Ұнаған тауарларыңызды таңдаулыларға қосыңыз",
+    "continueShopping": "Сатып алуға өту",
+    "item": "тауар",
+    "items": "тауар"
+  },
+  "auth": {
+    "login": "Кіру",
+    "register": "Тіркелу",
+    "loginSubtitle": "Тапсырыс беру үшін кіріңіз",
+    "registerSubtitle": "Сатып алу үшін тіркеліңіз",
+    "name": "Аты",
+    "namePlaceholder": "Атыңызды енгізіңіз",
+    "phone": "Телефон",
+    "email": "Email",
+    "emailPlaceholder": "example@mail.com",
+    "password": "Құпия сөз",
+    "passwordPlaceholder": "Кемінде 6 таңба",
+    "loginBtn": "Кіру",
+    "registerBtn": "Тіркелу",
+    "noAccount": "Аккаунт жоқ па?",
+    "hasAccount": "Аккаунт бар ма?",
+    "registerLink": "Тіркеліңіз",
+    "loginLink": "Кіріңіз",
+    "logout": "Шығу",
+    "errors": {
+      "nameRequired": "Атыңызды енгізіңіз",
+      "phoneRequired": "Телефон нөмірін енгізіңіз",
+      "phoneInvalid": "Телефон форматы қате",
+      "emailInvalid": "Email форматы қате",
+      "passwordRequired": "Құпия сөзді енгізіңіз",
+      "passwordShort": "Құпия сөз кемінде 6 таңба болуы керек",
+      "userNotFound": "Бұл телефон нөмірімен пайдаланушы табылмады",
+      "wrongPassword": "Құпия сөз қате",
+      "phoneExists": "Бұл телефон нөмірімен пайдаланушы тіркелген",
+      "emailExists": "Бұл email-мен пайдаланушы тіркелген"
+    }
+  },
+  "checkout": {
+    "title": "Тапсырыс беру",
+    "subtitle": "Байланыс деректерін толтырыңыз",
+    "name": "Аты",
+    "namePlaceholder": "Сізге қалай хабарласуға болады?",
+    "phone": "Телефон",
+    "email": "Email",
+    "emailPlaceholder": "Тапсырыс хабарландырулары үшін",
+    "city": "Қала",
+    "cityPlaceholder": "Жеткізу қаласын көрсетіңіз",
+    "comment": "Түсініктеме",
+    "commentPlaceholder": "Қосымша тілектер...",
+    "total": "Барлығы",
+    "submitBtn": "Өтінім жіберу",
+    "errors": {
+      "nameRequired": "Атыңызды енгізіңіз",
+      "phoneRequired": "Телефон нөмірі міндетті",
+      "phoneInvalid": "Телефон форматы қате",
+      "cityRequired": "Қаланы көрсетіңіз"
+    },
+    "success": {
+      "title": "Өтінім жіберілді!",
+      "message": "Рахмет! Менеджеріміз жақын арада сізбен байланысады.",
+      "btn": "Жарайды!"
+    }
+  },
+  "footer": {
+    "recentlyViewed": "Сіз қараған тауарлар",
+    "description": "SWISS TIME, CHRONOS және TISSOT дүкендері - ҚР нарығындағы швейцариялық сағат брендтерінің 20 ресми сату нүктесінің желісі",
+    "navigation": "Навигация",
+    "categories": "Санаттар",
+    "delivery": "Жеткізу және төлем",
+    "service": "Сервис орталығы",
+    "stores": "Дүкендер",
+    "watches": "Сағаттар",
+    "accessories": "Аксессуарлар",
+    "blog": "Блог",
+    "copyright": "Мазмұнды жазбаша рұқсатсыз пайдалануға тыйым салынады",
+    "privacy": "Құпиялылық саясаты",
+    "offer": "Жария оферта"
+  }
+}

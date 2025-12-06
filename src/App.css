@@ -1,0 +1,463 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #30333A;
+  color: #FFFFFF;
+}
+
+.app {
+  min-height: 100vh;
+  background-color: #30333A;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ========== CURSOR GLOW ========== */
+.cursor-glow {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(183, 157, 155, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+  mix-blend-mode: screen;
+}
+
+.cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #B79D9B;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px #B79D9B, 0 0 20px rgba(183, 157, 155, 0.5);
+}
+
+/* ========== GRADIENT MESH BACKGROUND ========== */
+
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(183, 157, 155, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(114, 103, 111, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(48, 51, 58, 1) 0%, rgba(42, 45, 49, 1) 100%);
+  background-size: 200% 200%;
+  animation: gradientMesh 15s ease-in-out infinite;
+  z-index: -1;
+  overflow: hidden;
+}
+
+@keyframes gradientMesh {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+
+/* ========== FLOATING PARTICLES ========== */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #B79D9B;
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat 20s infinite;
+  pointer-events: none;
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 25s; }
+.particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 20s; }
+.particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 28s; }
+.particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 22s; }
+.particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 24s; }
+.particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 26s; }
+.particle:nth-child(7) { left: 70%; animation-delay: 2.5s; animation-duration: 21s; }
+.particle:nth-child(8) { left: 80%; animation-delay: 4.5s; animation-duration: 23s; }
+.particle:nth-child(9) { left: 90%; animation-delay: 1.5s; animation-duration: 27s; }
+.particle:nth-child(10) { left: 15%; animation-delay: 3.5s; animation-duration: 19s; }
+.particle:nth-child(11) { left: 25%; animation-delay: 0.5s; animation-duration: 30s; }
+.particle:nth-child(12) { left: 75%; animation-delay: 6s; animation-duration: 18s; }
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100vh) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Анимированные часы */
+.clock {
+  position: absolute;
+  border: 2px solid #B79D9B;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(183, 157, 155, 0.1), transparent);
+  opacity: 0.15;
+  animation: floatClock 20s ease-in-out infinite, rotate 60s linear infinite;
+}
+
+.clock-1 {
+  width: 200px;
+  height: 200px;
+  top: 10%;
+  left: 5%;
+  animation-duration: 25s, 80s;
+}
+
+.clock-2 {
+  width: 150px;
+  height: 150px;
+  top: 60%;
+  right: 10%;
+  animation-duration: 30s, 100s;
+  animation-delay: -10s, -15s;
+}
+
+.clock-3 {
+  width: 250px;
+  height: 250px;
+  bottom: 5%;
+  left: 15%;
+  animation-duration: 35s, 120s;
+  animation-delay: -15s, -30s;
+}
+
+.clock-4 {
+  width: 120px;
+  height: 120px;
+  top: 35%;
+  right: 5%;
+  animation-duration: 22s, 90s;
+  animation-delay: -5s, -20s;
+}
+
+/* Стрелки часов внутри */
+.clock::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 40%;
+  background: #B79D9B;
+  opacity: 0.3;
+  border-radius: 1px;
+}
+
+.clock::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  width: 2px;
+  height: 30%;
+  background: #B79D9B;
+  opacity: 0.2;
+  border-radius: 1px;
+}
+
+/* Линии времени */
+.time-line {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, #B79D9B, transparent);
+  opacity: 0.1;
+  animation: slideTime 8s linear infinite;
+}
+
+.time-line-1 {
+  width: 200%;
+  height: 1px;
+  top: 25%;
+  right: -50%;
+}
+
+.time-line-2 {
+  width: 200%;
+  height: 1px;
+  bottom: 35%;
+  left: -50%;
+  animation-delay: -2s;
+}
+
+/* Плавающие круги */
+.floating-circle {
+  position: absolute;
+  border: 1px solid #B79D9B;
+  border-radius: 50%;
+  opacity: 0.08;
+  animation: float 15s ease-in-out infinite;
+}
+
+.circle-1 {
+  width: 100px;
+  height: 100px;
+  top: 20%;
+  right: 25%;
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  width: 80px;
+  height: 80px;
+  bottom: 30%;
+  left: 20%;
+  animation-delay: -5s;
+}
+
+.circle-3 {
+  width: 120px;
+  height: 120px;
+  top: 50%;
+  left: 10%;
+  animation-delay: -10s;
+}
+
+/* Светящиеся шары */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.05;
+  animation: pulse 4s ease-in-out infinite;
+  filter: blur(30px);
+}
+
+.orb-1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #B79D9B, transparent);
+  top: 15%;
+  right: -50px;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, #B79D9B, transparent);
+  bottom: 10%;
+  left: -80px;
+  animation-delay: -2s;
+}
+
+/* ========== АНИМАЦИИ ========== */
+
+@keyframes floatClock {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-30px) translateX(20px);
+  }
+  50% {
+    transform: translateY(30px) translateX(-20px);
+  }
+  75% {
+    transform: translateY(-20px) translateX(-30px);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slideTime {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-40px) scale(1.1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.05;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.15;
+    transform: scale(1.2);
+  }
+}
+
+/* ========== ОБЩИЕ СТИЛИ ========== */
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ripple эффект для всех кнопок */
+button, .btn, a.icon-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+button::after, .btn::after, a.icon-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+  opacity: 0;
+}
+
+button:active::after, .btn:active::after, a.icon-btn:active::after {
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+  transition: 0s;
+}
+
+/* Дефолтные стили для ссылок */
+a {
+  color: #B79D9B;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #c9afa8;
+}
+
+/* Кастомный скроллбар */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2a2d31;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #B79D9B 0%, #72676F 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #c9afa8 0%, #8a7d86 100%);
+}
+
+/* Восстановление курсора для интерактивных элементов */
+a, button, input, textarea, select, [role="button"] {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+  .cursor-glow, .cursor-dot {
+    display: none;
+  }
+}
+
+/* ========== RIPPLE EFFECT ========== */
+button, .btn, [role="button"] {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: rippleEffect 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ========== SMOOTH SCROLL WITH PARALLAX ========== */
+.parallax-container {
+  perspective: 1px;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.parallax-layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.parallax-layer-back {
+  transform: translateZ(-1px) scale(2);
+}
+
+.parallax-layer-front {
+  transform: translateZ(0);
+}
+

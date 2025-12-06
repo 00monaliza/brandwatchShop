@@ -1,0 +1,147 @@
+{
+  "nav": {
+    "main": "Главная",
+    "catalog": "Каталог",
+    "sales": "Распродажи",
+    "aboutUs": "О нас",
+    "contacts": "Контакты"
+  },
+  "header": {
+    "search": "Поиск",
+    "cart": "Корзина",
+    "favorites": "Избранное"
+  },
+  "filters": {
+    "title": "Фильтры",
+    "brand": "Бренд",
+    "diameter": "Диаметр",
+    "gender": "Пол",
+    "caseShape": "Форма корпуса",
+    "movement": "Тип механизма",
+    "dialColor": "Цвет циферблата",
+    "caseMaterial": "Материал корпуса",
+    "glass": "Стекло",
+    "strapMaterial": "Материал ремешка",
+    "claspType": "Тип застежки",
+    "waterResistance": "Водонепроницаемость",
+    "reset": "Очистить фильтры",
+    "search": "Поиск...",
+    "noResults": "Ничего не найдено"
+  },
+  "sort": {
+    "title": "Сортировка",
+    "popularity": "По популярности",
+    "priceLow": "От дешевых к дорогим",
+    "priceHigh": "От дорогих к дешевым",
+    "newest": "По новизне",
+    "maxDiscount": "Максимальная скидка"
+  },
+  "product": {
+    "new": "Новое",
+    "discount": "Скидка",
+    "price": "Цена",
+    "oldPrice": "Старая цена",
+    "addToCart": "В корзину",
+    "added": "Добавлено!",
+    "addToFavorites": "Добавить в избранное",
+    "removeFromFavorites": "Убрать из избранного"
+  },
+  "catalog": {
+    "title": "Каталог часов",
+    "noProducts": "Товары не найдены"
+  },
+  "cart": {
+    "title": "Корзина",
+    "empty": "Корзина пуста",
+    "emptyText": "Добавьте товары в корзину, чтобы оформить заказ",
+    "continueShopping": "Перейти к покупкам",
+    "clearAll": "Очистить всё",
+    "summary": "Итого",
+    "subtotal": "Подытог",
+    "shipping": "Доставка",
+    "free": "Бесплатно",
+    "total": "Итого к оплате",
+    "checkout": "Оформить заказ"
+  },
+  "favorites": {
+    "title": "Избранное",
+    "empty": "Список пуст",
+    "emptyText": "Добавляйте понравившиеся товары в избранное",
+    "continueShopping": "Перейти к покупкам",
+    "item": "товар",
+    "items": "товаров"
+  },
+  "auth": {
+    "login": "Вход",
+    "register": "Регистрация",
+    "loginSubtitle": "Войдите, чтобы оформить заказ",
+    "registerSubtitle": "Создайте аккаунт для покупок",
+    "name": "Имя",
+    "namePlaceholder": "Введите ваше имя",
+    "phone": "Телефон",
+    "email": "Email",
+    "emailPlaceholder": "example@mail.com",
+    "password": "Пароль",
+    "passwordPlaceholder": "Минимум 6 символов",
+    "loginBtn": "Войти",
+    "registerBtn": "Зарегистрироваться",
+    "noAccount": "Нет аккаунта?",
+    "hasAccount": "Уже есть аккаунт?",
+    "registerLink": "Зарегистрируйтесь",
+    "loginLink": "Войдите",
+    "logout": "Выйти",
+    "errors": {
+      "nameRequired": "Введите имя",
+      "phoneRequired": "Введите номер телефона",
+      "phoneInvalid": "Неверный формат телефона",
+      "emailInvalid": "Неверный формат email",
+      "passwordRequired": "Введите пароль",
+      "passwordShort": "Пароль должен быть не менее 6 символов",
+      "userNotFound": "Пользователь с таким телефоном не найден",
+      "wrongPassword": "Неверный пароль",
+      "phoneExists": "Пользователь с таким телефоном уже зарегистрирован",
+      "emailExists": "Пользователь с таким email уже зарегистрирован"
+    }
+  },
+  "checkout": {
+    "title": "Оформление заказа",
+    "subtitle": "Заполните данные для связи",
+    "name": "Имя",
+    "namePlaceholder": "Как к вам обращаться?",
+    "phone": "Телефон",
+    "email": "Email",
+    "emailPlaceholder": "Для уведомлений о заказе",
+    "city": "Город",
+    "cityPlaceholder": "Укажите город доставки",
+    "comment": "Комментарий",
+    "commentPlaceholder": "Дополнительные пожелания...",
+    "total": "Итого",
+    "submitBtn": "Отправить заявку",
+    "errors": {
+      "nameRequired": "Введите имя",
+      "phoneRequired": "Номер телефона обязателен",
+      "phoneInvalid": "Неверный формат телефона",
+      "cityRequired": "Укажите город"
+    },
+    "success": {
+      "title": "Заявка отправлена!",
+      "message": "Спасибо за заказ! Наш менеджер свяжется с вами в ближайшее время.",
+      "btn": "Отлично!"
+    }
+  },
+  "footer": {
+    "recentlyViewed": "Ранее вы смотрели",
+    "description": "Лучший магазин роскошных часов. Оригинальные бренды по лучшим ценам.",
+    "navigation": "Навигация",
+    "categories": "Категории",
+    "delivery": "Доставка и оплата",
+    "service": "Сервисный центр",
+    "stores": "Магазины",
+    "watches": "Часы",
+    "accessories": "Аксессуары",
+    "blog": "Блог",
+    "copyright": "Любое использование контента без письменного разрешения запрещено",
+    "privacy": "Политика конфиденциальности",
+    "offer": "Публичная оферта"
+  }
+}
