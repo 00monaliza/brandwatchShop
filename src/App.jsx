@@ -10,6 +10,7 @@ import Catalog from './pages/Catalog';
 import Cart from './pages/Cart';
 import Favorites from './pages/Favorites';
 import AdminPanel from './components/admin/AdminPanel';
+import Premium from './pages/Premium';
 import i18n from './i18n';
 import './App.css';
 
@@ -100,6 +101,7 @@ function App() {
                 <Route path="/catalog" element={<Catalog />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/favorites" element={<Favorites />} />
+                <Route path="/premium" element={<Premium />} />
                 <Route path="*" element={<Navigate to="/catalog" replace />} />
               </Routes>
 

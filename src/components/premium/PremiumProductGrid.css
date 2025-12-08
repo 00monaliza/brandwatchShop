@@ -1,0 +1,47 @@
+/* ========== PREMIUM PRODUCT GRID ========== */
+.premium-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.premium-grid--cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.premium-grid--cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.premium-grid--cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .premium-grid--cols-4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .premium-grid--cols-4,
+  .premium-grid--cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .premium-grid {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .premium-grid--cols-4,
+  .premium-grid--cols-3,
+  .premium-grid--cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .premium-grid {
+    gap: 1.25rem;
+  }
+}
