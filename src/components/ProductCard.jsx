@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
+import { LazyImage } from './OptimizedImage';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
@@ -66,10 +67,12 @@ const ProductCard = ({ product }) => {
       style={tiltStyle}
     >
       <div className="product-image-container">
-        <img 
+        <LazyImage 
           src={product.image} 
           alt={product.title}
           className="product-image"
+          width={400}
+          height={500}
         />
         
         {/* Кнопка лайка */}

@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import AuthModal from './AuthModal';
 import { LanguageSwitcher, MobileLanguageSwitcher } from './LanguageSwitcher';
-import logoImage from '../images/image.png';
+import { ResponsiveLogo } from './OptimizedImage';
 import './Header.css';
 
 const Header = ({ onOpenAdmin }) => {
@@ -42,7 +42,7 @@ const Header = ({ onOpenAdmin }) => {
         {/* Логотип */}
         <div className="logo">
           <Link to="/">
-            <img src={logoImage} alt="brandwatch" className="logo-image" />
+            <ResponsiveLogo context="header" className="logo-image" />
           </Link>
         </div>
 
