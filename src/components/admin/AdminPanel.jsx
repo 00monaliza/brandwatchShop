@@ -52,7 +52,7 @@ const AdminPanel = ({ onClose }) => {
     <div className="admin-panel-overlay">
       <div className="admin-panel">
         <div className="admin-header">
-          <h1>Администратор</h1>
+          <h1>Панель Администратора</h1>
           <div className="admin-header-right">
             <div className="admin-user-info-header">
               <span className="admin-user-name-header">{currentAdmin.name}</span>
