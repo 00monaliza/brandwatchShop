@@ -11,7 +11,7 @@
 
 .admin-panel {
   min-height: 100vh;
-  background: #1a1c20;
+  background: #1C3334;
   color: #fff;
 }
 
@@ -20,8 +20,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 30px;
-  background: linear-gradient(135deg, #2a2d35 0%, #1a1c20 100%);
-  border-bottom: 1px solid rgba(183, 157, 155, 0.2);
+  background: linear-gradient(135deg, #2F4454 0%, #1C3334 100%);
+  border-bottom: 1px solid rgba(55, 110, 111, 0.3);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -41,14 +41,14 @@
 
 .admin-user-info-header {
   padding: 8px 16px;
-  background: rgba(183, 157, 155, 0.1);
+  background: rgba(55, 110, 111, 0.2);
   border-radius: 20px;
 }
 
 .admin-user-name-header {
   font-size: 14px;
   font-weight: 500;
-  color: #B79D9B;
+  color: #DA7B93;
 }
 
 .admin-logout-btn {
@@ -94,9 +94,9 @@
 
 .admin-sidebar {
   width: 220px;
-  background: #22252b;
+  background: #2F4454;
   padding: 20px 15px;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-right: 1px solid rgba(55, 110, 111, 0.2);
   position: sticky;
   top: 81px;
   height: calc(100vh - 81px);
@@ -122,12 +122,12 @@
 }
 
 .admin-nav-btn:hover {
-  background: rgba(183, 157, 155, 0.1);
+  background: rgba(55, 110, 111, 0.2);
   color: #fff;
 }
 
 .admin-nav-btn.active {
-  background: linear-gradient(135deg, rgba(183, 157, 155, 0.3) 0%, rgba(114, 103, 111, 0.3) 100%);
+  background: linear-gradient(135deg, rgba(55, 110, 111, 0.4) 0%, rgba(47, 68, 84, 0.4) 100%);
   color: #fff;
 }
 
@@ -187,13 +187,13 @@
 }
 
 .admin-btn-primary {
-  background: linear-gradient(135deg, #B79D9B 0%, #72676F 100%);
+  background: linear-gradient(135deg, #DA7B93 0%, #2E151B 100%);
   color: #fff;
 }
 
 .admin-btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(183, 157, 155, 0.3);
+  box-shadow: 0 5px 20px rgba(218, 123, 147, 0.3);
 }
 
 .admin-btn-secondary {
@@ -232,7 +232,7 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  background: #22252b;
+  background: #2F4454;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -241,11 +241,11 @@
 .admin-table td {
   padding: 15px;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(55, 110, 111, 0.15);
 }
 
 .admin-table th {
-  background: rgba(183, 157, 155, 0.1);
+  background: rgba(55, 110, 111, 0.2);
   font-weight: 600;
   font-size: 13px;
   text-transform: uppercase;
@@ -268,7 +268,7 @@
 
 /* ========== КАРТОЧКИ ========== */
 .admin-card {
-  background: #22252b;
+  background: #2F4454;
   border-radius: 16px;
   padding: 20px;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -291,7 +291,7 @@
 .admin-card-value {
   font-size: 32px;
   font-weight: 700;
-  color: #B79D9B;
+  color: #DA7B93;
 }
 
 /* ========== ФОРМЫ ========== */
@@ -330,8 +330,8 @@
 .admin-form-textarea:focus,
 .admin-form-select:focus {
   outline: none;
-  border-color: #B79D9B;
-  background: rgba(183, 157, 155, 0.1);
+  border-color: #DA7B93;
+  background: rgba(218, 123, 147, 0.1);
 }
 
 .admin-form-textarea {
@@ -367,14 +367,14 @@
 }
 
 .admin-modal {
-  background: #22252b;
+  background: #2F4454;
   border-radius: 20px;
   padding: 30px;
   max-width: 600px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  border: 1px solid rgba(183, 157, 155, 0.2);
+  border: 1px solid rgba(218, 123, 147, 0.2);
 }
 
 .admin-modal-header {
@@ -453,7 +453,7 @@
 
 .admin-add-btn {
   padding: 12px 24px;
-  background: linear-gradient(135deg, #B79D9B 0%, #72676F 100%);
+  background: linear-gradient(135deg, #DA7B93 0%, #376E6F 100%);
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -466,7 +466,7 @@
 
 .admin-add-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(183, 157, 155, 0.3);
+  box-shadow: 0 8px 25px rgba(218, 123, 147, 0.3);
 }
 
 .admin-search {
@@ -488,8 +488,8 @@
 
 .admin-search-input:focus {
   outline: none;
-  border-color: #B79D9B;
-  background: rgba(183, 157, 155, 0.1);
+  border-color: #DA7B93;
+  background: rgba(218, 123, 147, 0.1);
 }
 
 .admin-products-grid {
@@ -499,7 +499,7 @@
 }
 
 .admin-product-card {
-  background: #22252b;
+  background: #2F4454;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -509,7 +509,7 @@
 .admin-product-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  border-color: rgba(183, 157, 155, 0.3);
+  border-color: rgba(218, 123, 147, 0.3);
 }
 
 .admin-product-image {
@@ -546,7 +546,7 @@
 .admin-product-brand {
   font-size: 14px;
   font-weight: 600;
-  color: #B79D9B;
+  color: #DA7B93;
   margin: 0 0 5px 0;
 }
 
@@ -594,12 +594,12 @@
 }
 
 .admin-edit-btn {
-  background: rgba(183, 157, 155, 0.2);
-  color: #B79D9B;
+  background: rgba(218, 123, 147, 0.2);
+  color: #DA7B93;
 }
 
 .admin-edit-btn:hover {
-  background: rgba(183, 157, 155, 0.3);
+  background: rgba(218, 123, 147, 0.3);
 }
 
 .admin-delete-btn {
@@ -658,12 +658,12 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #B79D9B;
-  background: rgba(183, 157, 155, 0.1);
+  border-color: #DA7B93;
+  background: rgba(218, 123, 147, 0.1);
 }
 
 .form-group select option {
-  background: #22252b;
+  background: #2F4454;
   color: #fff;
 }
 
@@ -711,13 +711,13 @@
 }
 
 .admin-save-btn {
-  background: linear-gradient(135deg, #B79D9B 0%, #72676F 100%);
+  background: linear-gradient(135deg, #DA7B93 0%, #376E6F 100%);
   color: #fff;
 }
 
 .admin-save-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(183, 157, 155, 0.3);
+  box-shadow: 0 5px 20px rgba(218, 123, 147, 0.3);
 }
 
 /* ========== ORDERS ========== */
@@ -747,15 +747,15 @@
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, rgba(183, 157, 155, 0.3) 0%, rgba(114, 103, 111, 0.3) 100%);
-  border-color: rgba(183, 157, 155, 0.5);
+  background: linear-gradient(135deg, rgba(218, 123, 147, 0.3) 0%, rgba(55, 110, 111, 0.3) 100%);
+  border-color: rgba(218, 123, 147, 0.5);
   color: #fff;
 }
 
 .no-orders {
   text-align: center;
   padding: 60px 20px;
-  background: #22252b;
+  background: #2F4454;
   border-radius: 16px;
 }
 
@@ -777,7 +777,7 @@
 }
 
 .admin-order-card {
-  background: #22252b;
+  background: #2F4454;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -801,7 +801,7 @@
 .order-id {
   font-weight: 700;
   font-size: 16px;
-  color: #B79D9B;
+  color: #DA7B93;
 }
 
 .order-date {
@@ -874,7 +874,7 @@
 .order-total .total-amount {
   font-size: 24px;
   font-weight: 700;
-  color: #B79D9B;
+  color: #DA7B93;
   display: block;
 }
 
@@ -921,7 +921,7 @@
 }
 
 .status-select option {
-  background: #22252b;
+  background: #2F4454;
 }
 
 /* Order Details Modal */
@@ -985,7 +985,7 @@
 .item-brand {
   font-size: 14px;
   font-weight: 600;
-  color: #B79D9B;
+  color: #DA7B93;
 }
 
 .item-title {
@@ -1008,7 +1008,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background: rgba(183, 157, 155, 0.1);
+  background: rgba(218, 123, 147, 0.1);
   border-radius: 12px;
   font-size: 16px;
 }
@@ -1016,7 +1016,7 @@
 .total-big {
   font-size: 28px;
   font-weight: 700;
-  color: #B79D9B;
+  color: #DA7B93;
 }
 
 /* ========== SETTINGS ========== */
@@ -1053,14 +1053,14 @@
 }
 
 .settings-nav-btn.active {
-  background: linear-gradient(135deg, rgba(183, 157, 155, 0.2) 0%, rgba(114, 103, 111, 0.2) 100%);
-  border-color: rgba(183, 157, 155, 0.3);
+  background: linear-gradient(135deg, rgba(218, 123, 147, 0.2) 0%, rgba(55, 110, 111, 0.2) 100%);
+  border-color: rgba(218, 123, 147, 0.3);
   color: #fff;
 }
 
 .settings-content {
   flex: 1;
-  background: #22252b;
+  background: #2F4454;
   border-radius: 16px;
   padding: 30px;
 }
@@ -1108,9 +1108,9 @@
 
 .upload-btn {
   padding: 12px 20px;
-  background: rgba(183, 157, 155, 0.2);
+  background: rgba(218, 123, 147, 0.2);
   border-radius: 10px;
-  color: #B79D9B;
+  color: #DA7B93;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -1119,7 +1119,7 @@
 }
 
 .upload-btn:hover {
-  background: rgba(183, 157, 155, 0.3);
+  background: rgba(218, 123, 147, 0.3);
 }
 
 .upload-hint {
@@ -1157,7 +1157,7 @@
 .checkbox-label input {
   width: 20px;
   height: 20px;
-  accent-color: #B79D9B;
+  accent-color: #DA7B93;
 }
 
 /* Notification Toggles */
@@ -1186,7 +1186,7 @@
 .toggle-label input {
   width: 20px;
   height: 20px;
-  accent-color: #B79D9B;
+  accent-color: #DA7B93;
 }
 
 .settings-actions {
@@ -1197,7 +1197,7 @@
 
 .save-settings-btn {
   padding: 14px 30px;
-  background: linear-gradient(135deg, #B79D9B 0%, #72676F 100%);
+  background: linear-gradient(135deg, #DA7B93 0%, #376E6F 100%);
   border: none;
   border-radius: 12px;
   color: #fff;
@@ -1210,7 +1210,7 @@
 
 .save-settings-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(183, 157, 155, 0.3);
+  box-shadow: 0 8px 25px rgba(218, 123, 147, 0.3);
 }
 
 .save-settings-btn.saved {
@@ -1226,7 +1226,7 @@
 }
 
 .stats-card {
-  background: #22252b;
+  background: #2F4454;
   border-radius: 16px;
   padding: 25px;
   display: flex;
@@ -1242,8 +1242,8 @@
 }
 
 .stats-card.highlight {
-  background: linear-gradient(135deg, rgba(183, 157, 155, 0.2) 0%, rgba(114, 103, 111, 0.2) 100%);
-  border-color: rgba(183, 157, 155, 0.3);
+  background: linear-gradient(135deg, rgba(218, 123, 147, 0.2) 0%, rgba(55, 110, 111, 0.2) 100%);
+  border-color: rgba(218, 123, 147, 0.3);
 }
 
 .stats-card.warning {
@@ -1280,7 +1280,7 @@
 
 .stats-chart-card,
 .stats-top-products {
-  background: #22252b;
+  background: #2F4454;
   border-radius: 16px;
   padding: 25px;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -1318,7 +1318,7 @@
 .chart-bar {
   width: 100%;
   max-width: 40px;
-  background: linear-gradient(180deg, #B79D9B 0%, #72676F 100%);
+  background: linear-gradient(180deg, #DA7B93 0%, #376E6F 100%);
   border-radius: 6px 6px 0 0;
   min-height: 10px;
   transition: height 0.3s ease;
@@ -1351,14 +1351,14 @@
 .top-product-rank {
   width: 30px;
   height: 30px;
-  background: rgba(183, 157, 155, 0.2);
+  background: rgba(218, 123, 147, 0.2);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
   font-weight: 700;
-  color: #B79D9B;
+  color: #DA7B93;
 }
 
 .top-product-info {
@@ -1385,7 +1385,7 @@
 }
 
 .stats-conversion {
-  background: #22252b;
+  background: #2F4454;
   border-radius: 16px;
   padding: 25px;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -1481,12 +1481,12 @@
 }
 
 .admin-login-modal {
-  background: linear-gradient(145deg, #22252b 0%, #1a1c20 100%);
+  background: linear-gradient(145deg, #2F4454 0%, #1a1c20 100%);
   border-radius: 24px;
   padding: 40px;
   max-width: 420px;
   width: 100%;
-  border: 1px solid rgba(183, 157, 155, 0.2);
+  border: 1px solid rgba(218, 123, 147, 0.2);
   position: relative;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
 }
@@ -1562,8 +1562,8 @@
 
 .admin-login-field input:focus {
   outline: none;
-  border-color: #B79D9B;
-  background: rgba(183, 157, 155, 0.1);
+  border-color: #DA7B93;
+  background: rgba(218, 123, 147, 0.1);
 }
 
 .admin-login-error {
@@ -1578,7 +1578,7 @@
 
 .admin-login-btn {
   padding: 16px;
-  background: linear-gradient(135deg, #B79D9B 0%, #72676F 100%);
+  background: linear-gradient(135deg, #DA7B93 0%, #376E6F 100%);
   border: none;
   border-radius: 12px;
   color: #fff;
@@ -1592,7 +1592,7 @@
 
 .admin-login-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(183, 157, 155, 0.3);
+  box-shadow: 0 10px 30px rgba(218, 123, 147, 0.3);
 }
 
 .admin-login-btn:disabled {
@@ -1621,7 +1621,7 @@
   align-items: center;
   gap: 20px;
   padding: 20px;
-  background: #22252b;
+  background: #2F4454;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
@@ -1633,14 +1633,14 @@
 }
 
 .admin-user-card.current {
-  border-color: rgba(183, 157, 155, 0.3);
-  background: linear-gradient(135deg, rgba(183, 157, 155, 0.1) 0%, rgba(114, 103, 111, 0.1) 100%);
+  border-color: rgba(218, 123, 147, 0.3);
+  background: linear-gradient(135deg, rgba(218, 123, 147, 0.1) 0%, rgba(55, 110, 111, 0.1) 100%);
 }
 
 .admin-user-avatar {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #B79D9B 0%, #72676F 100%);
+  background: linear-gradient(135deg, #DA7B93 0%, #376E6F 100%);
   border-radius: 14px;
   display: flex;
   align-items: center;

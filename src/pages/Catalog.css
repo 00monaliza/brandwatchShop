@@ -28,9 +28,9 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(124, 252, 0, 0.3);
-  color: #7CFC00;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(218, 123, 147, 0.4);
+  color: #DA7B93;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
@@ -43,8 +43,8 @@
 }
 
 .filter-burger-btn:hover {
-  background: rgba(124, 252, 0, 0.1);
-  box-shadow: 0 0 25px rgba(124, 252, 0, 0.3);
+  background: rgba(218, 123, 147, 0.15);
+  box-shadow: 0 0 25px rgba(218, 123, 147, 0.25);
 }
 
 .filter-burger-btn svg {
@@ -69,7 +69,7 @@
 .active-filters-count {
   font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
-  color: #7CFC00;
+  color: #376E6F;
   font-weight: 600;
   letter-spacing: 0.5px;
 }

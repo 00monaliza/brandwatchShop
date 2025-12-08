@@ -28,7 +28,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center, rgba(183, 157, 155, 0.15) 0%, transparent 50%);
+  background: radial-gradient(circle at center, rgba(218, 123, 147, 0.15) 0%, transparent 50%);
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
@@ -44,8 +44,8 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(98, 89, 96, 0.8) 0%, rgba(114, 103, 111, 0.8) 100%);
-  border-radius: 20px 20px 0 0;
+  background: linear-gradient(135deg, rgba(47, 68, 84, 0.9) 0%, rgba(55, 110, 111, 0.6) 100%);
+  border-radius: 4px 4px 0 0;
   z-index: 2;
 }
 
@@ -159,8 +159,8 @@
 }
 
 .badge-new {
-  background: rgba(183, 157, 155, 0.9);
-  color: #30333A;
+  background: rgba(55, 110, 111, 0.9);
+  color: #FFFFFF;
 }
 
 .badge-discount {
@@ -173,10 +173,10 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.9);
+  background: #DA7B93;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  color: #30333A;
+  color: #FFFFFF;
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   font-family: 'Montserrat', sans-serif;
@@ -197,8 +197,8 @@
 }
 
 .product-add-to-cart:hover {
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+  background: #2E151B;
+  box-shadow: 0 -5px 20px rgba(46, 21, 27, 0.3);
 }
 
 .product-add-to-cart.adding {
@@ -226,7 +226,7 @@
   flex-direction: column;
   gap: 0.75rem;
   flex: 1;
-  background: rgba(114, 103, 111, 0.5);
+  background: rgba(47, 68, 84, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   z-index: 2;
@@ -290,7 +290,7 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 1.3rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #DA7B93;
 }
 
 .product-details {
@@ -324,7 +324,7 @@
 }
 
 .product-card.skeleton .product-image-container {
-  background: linear-gradient(90deg, #625960 25%, #72676F 50%, #625960 75%);
+  background: linear-gradient(90deg, #2F4454 25%, #376E6F 50%, #2F4454 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }

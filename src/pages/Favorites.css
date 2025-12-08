@@ -1,6 +1,6 @@
 .favorites-page {
   min-height: calc(100vh - 80px);
-  background-color: #30333A;
+  background-color: var(--primary);
   padding: 2rem;
 }
 
@@ -27,7 +27,7 @@
 .favorites-count {
   font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
-  color: #B79D9B;
+  color: #DA7B93;
   font-weight: 600;
 }
 
@@ -69,8 +69,8 @@
 }
 
 .favorites-continue-btn {
-  background-color: #B79D9B;
-  color: #30333A;
+  background-color: #DA7B93;
+  color: #FFFFFF;
   text-decoration: none;
   font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
@@ -81,7 +81,7 @@
 }
 
 .favorites-continue-btn:hover {
-  background-color: #c9afa8;
+  background-color: #2E151B;
 }
 
 /* Адаптив */

@@ -3,10 +3,10 @@
   align-items: center;
   gap: 1rem;
   padding: 1.5rem 2rem;
-  background: rgba(13, 13, 13, 0.6);
+  background: rgba(47, 68, 84, 0.6);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .sort-label {
@@ -42,20 +42,20 @@
 }
 
 .sort-button:hover {
-  background: rgba(124, 252, 0, 0.05);
-  border-color: rgba(124, 252, 0, 0.3);
+  background: rgba(55, 110, 111, 0.1);
+  border-color: rgba(55, 110, 111, 0.4);
 }
 
 .sort-button:focus {
   outline: none;
-  background: rgba(124, 252, 0, 0.08);
-  border-color: rgba(124, 252, 0, 0.4);
-  box-shadow: 0 0 20px rgba(124, 252, 0, 0.15);
+  background: rgba(55, 110, 111, 0.15);
+  border-color: rgba(55, 110, 111, 0.5);
+  box-shadow: 0 0 20px rgba(55, 110, 111, 0.2);
 }
 
 .sort-icon {
   transition: transform 0.3s ease;
-  color: #7CFC00;
+  color: #376E6F;
 }
 
 .sort-icon.open {
@@ -67,13 +67,13 @@
   top: calc(100% + 0.5rem);
   left: 0;
   right: 0;
-  background: rgba(13, 13, 13, 0.98);
+  background: rgba(47, 68, 84, 0.98);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 15px 40px rgba(28, 51, 52, 0.5);
   z-index: 10;
   animation: dropdownIn 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -111,20 +111,20 @@
 }
 
 .sort-option:hover {
-  background: rgba(124, 252, 0, 0.08);
-  color: #7CFC00;
+  background: rgba(218, 123, 147, 0.12);
+  color: #DA7B93;
 }
 
 .sort-option.active {
-  background: rgba(124, 252, 0, 0.12);
-  color: #7CFC00;
+  background: rgba(218, 123, 147, 0.18);
+  color: #DA7B93;
   font-weight: 600;
 }
 
 .sort-option svg {
   width: 16px;
   height: 16px;
-  color: #7CFC00;
+  color: #DA7B93;
 }
 
 /* Адаптив */

@@ -96,12 +96,12 @@
 /* Language Switcher styles moved to LanguageSwitcher.css */
 
 .lang-btn.active {
-  color: #B79D9B;
+  color: #DA7B93;
   font-weight: 700;
 }
 
 .lang-btn:hover:not(.active) {
-  color: #B79D9B;
+  color: #DA7B93;
   opacity: 0.7;
 }
 
@@ -134,7 +134,7 @@ a.icon-btn {
 }
 
 .icon-btn:hover {
-  color: #B79D9B;
+  color: #DA7B93;
 }
 
 .icon-badge {
@@ -186,7 +186,7 @@ a.icon-btn {
 }
 
 .user-btn.icon-btn {
-  background: rgba(183, 157, 155, 0.2);
+  background: rgba(55, 110, 111, 0.3);
   border-radius: 50%;
 }
 
@@ -194,12 +194,12 @@ a.icon-btn {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  background: linear-gradient(145deg, rgba(72, 67, 79, 0.98), rgba(48, 51, 58, 0.98));
+  background: linear-gradient(145deg, rgba(47, 68, 84, 0.98), rgba(28, 51, 52, 0.98));
   border-radius: 12px;
   padding: 15px;
   min-width: 200px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(183, 157, 155, 0.2);
+  box-shadow: 0 10px 40px rgba(28, 51, 52, 0.5);
+  border: 1px solid rgba(55, 110, 111, 0.3);
   z-index: 1000;
   animation: dropdownSlide 0.2s ease;
 }
@@ -221,7 +221,7 @@ a.icon-btn {
   gap: 4px;
   padding-bottom: 12px;
   margin-bottom: 12px;
-  border-bottom: 1px solid rgba(183, 157, 155, 0.2);
+  border-bottom: 1px solid rgba(55, 110, 111, 0.3);
 }
 
 .user-name {
@@ -238,10 +238,10 @@ a.icon-btn {
 .admin-panel-btn {
   width: 100%;
   padding: 10px;
-  background: linear-gradient(135deg, rgba(183, 157, 155, 0.2) 0%, rgba(114, 103, 111, 0.2) 100%);
-  border: 1px solid rgba(183, 157, 155, 0.3);
+  background: linear-gradient(135deg, rgba(55, 110, 111, 0.25) 0%, rgba(47, 68, 84, 0.25) 100%);
+  border: 1px solid rgba(55, 110, 111, 0.4);
   border-radius: 8px;
-  color: #B79D9B;
+  color: #376E6F;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -251,7 +251,7 @@ a.icon-btn {
 }
 
 .admin-panel-btn:hover {
-  background: linear-gradient(135deg, rgba(183, 157, 155, 0.3) 0%, rgba(114, 103, 111, 0.3) 100%);
+  background: linear-gradient(135deg, rgba(55, 110, 111, 0.35) 0%, rgba(47, 68, 84, 0.35) 100%);
   transform: translateY(-1px);
 }
 
@@ -260,7 +260,7 @@ a.icon-btn {
 }
 
 .admin-btn:hover {
-  color: #B79D9B;
+  color: #DA7B93;
 }
 
 .logout-btn {
@@ -286,7 +286,7 @@ a.icon-btn {
 }
 
 .login-btn:hover {
-  color: #B79D9B;
+  color: #DA7B93;
 }
 
 /* Overlay */
@@ -327,14 +327,14 @@ a.icon-btn {
     left: auto;
     width: 280px;
     height: 100vh;
-    background: #30333A;
+    background: #2F4454;
     flex-direction: column;
     gap: 0;
     display: flex;
     padding: 0;
     transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 101;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+    box-shadow: -5px 0 15px rgba(28, 51, 52, 0.5);
   }
 
   .nav.open {

@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(28, 51, 52, 0.75);
   z-index: 998;
   opacity: 0;
   visibility: hidden;
@@ -21,7 +21,7 @@
 
 .filter-sidebar {
   width: 340px;
-  background: rgba(13, 13, 13, 0.98);
+  background: #2F4454;
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   padding: 2rem 1.5rem;
@@ -32,8 +32,8 @@
   left: -340px;
   z-index: 999;
   transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: 5px 0 40px rgba(0, 0, 0, 0.6);
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 5px 0 40px rgba(28, 51, 52, 0.6);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .filter-sidebar.open {
@@ -77,14 +77,14 @@
 }
 
 .filter-close-btn:hover {
-  color: #7CFC00;
-  background: rgba(124, 252, 0, 0.1);
+  color: #DA7B93;
+  background: rgba(218, 123, 147, 0.15);
 }
 
 .filter-reset {
   background: transparent;
-  border: 1px solid rgba(124, 252, 0, 0.4);
-  color: #7CFC00;
+  border: 1px solid rgba(218, 123, 147, 0.5);
+  color: #DA7B93;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
@@ -98,8 +98,8 @@
 }
 
 .filter-reset:hover {
-  background: rgba(124, 252, 0, 0.15);
-  box-shadow: 0 0 20px rgba(124, 252, 0, 0.3);
+  background: rgba(218, 123, 147, 0.2);
+  box-shadow: 0 0 20px rgba(218, 123, 147, 0.3);
 }
 
 .filter-groups {
@@ -135,22 +135,22 @@
 }
 
 .filter-header:hover {
-  color: #7CFC00;
+  color: #DA7B93;
 }
 
 .filter-header.expanded {
-  color: #7CFC00;
+  color: #DA7B93;
 }
 
 .filter-toggle {
   font-size: 1.2rem;
   transition: transform 0.3s ease;
-  color: rgba(245, 245, 245, 0.4);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .filter-header:hover .filter-toggle,
 .filter-header.expanded .filter-toggle {
-  color: #7CFC00;
+  color: #DA7B93;
 }
 
 .filter-options {
@@ -194,9 +194,9 @@
 }
 
 .filter-search-input:focus {
-  border-color: rgba(124, 252, 0, 0.4);
-  background: rgba(124, 252, 0, 0.03);
-  box-shadow: 0 0 15px rgba(124, 252, 0, 0.1);
+  border-color: rgba(55, 110, 111, 0.6);
+  background: rgba(55, 110, 111, 0.08);
+  box-shadow: 0 0 15px rgba(55, 110, 111, 0.15);
 }
 
 .filter-search-clear {
@@ -215,7 +215,7 @@
 }
 
 .filter-search-clear:hover {
-  color: #7CFC00;
+  color: #DA7B93;
 }
 
 .filter-options-list {
@@ -235,7 +235,7 @@
 }
 
 .filter-options-list::-webkit-scrollbar-thumb {
-  background: rgba(124, 252, 0, 0.3);
+  background: rgba(55, 110, 111, 0.5);
   border-radius: 2px;
 }
 
@@ -270,13 +270,13 @@
 }
 
 .filter-checkbox:hover {
-  color: #7CFC00;
+  color: #DA7B93;
 }
 
 .filter-checkbox input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #7CFC00;
+  accent-color: #DA7B93;
   cursor: pointer;
   border-radius: 4px;
 }
@@ -296,12 +296,12 @@
 }
 
 .filter-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(124, 252, 0, 0.3);
+  background: rgba(55, 110, 111, 0.5);
   border-radius: 3px;
 }
 
 .filter-sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(124, 252, 0, 0.5);
+  background: rgba(55, 110, 111, 0.7);
 }
 
 /* Адаптив */
