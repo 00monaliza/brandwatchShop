@@ -1,7 +1,9 @@
 .recently-viewed {
-  background-color: #B0A6A7;
-  padding: 40px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 50px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .recently-viewed-container {
@@ -11,37 +13,60 @@
 }
 
 .recently-viewed-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 18px;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
   font-weight: 500;
-  color: #2A2D35;
-  margin-bottom: 20px;
+  color: #F5F5F5;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
 }
 
 .recently-viewed-grid {
   display: flex;
   gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.recently-viewed-grid::-webkit-scrollbar {
+  height: 4px;
+}
+
+.recently-viewed-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.recently-viewed-grid::-webkit-scrollbar-thumb {
+  background: rgba(124, 252, 0, 0.3);
+  border-radius: 2px;
 }
 
 .recent-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 18px;
   display: flex;
   align-items: center;
   gap: 20px;
-  width: 300px;
-  transition: box-shadow 0.3s ease;
+  min-width: 300px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .recent-card:hover {
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(124, 252, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
 }
 
 .recent-card-image {
   width: 80px;
   height: 80px;
   flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(26, 26, 26, 0.5);
 }
 
 .recent-card-image img {
@@ -53,21 +78,22 @@
 .recent-card-info {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
 
 .recent-card-brand {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Playfair Display', serif;
   font-size: 14px;
   font-weight: 400;
-  color: #2A2D35;
+  color: rgba(245, 245, 245, 0.8);
   margin: 0;
   line-height: 1.4;
 }
 
 .recent-card-price {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #2A2D35;
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #7CFC00;
+  letter-spacing: 1px;
 }

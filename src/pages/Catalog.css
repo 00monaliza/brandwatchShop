@@ -1,6 +1,6 @@
 .catalog {
   display: flex;
-  background-color: #30333A;
+  background: transparent;
   min-height: calc(100vh - 80px);
 }
 
@@ -11,11 +11,11 @@
 }
 
 .catalog-header {
-  padding: 2rem 2rem 0 2rem;
+  padding: 2.5rem 2rem 0 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #30333A;
+  background: transparent;
 }
 
 .catalog-header-left {
@@ -27,21 +27,24 @@
 .filter-burger-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background-color: transparent;
-  border: 1px solid #B79D9B;
-  color: #B79D9B;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(124, 252, 0, 0.3);
+  color: #7CFC00;
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  padding: 0.6rem 1rem;
+  padding: 0.7rem 1.2rem;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  border-radius: 8px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .filter-burger-btn:hover {
-  background-color: rgba(183, 157, 155, 0.15);
+  background: rgba(124, 252, 0, 0.1);
+  box-shadow: 0 0 25px rgba(124, 252, 0, 0.3);
 }
 
 .filter-burger-btn svg {
@@ -49,12 +52,12 @@
 }
 
 .catalog-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #FFFFFF;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: #F5F5F5;
   margin: 0;
-  letter-spacing: -0.5px;
+  letter-spacing: 2px;
 }
 
 .results-info {
@@ -65,19 +68,20 @@
 
 .active-filters-count {
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.9rem;
-  color: #B79D9B;
+  font-size: 0.85rem;
+  color: #7CFC00;
   font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 /* Адаптив для планшетов */
 @media (max-width: 1024px) {
   .catalog-title {
-    font-size: 1.7rem;
+    font-size: 1.8rem;
   }
 
   .catalog-header {
-    padding: 1.5rem 1.5rem 0 1.5rem;
+    padding: 2rem 1.5rem 0 1.5rem;
   }
 }
 
@@ -88,7 +92,7 @@
   }
 
   .catalog-header {
-    padding: 1rem 1rem 0 1rem;
+    padding: 1.5rem 1rem 0 1rem;
     flex-wrap: wrap;
     gap: 1rem;
   }
@@ -120,7 +124,7 @@
   }
 
   .filter-burger-btn {
-    font-size: 0.85rem;
-    padding: 0.5rem 0.8rem;
+    font-size: 0.75rem;
+    padding: 0.6rem 1rem;
   }
 }

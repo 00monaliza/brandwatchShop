@@ -4,8 +4,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,21 +25,23 @@
 }
 
 .auth-modal {
-  background: linear-gradient(145deg, rgba(72, 67, 79, 0.95), rgba(48, 51, 58, 0.98));
-  border-radius: 20px;
-  padding: 40px;
-  max-width: 420px;
+  background: rgba(13, 13, 13, 0.98);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-radius: 24px;
+  padding: 45px;
+  max-width: 440px;
   width: 100%;
   position: relative;
-  border: 1px solid rgba(183, 157, 155, 0.2);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-  animation: slideUp 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+  animation: slideUp 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -48,90 +51,96 @@
 
 .auth-modal-close {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 18px;
+  right: 18px;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(245, 245, 245, 0.4);
   cursor: pointer;
-  padding: 5px;
-  transition: all 0.3s ease;
+  padding: 8px;
+  transition: all 0.4s ease;
+  border-radius: 50%;
 }
 
 .auth-modal-close:hover {
-  color: #B79D9B;
+  color: #7CFC00;
+  background: rgba(124, 252, 0, 0.1);
   transform: rotate(90deg);
 }
 
 .auth-modal-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
 }
 
 .auth-modal-header h2 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #FFFFFF;
-  margin: 0 0 10px 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 500;
+  color: #F5F5F5;
+  margin: 0 0 12px 0;
+  letter-spacing: 1px;
 }
 
 .auth-modal-header p {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  color: rgba(245, 245, 245, 0.5);
   margin: 0;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .form-group label {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(245, 245, 245, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .form-group label .required {
-  color: #ff6b6b;
+  color: #7CFC00;
 }
 
 .form-group input {
-  padding: 14px 16px;
+  padding: 15px 18px;
   border-radius: 12px;
-  border: 1px solid rgba(183, 157, 155, 0.2);
-  background: rgba(255, 255, 255, 0.05);
-  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #F5F5F5;
   font-size: 15px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   font-family: 'Montserrat', sans-serif;
 }
 
 .form-group input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(245, 245, 245, 0.3);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #B79D9B;
-  background: rgba(183, 157, 155, 0.1);
-  box-shadow: 0 0 0 3px rgba(183, 157, 155, 0.1);
+  border-color: rgba(124, 252, 0, 0.4);
+  background: rgba(124, 252, 0, 0.03);
+  box-shadow: 0 0 25px rgba(124, 252, 0, 0.15);
 }
 
 .form-group input.error {
-  border-color: #ff6b6b;
-  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.5);
+  background: rgba(255, 107, 107, 0.05);
 }
 
 .error-message {
-  font-size: 12px;
+  font-size: 11px;
   color: #ff6b6b;
   display: flex;
   align-items: center;
@@ -142,10 +151,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 16px;
-  background: rgba(255, 107, 107, 0.1);
-  border: 1px solid rgba(255, 107, 107, 0.3);
-  border-radius: 10px;
+  padding: 14px 18px;
+  background: rgba(255, 107, 107, 0.08);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  border-radius: 12px;
   color: #ff6b6b;
   font-size: 13px;
   margin-bottom: 20px;
@@ -159,28 +168,32 @@
 }
 
 .auth-submit-btn {
-  padding: 16px;
+  padding: 18px;
   border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #B79D9B 0%, #72676F 100%);
-  color: #FFFFFF;
-  font-size: 16px;
+  border: 1px solid rgba(124, 252, 0, 0.3);
+  background: rgba(124, 252, 0, 0.1);
+  color: #7CFC00;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 10px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  margin-top: 15px;
   font-family: 'Montserrat', sans-serif;
   position: relative;
   overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .auth-submit-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(183, 157, 155, 0.3);
+  transform: translateY(-3px);
+  background: rgba(124, 252, 0, 0.2);
+  box-shadow: 0 0 40px rgba(124, 252, 0, 0.4);
+  border-color: rgba(124, 252, 0, 0.6);
 }
 
 .auth-submit-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -188,9 +201,9 @@
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(124, 252, 0, 0.3);
   border-radius: 50%;
-  border-top-color: #FFFFFF;
+  border-top-color: #7CFC00;
   animation: spin 0.8s linear infinite;
 }
 
@@ -202,30 +215,30 @@
 
 .auth-switch {
   text-align: center;
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(183, 157, 155, 0.1);
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .auth-switch p {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  color: rgba(245, 245, 245, 0.5);
   margin: 0;
 }
 
 .auth-switch button {
   background: none;
   border: none;
-  color: #B79D9B;
+  color: #7CFC00;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
   font-family: 'Montserrat', sans-serif;
 }
 
 .auth-switch button:hover {
-  color: #c9afa8;
+  text-shadow: 0 0 15px rgba(124, 252, 0, 0.5);
   text-decoration: underline;
 }
 
@@ -239,18 +252,19 @@
 .country-selector {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 0 12px; /* Remove vertical padding, let flex align */
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(183, 157, 155, 0.2);
+  gap: 6px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-right: none;
   border-radius: 12px 0 0 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 }
 
 .country-selector:hover {
-  background: rgba(183, 157, 155, 0.1); /* Match input focus/hover somewhat */
+  background: rgba(124, 252, 0, 0.03);
+  border-color: rgba(124, 252, 0, 0.2);
 }
 
 .country-flag {
@@ -260,22 +274,18 @@
 
 .dropdown-arrow {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(245, 245, 245, 0.4);
 }
 
 .phone-input {
   flex: 1;
-  border-radius: 0 12px 12px 0 !important; /* Override default input radius */
-  border-left: none !important; /* Remove left border to merge */
+  border-radius: 0 12px 12px 0 !important;
+  border-left: none !important;
 }
 
 .phone-input:focus {
-  /* When focused, we might want to highlight the whole container or just the input. 
-     If we highlight just input, the left border is missing. 
-     Ideally we wrap them in a container that has the border, but for now this is quick fix.
-  */
-  box-shadow: none !important; /* Remove default focus shadow to avoid weird look */
-  border-color: #B79D9B !important;
+  box-shadow: none !important;
+  border-color: rgba(124, 252, 0, 0.4) !important;
 }
 
 .country-dropdown {
@@ -285,53 +295,55 @@
   width: 280px;
   max-height: 200px;
   overflow-y: auto;
-  background: #2A2D35;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  background: rgba(13, 13, 13, 0.98);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
   z-index: 100;
-  margin-top: 5px;
+  margin-top: 8px;
 }
 
 .country-option {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
+  gap: 12px;
+  padding: 12px 16px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .country-option:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(124, 252, 0, 0.05);
 }
 
 .country-option.selected {
-  background: rgba(183, 157, 155, 0.2);
+  background: rgba(124, 252, 0, 0.1);
 }
 
 .country-name {
   flex: 1;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  color: rgba(245, 245, 245, 0.8);
 }
 
 .country-code {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  color: rgba(245, 245, 245, 0.4);
 }
 
 /* Scrollbar for dropdown */
 .country-dropdown::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 .country-dropdown::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
+  background: transparent;
 }
 
 .country-dropdown::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(124, 252, 0, 0.3);
   border-radius: 3px;
 }
 
