@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import AuthModal from './AuthModal';
+import { LanguageSwitcher, MobileLanguageSwitcher } from './LanguageSwitcher';
 import logoImage from '../images/image.png';
 import './Header.css';
 
@@ -12,12 +13,17 @@ const Header = ({ onOpenAdmin }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { cartCount, favoritesCount } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-  };
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
     { key: 'nav.main', path: '/' },
@@ -28,7 +34,10 @@ const Header = ({ onOpenAdmin }) => {
   ];
 
   return (
-    <header className="header">
+    <header className={`header ${scrolled ? 'scrolled' : ''}`}>
+      {/* Overlay for mobile menu */}
+      <div className={`menu-overlay ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(false)} />
+
       <div className="header-container">
         {/* Логотип */}
         <div className="logo">
@@ -39,6 +48,15 @@ const Header = ({ onOpenAdmin }) => {
 
         {/* Навигация */}
         <nav className={`nav ${menuOpen ? 'open' : ''}`}>
+          <div className="nav-header">
+            <span className="nav-title">Меню</span>
+            <button className="close-menu-btn" onClick={() => setMenuOpen(false)}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
           {navItems.map(item => (
             <Link 
               key={item.key} 
@@ -49,33 +67,13 @@ const Header = ({ onOpenAdmin }) => {
               {t(item.key)}
             </Link>
           ))}
+          <MobileLanguageSwitcher />
         </nav>
 
         {/* Правая часть */}
         <div className="header-right">
-          {/* Переключатель языков */}
-          <div className="language-switcher">
-            <button 
-              className={`lang-btn ${i18n.language === 'ru' ? 'active' : ''}`}
-              onClick={() => changeLanguage('ru')}
-            >
-              RU
-            </button>
-            <span className="lang-separator">|</span>
-            <button 
-              className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`}
-              onClick={() => changeLanguage('en')}
-            >
-              EN
-            </button>
-            <span className="lang-separator">|</span>
-            <button 
-              className={`lang-btn ${i18n.language === 'kz' ? 'active' : ''}`}
-              onClick={() => changeLanguage('kz')}
-            >
-              KZ
-            </button>
-          </div>
+          {/* Переключатель языков (Desktop) */}
+          <LanguageSwitcher />
 
           {/* Иконки */}
           <div className="header-icons">

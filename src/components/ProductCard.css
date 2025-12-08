@@ -1,42 +1,23 @@
 .product-card {
-  background: rgba(114, 103, 111, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  background: rgba(47, 68, 84, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
   overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   display: flex;
   flex-direction: column;
   height: 100%;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transform-style: preserve-3d;
-  perspective: 1000px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   position: relative;
 }
 
-.product-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 1;
-  border-radius: 20px;
-}
-
 .product-card:hover {
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(183, 157, 155, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  transform: translateY(-12px) rotateX(5deg) rotateY(-2deg) scale(1.02);
-  border-color: rgba(183, 157, 155, 0.3);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px var(--shadow-dark);
+  border-color: var(--accent-light);
+  background: rgba(47, 68, 84, 0.6);
 }
 
 /* Glow эффект при hover */

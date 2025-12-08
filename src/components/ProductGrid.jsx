@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProductCard from './ProductCard';
 import './ProductGrid.css';
 
 const ProductGrid = ({ products }) => {
   const { t } = useTranslation();
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const cards = gridRef.current?.querySelectorAll('.product-card-wrapper');
+    cards?.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, [products]);
 
   if (products.length === 0) {
     return (
@@ -21,9 +40,15 @@ const ProductGrid = ({ products }) => {
   }
 
   return (
-    <div className="product-grid">
-      {products.map(product => (
-        <ProductCard key={product.id} product={product} />
+    <div className="product-grid" ref={gridRef}>
+      {products.map((product, index) => (
+        <div 
+          key={product.id} 
+          className="product-card-wrapper"
+          style={{ transitionDelay: `${index * 100}ms` }}
+        >
+          <ProductCard product={product} />
+        </div>
       ))}
     </div>
   );

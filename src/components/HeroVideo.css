@@ -1,16 +1,16 @@
 .hero-video-container {
   position: relative;
   width: 100%;
-  height: 80vh; /* Высота видео-блока, можно настроить */
+  height: 85vh;
   overflow: hidden;
-  background-color: #000;
+  background-color: var(--primary);
 }
 
 .hero-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.8; /* Немного затемняем видео */
+  opacity: 0.9;
 }
 
 .hero-overlay {
@@ -19,7 +19,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3); /* Дополнительное затемнение */
+  background: linear-gradient(
+    to bottom,
+    rgba(47, 68, 84, 0.3) 0%,
+    rgba(46, 21, 27, 0.4) 50%,
+    rgba(28, 51, 52, 0.8) 100%
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,21 +33,23 @@
 
 .hero-content h1 {
   font-family: 'Playfair Display', serif;
-  font-size: 4rem;
-  color: #fff;
-  margin-bottom: 1rem;
-  letter-spacing: 2px;
+  font-size: 5rem;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+  letter-spacing: 4px;
   text-transform: uppercase;
   animation: fadeInUp 1s ease-out;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
 .hero-content p {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.5rem;
-  color: #B79D9B;
-  letter-spacing: 4px;
+  font-size: 1.2rem;
+  color: var(--accent-light);
+  letter-spacing: 6px;
   text-transform: uppercase;
   animation: fadeInUp 1s ease-out 0.3s backwards;
+  font-weight: 600;
 }
 
 @keyframes fadeInUp {
