@@ -1,16 +1,17 @@
 .hero-video-container {
   position: relative;
   width: 100%;
-  height: 80vh; /* Высота видео-блока, можно настроить */
+  height: 85vh;
   overflow: hidden;
-  background-color: #000;
+  background: #0D0D0D;
 }
 
 .hero-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.8; /* Немного затемняем видео */
+  opacity: 0.7;
+  filter: brightness(0.8) contrast(1.1);
 }
 
 .hero-overlay {
@@ -19,7 +20,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3); /* Дополнительное затемнение */
+  background: linear-gradient(
+    135deg,
+    rgba(13, 13, 13, 0.6) 0%,
+    rgba(13, 13, 13, 0.3) 50%,
+    rgba(13, 13, 13, 0.7) 100%
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,28 +33,32 @@
 }
 
 .hero-content h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 4rem;
-  color: #fff;
-  margin-bottom: 1rem;
-  letter-spacing: 2px;
+  font-family: 'Cinzel', serif;
+  font-size: 4.5rem;
+  color: #F5F5F5;
+  margin-bottom: 1.5rem;
+  letter-spacing: 8px;
   text-transform: uppercase;
-  animation: fadeInUp 1s ease-out;
+  font-weight: 500;
+  animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+  text-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
 }
 
 .hero-content p {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.5rem;
-  color: #B79D9B;
-  letter-spacing: 4px;
+  font-size: 1.2rem;
+  color: #7CFC00;
+  letter-spacing: 6px;
   text-transform: uppercase;
-  animation: fadeInUp 1s ease-out 0.3s backwards;
+  animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.3s backwards;
+  font-weight: 400;
+  text-shadow: 0 0 20px rgba(124, 252, 0, 0.3);
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -62,10 +72,12 @@
   }
   
   .hero-content h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    letter-spacing: 4px;
   }
   
   .hero-content p {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
   }
 }
