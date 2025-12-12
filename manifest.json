@@ -1,15 +1,52 @@
 {
+  "name": "brandwatch - Luxury Timepieces Collection",
   "short_name": "brandwatch",
-  "name": "brandwatch - Luxury Watch Catalog",
+  "description": "Luxury Watches and Timepieces",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#2F4454",
+  "theme_color": "#2F4454",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%2330333A' width='192' height='192'/><circle cx='96' cy='96' r='80' stroke='%23B79D9B' stroke-width='4' fill='none'/><line x1='96' y1='20' x2='96' y2='50' stroke='%23B79D9B' stroke-width='4'/><line x1='96' y1='142' x2='96' y2='172' stroke='%23B79D9B' stroke-width='4'/><line x1='20' y1='96' x2='50' y2='96' stroke='%23B79D9B' stroke-width='4'/><line x1='142' y1='96' x2='172' y2='96' stroke='%23B79D9B' stroke-width='4'/><circle cx='96' cy='96' r='12' fill='%23B79D9B'/></svg>",
+      "src": "/images/logo-favicon-192.webp",
       "sizes": "192x192",
-      "type": "image/svg+xml"
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logo-favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logo-favicon-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/logo-favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#30333A",
-  "background_color": "#ffffff"
+  "categories": ["shopping", "lifestyle"],
+  "screenshots": [
+    {
+      "src": "/images/logo-hero.webp",
+      "sizes": "256x256",
+      "type": "image/webp",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/images/logo-full.webp",
+      "sizes": "1024x1024",
+      "type": "image/webp",
+      "form_factor": "wide"
+    }
+  ]
 }
