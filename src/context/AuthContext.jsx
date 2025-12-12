@@ -119,6 +119,8 @@ export const AuthProvider = ({ children }) => {
     const { name, phone, email, password } = userData;
     setAuthError(null);
 
+    console.log('📝 Registration started:', { name, phone, email });
+
     try {
       // Проверяем, что email указан (Supabase требует email)
       let userEmail = email;
@@ -126,6 +128,8 @@ export const AuthProvider = ({ children }) => {
         // Если email не указан, создаём фиктивный на основе телефона
         userEmail = `${phone.replace(/[^0-9]/g, '')}@brandwatch.local`;
       }
+
+      console.log('📧 Using email:', userEmail);
 
       // Регистрация через Supabase Auth
       const { data, error } = await auth.signUp(
@@ -138,7 +142,8 @@ export const AuthProvider = ({ children }) => {
       );
 
       if (error) {
-        console.error('Supabase signup error:', error);
+        console.error('❌ Supabase signup error:', error);
+        console.log('Error details:', JSON.stringify(error, null, 2));
         
         // Обработка конкретных ошибок
         if (error.message?.includes('already registered')) {
@@ -151,13 +156,18 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: error.message };
       }
 
+      console.log('✅ Supabase auth success:', data);
+
       if (data?.user) {
+        console.log('👤 Creating profile for user:', data.user.id);
         // Создаём профиль в таблице profiles
         const profileData = await createProfile(data.user.id, {
           email: userEmail,
           phone: phone,
           name: name
         });
+
+        console.log('✅ Profile created:', profileData);
 
         setUser(data.user);
         setProfile(profileData);
@@ -169,6 +179,8 @@ export const AuthProvider = ({ children }) => {
           phone: phone,
           role: 'user'
         };
+
+        console.log('🎉 Registration complete:', sessionUser);
 
         return { success: true, user: sessionUser };
       }

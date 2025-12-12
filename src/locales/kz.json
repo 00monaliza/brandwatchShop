@@ -79,6 +79,8 @@
     "name": "Аты",
     "namePlaceholder": "Атыңызды енгізіңіз",
     "phone": "Телефон",
+    "phoneOrEmail": "Телефон немесе Email",
+    "phoneOrEmailPlaceholder": "+7... немесе email@example.com",
     "email": "Email",
     "emailPlaceholder": "example@mail.com",
     "password": "Құпия сөз",
@@ -93,14 +95,17 @@
     "errors": {
       "nameRequired": "Атыңызды енгізіңіз",
       "phoneRequired": "Телефон нөмірін енгізіңіз",
+      "phoneOrEmailRequired": "Телефон немесе email енгізіңіз",
       "phoneInvalid": "Телефон форматы қате",
       "emailInvalid": "Email форматы қате",
       "passwordRequired": "Құпия сөзді енгізіңіз",
       "passwordShort": "Құпия сөз кемінде 6 таңба болуы керек",
-      "userNotFound": "Бұл телефон нөмірімен пайдаланушы табылмады",
+      "userNotFound": "Пайдаланушы табылмады",
       "wrongPassword": "Құпия сөз қате",
       "phoneExists": "Бұл телефон нөмірімен пайдаланушы тіркелген",
-      "emailExists": "Бұл email-мен пайдаланушы тіркелген"
+      "emailExists": "Бұл email-мен пайдаланушы тіркелген",
+      "emailNotConfirmed": "Email растаңыз",
+      "unknown": "Қате орын алды. Қайталап көріңіз"
     }
   },
   "checkout": {

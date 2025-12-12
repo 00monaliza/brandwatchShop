@@ -79,6 +79,8 @@
     "name": "Name",
     "namePlaceholder": "Enter your name",
     "phone": "Phone",
+    "phoneOrEmail": "Phone or Email",
+    "phoneOrEmailPlaceholder": "+7... or email@example.com",
     "email": "Email",
     "emailPlaceholder": "example@mail.com",
     "password": "Password",
@@ -93,14 +95,17 @@
     "errors": {
       "nameRequired": "Name is required",
       "phoneRequired": "Phone number is required",
+      "phoneOrEmailRequired": "Enter phone or email",
       "phoneInvalid": "Invalid phone format",
       "emailInvalid": "Invalid email format",
       "passwordRequired": "Password is required",
       "passwordShort": "Password must be at least 6 characters",
-      "userNotFound": "User with this phone number not found",
+      "userNotFound": "User not found",
       "wrongPassword": "Wrong password",
       "phoneExists": "User with this phone number already exists",
-      "emailExists": "User with this email already exists"
+      "emailExists": "User with this email already exists",
+      "emailNotConfirmed": "Please confirm your email",
+      "unknown": "An error occurred. Please try again"
     }
   },
   "checkout": {

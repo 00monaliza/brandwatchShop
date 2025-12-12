@@ -23,7 +23,8 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
     name: '',
     email: '',
     phone: '',
-    password: ''
+    password: '',
+    loginIdentifier: '' // для входа по телефону или email
   });
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
@@ -49,7 +50,13 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
 
   // Сброс формы при переключении режимов
   useEffect(() => {
-    setFormData({ name: '', email: '', phone: selectedCountry.dial_code, password: '' });
+    setFormData({ 
+      name: '', 
+      email: '', 
+      phone: selectedCountry.dial_code, 
+      password: '',
+      loginIdentifier: ''
+    });
     setErrors({});
     setServerError('');
   }, [isLoginMode, selectedCountry.dial_code]);
@@ -118,14 +125,22 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
       newErrors.name = t('auth.errors.nameRequired');
     }
 
-    if (!formData.phone.trim()) {
-      newErrors.phone = t('auth.errors.phoneRequired');
-    } else if (!validatePhone(formData.phone)) {
-      newErrors.phone = t('auth.errors.phoneInvalid');
-    }
+    if (isLoginMode) {
+      // При логине проверяем loginIdentifier (телефон или email)
+      if (!formData.loginIdentifier.trim()) {
+        newErrors.loginIdentifier = t('auth.errors.phoneOrEmailRequired') || 'Введите телефон или email';
+      }
+    } else {
+      // При регистрации проверяем телефон
+      if (!formData.phone.trim()) {
+        newErrors.phone = t('auth.errors.phoneRequired');
+      } else if (!validatePhone(formData.phone)) {
+        newErrors.phone = t('auth.errors.phoneInvalid');
+      }
 
-    if (!isLoginMode && formData.email && !validateEmail(formData.email)) {
-      newErrors.email = t('auth.errors.emailInvalid');
+      if (formData.email && !validateEmail(formData.email)) {
+        newErrors.email = t('auth.errors.emailInvalid');
+      }
     }
 
     if (!formData.password.trim()) {
@@ -148,8 +163,8 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
 
     try {
       if (isLoginMode) {
-        // Авторизация (теперь асинхронная)
-        const result = await login(formData.phone, formData.password);
+        // Авторизация по телефону или email
+        const result = await login(formData.loginIdentifier, formData.password);
         
         if (result.success) {
           setIsSubmitting(false);
@@ -258,26 +273,46 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
             </div>
           )}
 
-          <div className="form-group">
-            <label htmlFor="phone">
-              {t('auth.phone')} <span className="required">*</span>
-            </label>
-            <div className="phone-input-container" ref={dropdownRef}>
-              <div 
-                className="country-selector" 
-                onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-              >
-                <span className="country-flag">{selectedCountry.flag}</span>
-                <span className="dropdown-arrow">▼</span>
-              </div>
-              
-              {showCountryDropdown && (
-                <div className="country-dropdown">
-                  {countries.map(country => (
-                    <div 
-                      key={country.code} 
-                      className={`country-option ${selectedCountry.code === country.code ? 'selected' : ''}`}
-                      onClick={() => handleCountrySelect(country)}
+          {/* При логине - одно поле для телефона или email */}
+          {isLoginMode ? (
+            <div className="form-group">
+              <label htmlFor="loginIdentifier">
+                {t('auth.phoneOrEmail') || 'Телефон или Email'} <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="loginIdentifier"
+                name="loginIdentifier"
+                value={formData.loginIdentifier}
+                onChange={handleChange}
+                placeholder={t('auth.phoneOrEmailPlaceholder') || '+7... или email@example.com'}
+                className={errors.loginIdentifier ? 'error' : ''}
+                autoComplete="username"
+              />
+              {errors.loginIdentifier && <span className="error-message">{errors.loginIdentifier}</span>}
+            </div>
+          ) : (
+            /* При регистрации - поле телефона с выбором страны */
+            <div className="form-group">
+              <label htmlFor="phone">
+                {t('auth.phone')} <span className="required">*</span>
+              </label>
+              <div className="phone-input-container" ref={dropdownRef}>
+                <div 
+                  className="country-selector" 
+                  onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                >
+                  <span className="country-flag">{selectedCountry.flag}</span>
+                  <span className="dropdown-arrow">▼</span>
+                </div>
+                
+                {showCountryDropdown && (
+                  <div className="country-dropdown">
+                    {countries.map(country => (
+                      <div 
+                        key={country.code} 
+                        className={`country-option ${selectedCountry.code === country.code ? 'selected' : ''}`}
+                        onClick={() => handleCountrySelect(country)}
                     >
                       <span className="country-flag">{country.flag}</span>
                       <span className="country-name">{country.name}</span>
@@ -298,21 +333,21 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
               />
             </div>
             {errors.phone && <span className="error-message">{errors.phone}</span>}
-          </div>
 
-          {!isLoginMode && (
-            <div className="form-group">
-              <label htmlFor="email">{t('auth.email')}</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder={t('auth.emailPlaceholder')}
-                className={errors.email ? 'error' : ''}
-              />
-              {errors.email && <span className="error-message">{errors.email}</span>}
+              {/* Email поле при регистрации */}
+              <div className="form-group" style={{ marginTop: '16px' }}>
+                <label htmlFor="email">{t('auth.email')}</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder={t('auth.emailPlaceholder')}
+                  className={errors.email ? 'error' : ''}
+                />
+                {errors.email && <span className="error-message">{errors.email}</span>}
+              </div>
             </div>
           )}
 
