@@ -146,50 +146,60 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
     setIsSubmitting(true);
     setServerError('');
 
-    // Небольшая задержка для UX
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    if (isLoginMode) {
-      // Авторизация
-      const result = login(formData.phone, formData.password);
-      
-      if (result.success) {
-        setIsSubmitting(false);
-        if (onSuccess) {
-          onSuccess(result.user);
+    try {
+      if (isLoginMode) {
+        // Авторизация (теперь асинхронная)
+        const result = await login(formData.phone, formData.password);
+        
+        if (result.success) {
+          setIsSubmitting(false);
+          if (onSuccess) {
+            onSuccess(result.user);
+          }
+          onClose();
+        } else {
+          setIsSubmitting(false);
+          if (result.error === 'userNotFound') {
+            setServerError(t('auth.errors.userNotFound'));
+          } else if (result.error === 'wrongPassword') {
+            setServerError(t('auth.errors.wrongPassword'));
+          } else if (result.error === 'emailNotConfirmed') {
+            setServerError(t('auth.errors.emailNotConfirmed') || 'Подтвердите email для входа');
+          } else {
+            setServerError(result.error || t('auth.errors.unknown'));
+          }
         }
-        onClose();
       } else {
-        setIsSubmitting(false);
-        if (result.error === 'userNotFound') {
-          setServerError(t('auth.errors.userNotFound'));
-        } else if (result.error === 'wrongPassword') {
-          setServerError(t('auth.errors.wrongPassword'));
+        // Регистрация (теперь асинхронная)
+        const result = await register({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          password: formData.password
+        });
+
+        if (result.success) {
+          setIsSubmitting(false);
+          if (onSuccess) {
+            onSuccess(result.user);
+          }
+          onClose();
+        } else {
+          setIsSubmitting(false);
+          if (result.error === 'phoneExists') {
+            setServerError(t('auth.errors.phoneExists'));
+          } else if (result.error === 'emailExists') {
+            setServerError(t('auth.errors.emailExists'));
+          } else if (result.error === 'invalidEmail') {
+            setServerError(t('auth.errors.emailInvalid'));
+          } else {
+            setServerError(result.error || t('auth.errors.unknown'));
+          }
         }
       }
-    } else {
-      // Регистрация
-      const result = register({
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        password: formData.password
-      });
-
-      if (result.success) {
-        setIsSubmitting(false);
-        if (onSuccess) {
-          onSuccess(result.user);
-        }
-        onClose();
-      } else {
-        setIsSubmitting(false);
-        if (result.error === 'phoneExists') {
-          setServerError(t('auth.errors.phoneExists'));
-        } else if (result.error === 'emailExists') {
-          setServerError(t('auth.errors.emailExists'));
-        }
-      }
+    } catch (err) {
+      setIsSubmitting(false);
+      setServerError(err.message || t('auth.errors.unknown'));
     }
   };
 

@@ -1,0 +1,418 @@
+/* Magic Navigation Menu */
+:root {
+  --magic-nav-height: 70px;
+  --magic-nav-bg: #fff;
+  --magic-nav-indicator-size: 70px;
+  --magic-nav-icon-size: 26px;
+  --magic-nav-transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.magic-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  background: var(--magic-nav-bg);
+  height: var(--magic-nav-height);
+  border-radius: 25px 25px 0 0;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  padding: 0 10px;
+}
+
+.magic-nav-list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  position: relative;
+}
+
+.magic-nav-item {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.magic-nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  transition: var(--magic-nav-transition);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+}
+
+.magic-nav-icon {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  color: #333;
+  transition: var(--magic-nav-transition);
+  z-index: 2;
+}
+
+.magic-nav-icon .nav-icon {
+  width: var(--magic-nav-icon-size);
+  height: var(--magic-nav-icon-size);
+  transition: var(--magic-nav-transition);
+}
+
+.magic-nav-label {
+  position: absolute;
+  bottom: 5px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #333;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: var(--magic-nav-transition);
+}
+
+/* Active State */
+.magic-nav-item.active .magic-nav-icon {
+  transform: translateY(-35px);
+  color: #fff;
+}
+
+.magic-nav-item.active .magic-nav-icon .nav-icon {
+  width: calc(var(--magic-nav-icon-size) * 1.1);
+  height: calc(var(--magic-nav-icon-size) * 1.1);
+}
+
+.magic-nav-item.active .magic-nav-label {
+  opacity: 1;
+  transform: translateY(0);
+  color: var(--clr);
+}
+
+/* Indicator (Floating Circle) */
+.magic-indicator {
+  position: absolute;
+  top: -50%;
+  left: 0;
+  width: calc(100% / 5);
+  height: var(--magic-nav-indicator-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: var(--magic-nav-transition);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.magic-indicator::before {
+  content: '';
+  position: absolute;
+  width: var(--magic-nav-indicator-size);
+  height: var(--magic-nav-indicator-size);
+  background: var(--clr);
+  border-radius: 50%;
+  border: 6px solid var(--primary, #2F4454);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: var(--magic-nav-transition);
+}
+
+/* Curved Effect - Left Side */
+.magic-indicator::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(var(--magic-nav-indicator-size) + 40px);
+  height: calc(var(--magic-nav-indicator-size) / 2 + 10px);
+  background: transparent;
+  border-radius: 0 0 50px 50px;
+  z-index: -1;
+}
+
+/* Curve Effect Pseudo Elements */
+.magic-nav-list::before,
+.magic-nav-list::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  opacity: 0;
+  transition: var(--magic-nav-transition);
+  z-index: 0;
+}
+
+.magic-nav-list::before {
+  left: calc(10% - 10px);
+  border-top-right-radius: 20px;
+  box-shadow: 1px -10px 0 0 var(--magic-nav-bg);
+}
+
+.magic-nav-list::after {
+  left: calc(10% + 55px);
+  border-top-left-radius: 20px;
+  box-shadow: -1px -10px 0 0 var(--magic-nav-bg);
+}
+
+/* Curve positioning for each item */
+.magic-nav-item:nth-child(1).active ~ .magic-indicator ~ .curve-left,
+.magic-nav-list:has(.magic-nav-item:nth-child(1).active)::before {
+  left: calc(10% - 30px);
+  opacity: 1;
+}
+
+.magic-nav-list:has(.magic-nav-item:nth-child(1).active)::after {
+  left: calc(10% + 35px);
+  opacity: 1;
+}
+
+.magic-nav-list:has(.magic-nav-item:nth-child(2).active)::before {
+  left: calc(30% - 30px);
+  opacity: 1;
+}
+
+.magic-nav-list:has(.magic-nav-item:nth-child(2).active)::after {
+  left: calc(30% + 35px);
+  opacity: 1;
+}
+
+.magic-nav-list:has(.magic-nav-item:nth-child(3).active)::before {
+  left: calc(50% - 30px);
+  opacity: 1;
+}
+
+.magic-nav-list:has(.magic-nav-item:nth-child(3).active)::after {
+  left: calc(50% + 35px);
+  opacity: 1;
+}
+
+.magic-nav-list:has(.magic-nav-item:nth-child(4).active)::before {
+  left: calc(70% - 30px);
+  opacity: 1;
+}
+
+.magic-nav-list:has(.magic-nav-item:nth-child(4).active)::after {
+  left: calc(70% + 35px);
+  opacity: 1;
+}
+
+.magic-nav-list:has(.magic-nav-item:nth-child(5).active)::before {
+  left: calc(90% - 30px);
+  opacity: 1;
+}
+
+.magic-nav-list:has(.magic-nav-item:nth-child(5).active)::after {
+  left: calc(90% + 35px);
+  opacity: 1;
+}
+
+/* Individual Item Curves */
+.magic-nav-item::before,
+.magic-nav-item::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  opacity: 0;
+  transition: var(--magic-nav-transition);
+  z-index: 10;
+}
+
+.magic-nav-item::before {
+  left: -15px;
+  border-top-right-radius: 20px;
+  box-shadow: 1px -10px 0 0 var(--magic-nav-bg);
+}
+
+.magic-nav-item::after {
+  right: -15px;
+  border-top-left-radius: 20px;
+  box-shadow: -1px -10px 0 0 var(--magic-nav-bg);
+}
+
+.magic-nav-item.active::before,
+.magic-nav-item.active::after {
+  opacity: 1;
+}
+
+/* Hover Effect for non-active items */
+.magic-nav-item:not(.active):hover .magic-nav-icon {
+  color: var(--clr);
+  transform: scale(1.1);
+}
+
+.magic-nav-item:not(.active):hover .nav-icon {
+  filter: drop-shadow(0 0 8px var(--clr));
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .magic-navigation {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    padding: 0 5px;
+  }
+
+  :root {
+    --magic-nav-height: 65px;
+    --magic-nav-indicator-size: 60px;
+    --magic-nav-icon-size: 22px;
+  }
+
+  .magic-nav-label {
+    font-size: 0.6rem;
+  }
+
+  .magic-nav-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .magic-nav-item.active .magic-nav-icon {
+    transform: translateY(-30px);
+  }
+
+  .magic-indicator {
+    top: -45%;
+  }
+}
+
+@media (max-width: 400px) {
+  :root {
+    --magic-nav-height: 60px;
+    --magic-nav-indicator-size: 55px;
+    --magic-nav-icon-size: 20px;
+  }
+
+  .magic-nav-label {
+    font-size: 0.55rem;
+    bottom: 3px;
+  }
+
+  .magic-nav-icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .magic-nav-item.active .magic-nav-icon {
+    transform: translateY(-28px);
+  }
+
+  .magic-indicator {
+    top: -42%;
+  }
+
+  .magic-nav-item::before {
+    left: -12px;
+  }
+
+  .magic-nav-item::after {
+    right: -12px;
+  }
+}
+
+/* Landscape orientation fix */
+@media (max-height: 500px) {
+  .magic-navigation {
+    position: relative;
+    margin-top: 20px;
+  }
+}
+
+/* Add space at the bottom of the page to prevent content from being hidden behind nav */
+.app {
+  padding-bottom: calc(var(--magic-nav-height) + 20px);
+}
+
+/* Hide navigation during scroll (optional animation) */
+.magic-navigation.hidden {
+  transform: translateX(-50%) translateY(100%);
+  transition: transform 0.3s ease-out;
+}
+
+.magic-navigation.visible {
+  transform: translateX(-50%) translateY(0);
+  transition: transform 0.3s ease-out;
+}
+
+/* Pulse animation on active indicator */
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
+  }
+}
+
+.magic-indicator::before {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Ripple effect on click */
+.magic-nav-item.active .magic-nav-icon::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .magic-navigation {
+    --magic-nav-bg: #1a1a2e;
+  }
+
+  .magic-nav-icon {
+    color: #e0e0e0;
+  }
+
+  .magic-nav-label {
+    color: #e0e0e0;
+  }
+
+  .magic-nav-item::before {
+    box-shadow: 1px -10px 0 0 #1a1a2e;
+  }
+
+  .magic-nav-item::after {
+    box-shadow: -1px -10px 0 0 #1a1a2e;
+  }
+}

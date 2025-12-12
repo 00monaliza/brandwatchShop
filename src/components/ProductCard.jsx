@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
 import './ProductCard.css';
@@ -8,31 +8,6 @@ const ProductCard = ({ product }) => {
   const { addToCart, toggleFavorite, isFavorite } = useCart();
   const [isAdding, setIsAdding] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
-  const [tiltStyle, setTiltStyle] = useState({});
-  const cardRef = useRef(null);
-
-  // 3D Tilt эффект
-  const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    const rotateX = (y - centerY) / 15;
-    const rotateY = (centerX - x) / 15;
-    
-    setTiltStyle({
-      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTiltStyle({
-      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
-    });
-  };
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
@@ -58,13 +33,7 @@ const ProductCard = ({ product }) => {
   const productIsFavorite = isFavorite(product.id);
 
   return (
-    <div 
-      className="product-card"
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={tiltStyle}
-    >
+    <div className="product-card">
       <div className="product-image-container">
         <img 
           src={product.image} 
@@ -89,6 +58,13 @@ const ProductCard = ({ product }) => {
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
           {isLiking && <span className="like-burst"></span>}
+          {isLiking && productIsFavorite && (
+            <span className="flying-heart">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#DA7B93" stroke="#DA7B93" strokeWidth="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </span>
+          )}
         </button>
         
         <div className="product-badges">

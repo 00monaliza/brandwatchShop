@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import MagicNavigation from './components/MagicNavigation';
 import RecentlyViewed from './components/RecentlyViewed';
 import Catalog from './pages/Catalog';
 import Cart from './pages/Cart';
@@ -107,6 +108,9 @@ function App() {
 
               <RecentlyViewed />
               <Footer />
+              
+              {/* Magic Navigation Menu */}
+              <MagicNavigation />
 
               {/* Admin Panel */}
               {showAdminPanel && (

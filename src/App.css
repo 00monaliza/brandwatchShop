@@ -51,6 +51,7 @@ h1, h2, h3, h4, h5, h6 {
   background-color: var(--primary);
   position: relative;
   overflow-x: hidden;
+  padding-bottom: 90px; /* Space for Magic Navigation */
 }
 
 /* Premium Reveal Animation Classes */

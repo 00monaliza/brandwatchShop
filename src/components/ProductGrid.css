@@ -1,21 +1,15 @@
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  padding: 4rem 2rem;
-  max-width: 1600px;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1400px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
 }
 
 .product-card-wrapper {
-  opacity: 0;
-  transform: translateY(50px);
-  transition: opacity 1s var(--ease-out-expo), transform 1s var(--ease-out-expo);
-}
-
-.product-card-wrapper.visible {
   opacity: 1;
   transform: translateY(0);
 }
