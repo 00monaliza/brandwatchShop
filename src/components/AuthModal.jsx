@@ -18,15 +18,17 @@ const countries = [
 
 const AuthModal = ({ isOpen, onClose, onSuccess }) => {
   const { t } = useTranslation();
-  const { login, register } = useAuth();
-  const [isLoginMode, setIsLoginMode] = useState(true);
+  const { login, register, resetPassword } = useAuth();
+  const [mode, setMode] = useState('login'); // 'login', 'register', 'forgot'
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     password: '',
-    loginIdentifier: '' // для входа по телефону или email
+    loginIdentifier: '', // для входа по телефону или email
+    resetEmail: '' // для восстановления пароля
   });
+  const [resetSent, setResetSent] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const dropdownRef = useRef(null);
@@ -56,11 +58,13 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
       email: '', 
       phone: selectedCountry.dial_code, 
       password: '',
-      loginIdentifier: ''
+      loginIdentifier: '',
+      resetEmail: ''
     });
     setErrors({});
     setServerError('');
-  }, [isLoginMode, selectedCountry.dial_code]);
+    setResetSent(false);
+  }, [mode, selectedCountry.dial_code]);
 
   if (!isOpen) return null;
 
@@ -122,16 +126,27 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
   const validate = () => {
     const newErrors = {};
 
-    if (!isLoginMode && !formData.name.trim()) {
+    if (mode === 'forgot') {
+      // При восстановлении пароля проверяем только email
+      if (!formData.resetEmail.trim()) {
+        newErrors.resetEmail = t('auth.errors.emailRequired') || 'Введите email';
+      } else if (!validateEmail(formData.resetEmail)) {
+        newErrors.resetEmail = t('auth.errors.emailInvalid');
+      }
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    }
+
+    if (mode === 'register' && !formData.name.trim()) {
       newErrors.name = t('auth.errors.nameRequired');
     }
 
-    if (isLoginMode) {
+    if (mode === 'login') {
       // При логине проверяем loginIdentifier (телефон или email)
       if (!formData.loginIdentifier.trim()) {
         newErrors.loginIdentifier = t('auth.errors.phoneOrEmailRequired') || 'Введите телефон или email';
       }
-    } else {
+    } else if (mode === 'register') {
       // При регистрации проверяем телефон
       if (!formData.phone.trim()) {
         newErrors.phone = t('auth.errors.phoneRequired');
@@ -144,10 +159,12 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
       }
     }
 
-    if (!formData.password.trim()) {
-      newErrors.password = t('auth.errors.passwordRequired');
-    } else if (formData.password.length < 6) {
-      newErrors.password = t('auth.errors.passwordShort');
+    if (mode !== 'forgot') {
+      if (!formData.password.trim()) {
+        newErrors.password = t('auth.errors.passwordRequired');
+      } else if (formData.password.length < 6) {
+        newErrors.password = t('auth.errors.passwordShort');
+      }
     }
 
     setErrors(newErrors);
@@ -163,7 +180,25 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
     setServerError('');
 
     try {
-      if (isLoginMode) {
+      // Режим восстановления пароля
+      if (mode === 'forgot') {
+        const result = await resetPassword(formData.resetEmail);
+        setIsSubmitting(false);
+        
+        if (result.success) {
+          setResetSent(true);
+          showToast.success(
+            t('auth.resetPasswordSent') || 'Письмо отправлено',
+            t('auth.resetPasswordSentDesc') || 'Проверьте почту для сброса пароля'
+          );
+        } else {
+          setServerError(result.error || t('auth.errors.unknown'));
+          showToast.error(result.error || 'Ошибка отправки');
+        }
+        return;
+      }
+
+      if (mode === 'login') {
         // Авторизация по телефону или email
         const result = await login(formData.loginIdentifier, formData.password);
         
@@ -187,7 +222,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
           }
           showToast.error('Ошибка входа');
         }
-      } else {
+      } else if (mode === 'register') {
         // Регистрация (теперь асинхронная)
         const result = await register({
           name: formData.name,
@@ -230,8 +265,12 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
     }
   };
 
-  const switchMode = () => {
-    setIsLoginMode(!isLoginMode);
+  const switchMode = (newMode) => {
+    if (typeof newMode === 'string') {
+      setMode(newMode);
+    } else {
+      setMode(mode === 'login' ? 'register' : 'login');
+    }
   };
 
   return (
@@ -245,8 +284,16 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
         </button>
 
         <div className="auth-modal-header">
-          <h2>{isLoginMode ? t('auth.login') : t('auth.register')}</h2>
-          <p>{isLoginMode ? t('auth.loginSubtitle') : t('auth.registerSubtitle')}</p>
+          <h2>
+            {mode === 'login' && t('auth.login')}
+            {mode === 'register' && t('auth.register')}
+            {mode === 'forgot' && (t('auth.forgotPassword') || 'Восстановление пароля')}
+          </h2>
+          <p>
+            {mode === 'login' && t('auth.loginSubtitle')}
+            {mode === 'register' && t('auth.registerSubtitle')}
+            {mode === 'forgot' && (t('auth.forgotPasswordSubtitle') || 'Введите email для получения ссылки на сброс пароля')}
+          </p>
         </div>
 
         {serverError && (
@@ -261,7 +308,46 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
         )}
 
         <form onSubmit={handleSubmit} className="auth-form">
-          {!isLoginMode && (
+          {/* Режим восстановления пароля */}
+          {mode === 'forgot' && (
+            <>
+              {resetSent ? (
+                <div className="reset-sent-message">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                  <h3>{t('auth.resetPasswordSent') || 'Письмо отправлено!'}</h3>
+                  <p>{t('auth.checkEmailDesc') || 'Проверьте вашу почту и перейдите по ссылке для сброса пароля.'}</p>
+                  <button 
+                    type="button" 
+                    className="auth-submit-btn"
+                    onClick={() => switchMode('login')}
+                  >
+                    {t('auth.backToLogin') || 'Вернуться к входу'}
+                  </button>
+                </div>
+              ) : (
+                <div className="form-group">
+                  <label htmlFor="resetEmail">
+                    {t('auth.email')} <span className="required">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="resetEmail"
+                    name="resetEmail"
+                    value={formData.resetEmail}
+                    onChange={handleChange}
+                    placeholder={t('auth.emailPlaceholder')}
+                    className={errors.resetEmail ? 'error' : ''}
+                  />
+                  {errors.resetEmail && <span className="error-message">{errors.resetEmail}</span>}
+                </div>
+              )}
+            </>
+          )}
+
+          {mode === 'register' && (
             <div className="form-group">
               <label htmlFor="name">
                 {t('auth.name')} <span className="required">*</span>
@@ -280,7 +366,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
           )}
 
           {/* При логине - одно поле для телефона или email */}
-          {isLoginMode ? (
+          {mode === 'login' && (
             <div className="form-group">
               <label htmlFor="loginIdentifier">
                 {t('auth.phoneOrEmail') || 'Телефон или Email'} <span className="required">*</span>
@@ -297,7 +383,9 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
               />
               {errors.loginIdentifier && <span className="error-message">{errors.loginIdentifier}</span>}
             </div>
-          ) : (
+          )}
+
+          {mode === 'register' && (
             /* При регистрации - поле телефона с выбором страны */
             <div className="form-group">
               <label htmlFor="phone">
@@ -357,47 +445,75 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
             </div>
           )}
 
-          <div className="form-group">
-            <label htmlFor="password">
-              {t('auth.password')} <span className="required">*</span>
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder={t('auth.passwordPlaceholder')}
-              className={errors.password ? 'error' : ''}
-            />
-            {errors.password && <span className="error-message">{errors.password}</span>}
-          </div>
+          {/* Поле пароля - только для логина и регистрации */}
+          {mode !== 'forgot' && (
+            <div className="form-group">
+              <label htmlFor="password">
+                {t('auth.password')} <span className="required">*</span>
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder={t('auth.passwordPlaceholder')}
+                className={errors.password ? 'error' : ''}
+              />
+              {errors.password && <span className="error-message">{errors.password}</span>}
+            </div>
+          )}
 
-          <button 
-            type="submit" 
-            className="auth-submit-btn"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <span className="loading-spinner"></span>
-            ) : (
-              isLoginMode ? t('auth.loginBtn') : t('auth.registerBtn')
-            )}
-          </button>
+          {/* Ссылка "Забыл пароль" при логине */}
+          {mode === 'login' && (
+            <div className="forgot-password-link">
+              <button type="button" onClick={() => switchMode('forgot')}>
+                {t('auth.forgotPasswordLink') || 'Забыли пароль?'}
+              </button>
+            </div>
+          )}
+
+          {/* Кнопка отправки - скрываем если письмо уже отправлено */}
+          {!(mode === 'forgot' && resetSent) && (
+            <button 
+              type="submit" 
+              className="auth-submit-btn"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <span className="loading-spinner"></span>
+              ) : (
+                <>
+                  {mode === 'login' && t('auth.loginBtn')}
+                  {mode === 'register' && t('auth.registerBtn')}
+                  {mode === 'forgot' && (t('auth.sendResetLink') || 'Отправить ссылку')}
+                </>
+              )}
+            </button>
+          )}
         </form>
 
         <div className="auth-switch">
-          {isLoginMode ? (
+          {mode === 'login' && (
             <p>
               {t('auth.noAccount')}{' '}
-              <button type="button" onClick={switchMode}>
+              <button type="button" onClick={() => switchMode('register')}>
                 {t('auth.registerLink')}
               </button>
             </p>
-          ) : (
+          )}
+          {mode === 'register' && (
             <p>
               {t('auth.hasAccount')}{' '}
-              <button type="button" onClick={switchMode}>
+              <button type="button" onClick={() => switchMode('login')}>
+                {t('auth.loginLink')}
+              </button>
+            </p>
+          )}
+          {mode === 'forgot' && !resetSent && (
+            <p>
+              {t('auth.rememberPassword') || 'Вспомнили пароль?'}{' '}
+              <button type="button" onClick={() => switchMode('login')}>
                 {t('auth.loginLink')}
               </button>
             </p>
