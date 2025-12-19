@@ -176,8 +176,8 @@ const Header = ({ onOpenAdmin }) => {
                         {t('profile.favorites')}
                       </button>
                     </div>
-                    <button className="logout-btn" onClick={() => { 
-                      logout(); 
+                    <button className="logout-btn" onClick={async () => { 
+                      await logout(); 
                       setShowUserMenu(false); 
                       showToast.logoutSuccess();
                     }}>

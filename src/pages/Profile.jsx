@@ -91,10 +91,15 @@ const Profile = () => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    showToast.logoutSuccess();
-    navigate('/catalog');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      showToast.logoutSuccess();
+      navigate('/catalog');
+    } catch (err) {
+      console.error('Logout error:', err);
+      showToast.error('Ошибка при выходе');
+    }
   };
 
   const tabs = [
