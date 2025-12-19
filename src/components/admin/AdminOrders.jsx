@@ -86,14 +86,14 @@ const AdminOrders = () => {
 
               <div className="order-card-body">
                 <div className="order-customer">
-                  <h4>👤 Покупатель</h4>
+                  <h4>Покупатель</h4>
                   <p>{order.customer?.name || 'Не указано'}</p>
                   <p>📱 {order.customer?.phone || 'Не указано'}</p>
                   {order.customer?.address && <p>📍 {order.customer.address}</p>}
                 </div>
 
                 <div className="order-items-preview">
-                  <h4>🛒 Товары ({order.items?.length || 0})</h4>
+                  <h4>Товары ({order.items?.length || 0})</h4>
                   <div className="order-items-list">
                     {order.items?.slice(0, 2).map((item, index) => (
                       <div key={index} className="order-item-mini">
@@ -109,7 +109,7 @@ const AdminOrders = () => {
                 </div>
 
                 <div className="order-total">
-                  <h4>💰 Сумма</h4>
+                  <h4>Сумма</h4>
                   <span className="total-amount">${order.total?.toLocaleString()}</span>
                   <p className="payment-method">{order.paymentMethod || 'Не указано'}</p>
                 </div>

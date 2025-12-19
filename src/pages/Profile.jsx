@@ -9,7 +9,7 @@ import './Profile.css';
 const Profile = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { user, isAuthenticated, logout, updateProfile } = useAuth();
+  const { user, profile, isAuthenticated, logout, updateProfile } = useAuth();
   const { cartItems, favoritesCount } = useCart();
   
   const [activeTab, setActiveTab] = useState('info');
@@ -21,6 +21,26 @@ const Profile = () => {
   });
   const [saving, setSaving] = useState(false);
 
+  // Получаем имя пользователя из разных источников
+  const getUserName = () => {
+    if (profile?.first_name) return profile.first_name;
+    if (user?.name) return user.name;
+    if (user?.user_metadata?.name) return user.user_metadata.name;
+    return '';
+  };
+
+  const getUserEmail = () => {
+    if (profile?.email) return profile.email;
+    if (user?.email) return user.email;
+    return '';
+  };
+
+  const getUserPhone = () => {
+    if (profile?.phone) return profile.phone;
+    if (user?.phone) return user.phone;
+    return '';
+  };
+
   // Редирект если не авторизован
   useEffect(() => {
     if (!isAuthenticated) {
@@ -30,18 +50,24 @@ const Profile = () => {
 
   // Заполняем форму данными пользователя
   useEffect(() => {
-    if (user) {
+    if (user || profile) {
       setFormData({
-        name: user.name || '',
-        email: user.email || '',
-        phone: user.phone || '',
+        name: getUserName(),
+        email: getUserEmail(),
+        phone: getUserPhone(),
       });
     }
-  }, [user]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, profile]);
 
   if (!isAuthenticated || !user) {
     return null;
   }
+
+  // Используем функции для получения данных
+  const displayName = getUserName();
+  const displayEmail = getUserEmail();
+  const displayPhone = getUserPhone();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -88,10 +114,10 @@ const Profile = () => {
         <aside className="profile-sidebar">
           <div className="profile-avatar">
             <div className="avatar-circle">
-              {user.name ? user.name.charAt(0).toUpperCase() : '👤'}
+              {displayName ? displayName.charAt(0).toUpperCase() : '👤'}
             </div>
-            <h2 className="profile-name">{user.name || t('profile.user')}</h2>
-            <p className="profile-email">{user.email || user.phone}</p>
+            <h2 className="profile-name">{displayName || t('profile.user')}</h2>
+            <p className="profile-email">{displayEmail || displayPhone}</p>
           </div>
 
           <nav className="profile-nav">
@@ -156,7 +182,7 @@ const Profile = () => {
                       placeholder={t('profile.enterName')}
                     />
                   ) : (
-                    <p>{user.name || '—'}</p>
+                    <p>{displayName || '—'}</p>
                   )}
                 </div>
 
@@ -171,7 +197,7 @@ const Profile = () => {
                       placeholder={t('profile.enterEmail')}
                     />
                   ) : (
-                    <p>{user.email || '—'}</p>
+                    <p>{displayEmail || '—'}</p>
                   )}
                 </div>
 
@@ -186,13 +212,14 @@ const Profile = () => {
                       placeholder={t('profile.enterPhone')}
                     />
                   ) : (
-                    <p>{user.phone || '—'}</p>
+                    <p>{displayPhone || '—'}</p>
                   )}
                 </div>
 
                 <div className="info-item">
                   <label>{t('profile.memberSince')}</label>
-                  <p>{user.createdAt ? new Date(user.createdAt).toLocaleDateString('ru-RU') : '—'}</p>
+                  <p>{profile?.created_at ? new Date(profile.created_at).toLocaleDateString('ru-RU') : 
+                      user?.created_at ? new Date(user.created_at).toLocaleDateString('ru-RU') : '—'}</p>
                 </div>
               </div>
 

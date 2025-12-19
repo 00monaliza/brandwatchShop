@@ -20,12 +20,17 @@ const Header = ({ onOpenAdmin }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { cartCount, favoritesCount } = useCart();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, profile, isAuthenticated, logout } = useAuth();
   const { settings } = useSettings();
 
   // Используем логотип из настроек или дефолтный
   const logoImage = settings?.logo || defaultLogoImage;
   const storeName = settings?.storeName || 'brandwatch';
+
+  // Получаем имя пользователя из разных источников
+  const displayName = profile?.first_name || user?.name || user?.user_metadata?.name || '';
+  const displayEmail = profile?.email || user?.email || '';
+  const displayPhone = profile?.phone || user?.phone || '';
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -141,8 +146,8 @@ const Header = ({ onOpenAdmin }) => {
                 {showUserMenu && (
                   <div className="user-dropdown">
                     <div className="user-info">
-                      <span className="user-name">{user?.name || t('profile.user')}</span>
-                      <span className="user-phone">{user?.email || user?.phone}</span>
+                      <span className="user-name">{displayName || t('profile.user')}</span>
+                      <span className="user-phone">{displayEmail || displayPhone}</span>
                     </div>
                     <div className="user-dropdown-links">
                       <button 
