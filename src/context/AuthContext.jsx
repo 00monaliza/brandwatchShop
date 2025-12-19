@@ -284,14 +284,14 @@ export const AuthProvider = ({ children }) => {
 
   // Выход из системы
   const logout = async () => {
+    // Сначала очищаем локальное состояние
+    setUser(null);
+    setProfile(null);
+    localStorage.removeItem('currentUser');
+    
     try {
-      // Выход из Supabase
+      // Потом выходим из Supabase
       await auth.signOut();
-      
-      // Очистка локального состояния
-      setUser(null);
-      setProfile(null);
-      localStorage.removeItem('currentUser');
     } catch (err) {
       console.error('Logout error:', err);
     }

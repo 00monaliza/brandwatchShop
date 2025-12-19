@@ -23,11 +23,9 @@ const Header = ({ onOpenAdmin }) => {
   const { user, profile, isAuthenticated, logout } = useAuth();
   const { settings } = useSettings();
 
-  // Используем логотип из настроек или дефолтный
   const logoImage = settings?.logo || defaultLogoImage;
   const storeName = settings?.storeName || 'brandwatch';
 
-  // Получаем имя пользователя из разных источников
   const displayName = profile?.first_name || user?.name || user?.user_metadata?.name || '';
   const displayEmail = profile?.email || user?.email || '';
   const displayPhone = profile?.phone || user?.phone || '';
@@ -176,10 +174,16 @@ const Header = ({ onOpenAdmin }) => {
                         {t('profile.favorites')}
                       </button>
                     </div>
-                    <button className="logout-btn" onClick={async () => { 
-                      await logout(); 
-                      setShowUserMenu(false); 
-                      showToast.logoutSuccess();
+                    <button className="logout-btn" onClick={async (e) => { 
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowUserMenu(false);
+                      try {
+                        await logout();
+                        showToast.logoutSuccess();
+                      } catch (err) {
+                        console.error('Logout error:', err);
+                      }
                     }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
