@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
@@ -12,7 +12,8 @@ import defaultLogoImage from '../images/image.png';
 import './Header.css';
 
 const Header = ({ onOpenAdmin }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
@@ -140,14 +141,46 @@ const Header = ({ onOpenAdmin }) => {
                 {showUserMenu && (
                   <div className="user-dropdown">
                     <div className="user-info">
-                      <span className="user-name">{user?.name}</span>
-                      <span className="user-phone">{user?.phone}</span>
+                      <span className="user-name">{user?.name || t('profile.user')}</span>
+                      <span className="user-phone">{user?.email || user?.phone}</span>
+                    </div>
+                    <div className="user-dropdown-links">
+                      <button 
+                        className="dropdown-link"
+                        onClick={() => {
+                          navigate('/profile');
+                          setShowUserMenu(false);
+                        }}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                          <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        {t('profile.myProfile')}
+                      </button>
+                      <button 
+                        className="dropdown-link"
+                        onClick={() => {
+                          navigate('/favorites');
+                          setShowUserMenu(false);
+                        }}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                        {t('profile.favorites')}
+                      </button>
                     </div>
                     <button className="logout-btn" onClick={() => { 
                       logout(); 
                       setShowUserMenu(false); 
                       showToast.logoutSuccess();
                     }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                      </svg>
                       {t('auth.logout')}
                     </button>
                   </div>

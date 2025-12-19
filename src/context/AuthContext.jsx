@@ -320,6 +320,49 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Обновление профиля пользователя
+  const updateProfile = async (profileData) => {
+    try {
+      if (user?.id) {
+        const { data, error } = await db.profiles.update(user.id, {
+          first_name: profileData.name,
+          email: profileData.email,
+          phone: profileData.phone,
+          updated_at: new Date().toISOString()
+        });
+
+        if (error) {
+          console.error('Update profile error:', error);
+          return { success: false, error: error.message };
+        }
+
+        if (data) {
+          setProfile(data);
+          // Обновляем локальное состояние user
+          setUser(prev => ({
+            ...prev,
+            name: profileData.name || prev.name,
+            email: profileData.email || prev.email,
+            phone: profileData.phone || prev.phone
+          }));
+          // Обновляем localStorage
+          const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+          localStorage.setItem('currentUser', JSON.stringify({
+            ...currentUser,
+            name: profileData.name || currentUser.name,
+            email: profileData.email || currentUser.email,
+            phone: profileData.phone || currentUser.phone
+          }));
+          return { success: true };
+        }
+      }
+      return { success: false, error: 'User not found' };
+    } catch (err) {
+      console.error('Update profile error:', err);
+      return { success: false, error: err.message };
+    }
+  };
+
   // Сброс пароля
   const resetPassword = async (email) => {
     try {
@@ -344,6 +387,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     updateUser,
+    updateProfile,
     resetPassword
   };
 

@@ -12,6 +12,7 @@ import RecentlyViewed from './components/RecentlyViewed';
 import Catalog from './pages/Catalog';
 import Cart from './pages/Cart';
 import Favorites from './pages/Favorites';
+import Profile from './pages/Profile';
 import AdminPanel from './components/admin/AdminPanel';
 import Premium from './pages/Premium';
 import i18n from './i18n';
@@ -108,6 +109,7 @@ function App() {
                 <Route path="/catalog" element={<Catalog />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/favorites" element={<Favorites />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="/premium" element={<Premium />} />
                 <Route path="*" element={<Navigate to="/catalog" replace />} />
               </Routes>

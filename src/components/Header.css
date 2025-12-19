@@ -259,6 +259,46 @@ a.icon-btn {
   color: rgba(255, 255, 255, 0.6);
 }
 
+.user-dropdown-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(55, 110, 111, 0.3);
+}
+
+.dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  text-align: left;
+}
+
+.dropdown-link:hover {
+  background: rgba(55, 110, 111, 0.2);
+  color: #fff;
+}
+
+.dropdown-link svg {
+  opacity: 0.7;
+}
+
+.dropdown-link:hover svg {
+  opacity: 1;
+}
+
 .admin-panel-btn {
   width: 100%;
   padding: 10px;
@@ -288,6 +328,10 @@ a.icon-btn {
 }
 
 .logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
   padding: 10px;
   background: rgba(255, 107, 107, 0.1);
