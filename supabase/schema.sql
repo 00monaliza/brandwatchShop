@@ -422,8 +422,34 @@ CREATE TRIGGER update_store_settings_updated_at
   EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================
--- 11. CREATE STORAGE BUCKET FOR IMAGES
+-- 11. CREATE STORAGE BUCKETS FOR IMAGES
 -- ============================================
 -- Run this in Supabase Dashboard -> Storage -> New Bucket
+
+-- Bucket 1: product-images
 -- Bucket name: product-images
 -- Public: Yes
+-- Description: Хранилище изображений товаров
+
+-- Bucket 2: store-assets
+-- Bucket name: store-assets
+-- Public: Yes
+-- Description: Хранилище логотипа и других ассетов магазина
+
+-- ВАЖНО: После создания бакетов в Supabase Dashboard, 
+-- добавьте политики доступа через SQL Editor:
+
+-- Storage Policy для store-assets (публичное чтение, загрузка для всех)
+-- INSERT INTO storage.buckets (id, name, public) VALUES ('store-assets', 'store-assets', true);
+
+-- Политика: любой может читать файлы из store-assets
+-- CREATE POLICY "Public Access store-assets" ON storage.objects FOR SELECT USING (bucket_id = 'store-assets');
+
+-- Политика: любой может загружать файлы в store-assets
+-- CREATE POLICY "Allow uploads store-assets" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'store-assets');
+
+-- Политика: любой может удалять файлы из store-assets
+-- CREATE POLICY "Allow deletes store-assets" ON storage.objects FOR DELETE USING (bucket_id = 'store-assets');
+
+-- Политика: любой может обновлять файлы в store-assets
+-- CREATE POLICY "Allow updates store-assets" ON storage.objects FOR UPDATE USING (bucket_id = 'store-assets');
