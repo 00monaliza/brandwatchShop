@@ -366,12 +366,16 @@ export const AuthProvider = ({ children }) => {
   // Сброс пароля
   const resetPassword = async (email) => {
     try {
+      console.log('Attempting to reset password for:', email);
       const { error } = await auth.resetPassword(email);
       if (error) {
+        console.error('Reset password error:', error);
         return { success: false, error: error.message };
       }
+      console.log('Reset password email sent successfully');
       return { success: true };
     } catch (err) {
+      console.error('Reset password exception:', err);
       return { success: false, error: err.message };
     }
   };

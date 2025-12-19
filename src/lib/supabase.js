@@ -48,7 +48,10 @@ export const auth = {
 
   // Сброс пароля
   resetPassword: async (email) => {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://brandwatch.kz/reset-password'
+    });
+    console.log('Reset password response:', { data, error });
     return { data, error };
   },
 
