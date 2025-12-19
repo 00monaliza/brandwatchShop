@@ -318,13 +318,106 @@ export const db = {
   }
 };
 
+// Store Settings helpers
+export const storeSettings = {
+  // Получить настройки магазина
+  get: async () => {
+    const { data, error } = await supabase
+      .from('store_settings')
+      .select('*')
+      .eq('id', 1)
+      .single();
+    
+    if (error && error.code === 'PGRST116') {
+      return { 
+        data: {
+          id: 1,
+          store_name: 'brandwatch',
+          currency: '$',
+          whatsapp: '+77778115151',
+          telegram: '@baikadamov_a',
+          email: 'info@brandwatch.kz',
+          instagram: 'https://www.instagram.com/brandwatch.kz/',
+          address: '',
+          working_hours: '',
+          payment_methods: [
+            { id: 1, name: 'Kaspi', enabled: true },
+            { id: 2, name: 'Карта', enabled: true },
+            // { id: 3, name: 'Наличные', enabled: true }
+          ],
+          notifications: {
+            telegramBotToken: '',
+            telegramChatId: '',
+            onNewOrder: true,
+            onOrderStatusChange: false,
+            onLowStock: false
+          }
+        }, 
+        error: null 
+      };
+    }
+    
+    return { data, error };
+  },
+
+  // Обновить настройки магазина
+  update: async (updates) => {
+    // Преобразуем camelCase в snake_case для Supabase
+    const dbUpdates = {};
+    
+    if (updates.storeName !== undefined) dbUpdates.store_name = updates.storeName;
+    if (updates.logo !== undefined) dbUpdates.logo_url = updates.logo;
+    if (updates.currency !== undefined) dbUpdates.currency = updates.currency;
+    if (updates.contacts?.whatsapp !== undefined) dbUpdates.whatsapp = updates.contacts.whatsapp;
+    if (updates.contacts?.telegram !== undefined) dbUpdates.telegram = updates.contacts.telegram;
+    if (updates.contacts?.email !== undefined) dbUpdates.email = updates.contacts.email;
+    if (updates.contacts?.address !== undefined) dbUpdates.address = updates.contacts.address;
+    if (updates.contacts?.workingHours !== undefined) dbUpdates.working_hours = updates.contacts.workingHours;
+    if (updates.contacts?.instagram !== undefined) dbUpdates.instagram = updates.contacts.instagram;
+    if (updates.paymentMethods !== undefined) dbUpdates.payment_methods = updates.paymentMethods;
+    if (updates.bankDetails !== undefined) dbUpdates.bank_details = updates.bankDetails;
+    if (updates.notifications !== undefined) dbUpdates.notifications = updates.notifications;
+
+    const { data, error } = await supabase
+      .from('store_settings')
+      .upsert({ id: 1, ...dbUpdates })
+      .select()
+      .single();
+    
+    return { data, error };
+  },
+
+  // Подписка на изменения настроек (real-time)
+  subscribe: (callback) => {
+    const subscription = supabase
+      .channel('store_settings_changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'store_settings' },
+        (payload) => {
+          callback(payload.new);
+        }
+      )
+      .subscribe();
+    
+    return subscription;
+  },
+
+  // Отписаться от изменений
+  unsubscribe: (subscription) => {
+    if (subscription) {
+      supabase.removeChannel(subscription);
+    }
+  }
+};
+
 // Storage helpers
 export const storage = {
   uploadProductImage: async (file, productId) => {
     const fileExt = file.name.split('.').pop();
     const fileName = `${productId}/${Date.now()}.${fileExt}`;
     
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from('product-images')
       .upload(fileName, file);
 
@@ -342,6 +435,55 @@ export const storage = {
       .from('product-images')
       .remove([path]);
     return { error };
+  },
+
+  // Загрузка логотипа магазина
+  uploadStoreLogo: async (file) => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `store-logo-${Date.now()}.${fileExt}`;
+    
+    // Удаляем старые логотипы
+    const { data: existingFiles } = await supabase.storage
+      .from('store-assets')
+      .list('', { search: 'store-logo' });
+    
+    if (existingFiles && existingFiles.length > 0) {
+      const filesToRemove = existingFiles.map(f => f.name);
+      await supabase.storage
+        .from('store-assets')
+        .remove(filesToRemove);
+    }
+    
+    const { error } = await supabase.storage
+      .from('store-assets')
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: true
+      });
+
+    if (error) return { url: null, error };
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('store-assets')
+      .getPublicUrl(fileName);
+
+    return { url: publicUrl, error: null };
+  },
+
+  // Удаление логотипа магазина
+  deleteStoreLogo: async () => {
+    const { data: existingFiles } = await supabase.storage
+      .from('store-assets')
+      .list('', { search: 'store-logo' });
+    
+    if (existingFiles && existingFiles.length > 0) {
+      const filesToRemove = existingFiles.map(f => f.name);
+      const { error } = await supabase.storage
+        .from('store-assets')
+        .remove(filesToRemove);
+      return { error };
+    }
+    return { error: null };
   }
 };
 

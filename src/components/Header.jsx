@@ -3,19 +3,28 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 import AuthModal from './AuthModal';
+import SearchModal from './SearchModal';
 import { LanguageSwitcher, MobileLanguageSwitcher } from './LanguageSwitcher';
-import logoImage from '../images/image.png';
+import { showToast } from '../utils/toast';
+import defaultLogoImage from '../images/image.png';
 import './Header.css';
 
 const Header = ({ onOpenAdmin }) => {
   const { t, i18n } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { cartCount, favoritesCount } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
+  const { settings } = useSettings();
+
+  // Используем логотип из настроек или дефолтный
+  const logoImage = settings?.logo || defaultLogoImage;
+  const storeName = settings?.storeName || 'brandwatch';
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -42,7 +51,7 @@ const Header = ({ onOpenAdmin }) => {
         {/* Логотип */}
         <div className="logo">
           <Link to="/">
-            <img src={logoImage} alt="brandwatch" className="logo-image" />
+            <img src={logoImage} alt={storeName} className="logo-image" />
           </Link>
         </div>
 
@@ -77,7 +86,7 @@ const Header = ({ onOpenAdmin }) => {
 
           {/* Иконки */}
           <div className="header-icons">
-            <button className="icon-btn" title={t('header.search')}>
+            <button className="icon-btn" title={t('header.search')} onClick={() => setShowSearchModal(true)}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.35-4.35"></path>
@@ -134,7 +143,11 @@ const Header = ({ onOpenAdmin }) => {
                       <span className="user-name">{user?.name}</span>
                       <span className="user-phone">{user?.phone}</span>
                     </div>
-                    <button className="logout-btn" onClick={() => { logout(); setShowUserMenu(false); }}>
+                    <button className="logout-btn" onClick={() => { 
+                      logout(); 
+                      setShowUserMenu(false); 
+                      showToast.logoutSuccess();
+                    }}>
                       {t('auth.logout')}
                     </button>
                   </div>
@@ -170,6 +183,12 @@ const Header = ({ onOpenAdmin }) => {
       <AuthModal 
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
+      />
+
+      {/* Модальное окно поиска */}
+      <SearchModal 
+        isOpen={showSearchModal}
+        onClose={() => setShowSearchModal(false)}
       />
     </header>
   );

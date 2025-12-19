@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
-import { useAdmin } from '../../context/AdminContext';
+import React, { useState, useEffect } from 'react';
+import { useSettings } from '../../context/SettingsContext';
+import { storage } from '../../lib/supabase';
+import { showAdminToast } from '../../utils/toast';
 import './AdminPanel.css';
 
 const AdminSettings = () => {
-  const { settings, updateSettings } = useAdmin();
+  const { settings, updateSettings, loading } = useSettings();
   const [activeSection, setActiveSection] = useState('general');
   const [formData, setFormData] = useState(settings);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+
+  // Синхронизация formData с settings при изменении
+  useEffect(() => {
+    setFormData(settings);
+  }, [settings]);
 
   const handleChange = (section, field, value) => {
     setFormData(prev => ({
@@ -19,24 +28,78 @@ const AdminSettings = () => {
     setSaved(false);
   };
 
-  const handleSave = () => {
-    updateSettings(formData);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  const handleSave = async () => {
+    setSaving(true);
+    const result = await updateSettings(formData);
+    setSaving(false);
+    
+    if (result.success) {
+      setSaved(true);
+      showAdminToast.settingsSaved();
+      setTimeout(() => setSaved(false), 3000);
+    } else {
+      showAdminToast.settingsError(result.error?.message || 'Неизвестная ошибка');
+    }
   };
 
-  const handleLogoChange = (e) => {
+  const handleLogoChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData(prev => ({
-          ...prev,
-          logo: reader.result
-        }));
-        setSaved(false);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // Проверка размера файла (2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      showAdminToast.settingsError('Файл слишком большой. Максимум 2MB');
+      return;
+    }
+
+    // Проверка типа файла
+    if (!file.type.startsWith('image/')) {
+      showAdminToast.settingsError('Пожалуйста, загрузите изображение');
+      return;
+    }
+
+    setUploadingLogo(true);
+
+    try {
+      // Загружаем логотип в Supabase Storage
+      const { url, error } = await storage.uploadStoreLogo(file);
+      
+      if (error) {
+        console.error('Error uploading logo:', error);
+        showAdminToast.settingsError('Ошибка загрузки логотипа');
+        setUploadingLogo(false);
+        return;
+      }
+
+      // Обновляем formData с новым URL логотипа
+      setFormData(prev => ({
+        ...prev,
+        logo: url
+      }));
+      setSaved(false);
+      showAdminToast.settingsSaved();
+    } catch (err) {
+      console.error('Error in handleLogoChange:', err);
+      showAdminToast.settingsError('Ошибка загрузки логотипа');
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
+  const handleRemoveLogo = async () => {
+    setUploadingLogo(true);
+    try {
+      await storage.deleteStoreLogo();
+      setFormData(prev => ({
+        ...prev,
+        logo: null
+      }));
+      setSaved(false);
+    } catch (err) {
+      console.error('Error removing logo:', err);
+      showAdminToast.settingsError('Ошибка удаления логотипа');
+    } finally {
+      setUploadingLogo(false);
     }
   };
 
@@ -46,6 +109,15 @@ const AdminSettings = () => {
     { id: 'payment', label: 'Оплата', },
     { id: 'notifications', label: 'Уведомления', }
   ];
+
+  if (loading) {
+    return (
+      <div className="admin-settings">
+        <h2 className="admin-section-title">Настройки магазина</h2>
+        <div className="loading-state">Загрузка настроек...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-settings">
@@ -77,10 +149,12 @@ const AdminSettings = () => {
                 <label>Логотип магазина</label>
                 <div className="logo-upload">
                   <div className="logo-preview">
-                    {formData.logo ? (
+                    {uploadingLogo ? (
+                      <span className="logo-loading">Загрузка...</span>
+                    ) : formData.logo ? (
                       <img src={formData.logo} alt="Logo" />
                     ) : (
-                      <span className="logo-placeholder"></span>
+                      <span className="logo-placeholder">📷</span>
                     )}
                   </div>
                   <div className="logo-actions">
@@ -90,11 +164,22 @@ const AdminSettings = () => {
                       onChange={handleLogoChange}
                       id="logo-input"
                       hidden
+                      disabled={uploadingLogo}
                     />
-                    <label htmlFor="logo-input" className="upload-btn">
-                      Загрузить логотип
+                    <label htmlFor="logo-input" className={`upload-btn ${uploadingLogo ? 'disabled' : ''}`}>
+                      {uploadingLogo ? 'Загрузка...' : 'Загрузить логотип'}
                     </label>
-                    <span className="upload-hint">PNG, JPG до 2MB</span>
+                    {formData.logo && (
+                      <button 
+                        type="button" 
+                        className="remove-logo-btn"
+                        onClick={handleRemoveLogo}
+                        disabled={uploadingLogo}
+                      >
+                        Удалить
+                      </button>
+                    )}
+                    <span className="upload-hint">PNG, JPG до 2MB. Логотип будет отображаться в шапке и подвале сайта</span>
                   </div>
                 </div>
               </div>
@@ -178,6 +263,17 @@ const AdminSettings = () => {
                   onChange={(e) => handleChange('contacts', 'workingHours', e.target.value)}
                   placeholder="Пн-Пт: 10:00-20:00, Сб-Вс: 11:00-18:00"
                 />
+              </div>
+
+              <div className="form-group">
+                <label>Instagram</label>
+                <input
+                  type="text"
+                  value={formData.contacts?.instagram || ''}
+                  onChange={(e) => handleChange('contacts', 'instagram', e.target.value)}
+                  placeholder="https://www.instagram.com/brandwatch.kz/"
+                />
+                <span className="form-hint">Ссылка на страницу Instagram</span>
               </div>
             </div>
           )}
@@ -317,11 +413,15 @@ const AdminSettings = () => {
           {/* Кнопка сохранения */}
           <div className="settings-actions">
             <button 
-              className={`save-settings-btn ${saved ? 'saved' : ''}`}
+              className={`save-settings-btn ${saved ? 'saved' : ''} ${saving ? 'saving' : ''}`}
               onClick={handleSave}
+              disabled={saving}
             >
-              {saved ? 'Сохранено!' : 'Сохранить настройки'}
+              {saving ? 'Сохранение...' : saved ? '✓ Сохранено!' : 'Сохранить настройки'}
             </button>
+            <span className="settings-hint">
+              Изменения будут применены на всём сайте
+            </span>
           </div>
         </div>
       </div>

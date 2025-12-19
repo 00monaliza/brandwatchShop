@@ -17,15 +17,20 @@ const AdminStatistics = () => {
       {/* Основные карточки */}
       <div className="stats-cards">
         <div className="stats-card">
-          {/* <div className="stats-card-icon"></div> */}
           <div className="stats-card-info">
             <span className="stats-card-value">{stats.totalProducts}</span>
-            <span className="stats-card-label">Товаров</span>
+            <span className="stats-card-label">Товаров в продаже</span>
+          </div>
+        </div>
+
+        <div className="stats-card archived-stat">
+          <div className="stats-card-info">
+            <span className="stats-card-value">{stats.archivedCount || 0}</span>
+            <span className="stats-card-label">В архиве</span>
           </div>
         </div>
 
         <div className="stats-card">
-          <div className="stats-card-icon"></div>
           <div className="stats-card-info">
             <span className="stats-card-value">{stats.totalOrders}</span>
             <span className="stats-card-label">Всего заказов</span>
@@ -33,7 +38,6 @@ const AdminStatistics = () => {
         </div>
 
         <div className="stats-card highlight">
-          {/* <div className="stats-card-icon">💰</div> */}
           <div className="stats-card-info">
             <span className="stats-card-value">{formatCurrency(stats.totalRevenue)}</span>
             <span className="stats-card-label">Выручка</span>
@@ -41,10 +45,16 @@ const AdminStatistics = () => {
         </div>
 
         <div className="stats-card warning">
-          {/* <div className="stats-card-icon">⏳</div> */}
           <div className="stats-card-info">
             <span className="stats-card-value">{stats.pendingOrders}</span>
             <span className="stats-card-label">Ожидают обработки</span>
+          </div>
+        </div>
+
+        <div className="stats-card success">
+          <div className="stats-card-info">
+            <span className="stats-card-value">{stats.completedOrders}</span>
+            <span className="stats-card-label">Выполнено</span>
           </div>
         </div>
       </div>

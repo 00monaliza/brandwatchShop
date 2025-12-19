@@ -142,7 +142,7 @@ export const AuthProvider = ({ children }) => {
       );
 
       if (error) {
-        console.error('❌ Supabase signup error:', error);
+        console.error('Supabase signup error:', error);
         console.log('Error details:', JSON.stringify(error, null, 2));
         
         // Обработка конкретных ошибок

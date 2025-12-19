@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAdmin } from '../../context/AdminContext';
+import { showAdminToast } from '../../utils/toast';
 import './AdminPanel.css';
 
 const AdminUsers = () => {
@@ -63,12 +64,14 @@ const AdminUsers = () => {
       const result = updateAdmin(editingAdmin.id, updates);
       if (result.success) {
         setSuccess('Данные успешно обновлены!');
+        showAdminToast.info('Администратор обновлён', `Данные ${formData.name} обновлены`);
         setTimeout(() => {
           handleCloseModal();
           setSuccess('');
         }, 1500);
       } else {
         setError(result.error);
+        showAdminToast.error(result.error);
       }
     } else {
       // Добавление
@@ -79,12 +82,14 @@ const AdminUsers = () => {
       const result = addAdmin(formData);
       if (result.success) {
         setSuccess('Администратор успешно добавлен!');
+        showAdminToast.adminAdded(formData.name);
         setTimeout(() => {
           handleCloseModal();
           setSuccess('');
         }, 1500);
       } else {
         setError(result.error);
+        showAdminToast.error(result.error);
       }
     }
   };
@@ -93,8 +98,10 @@ const AdminUsers = () => {
     const admin = admins.find(a => a.id === id);
     if (window.confirm(`Удалить администратора "${admin?.name}"?`)) {
       const result = deleteAdmin(id);
-      if (!result.success) {
-        alert(result.error);
+      if (result.success) {
+        showAdminToast.adminDeleted(admin?.name);
+      } else {
+        showAdminToast.error(result.error);
       }
     }
   };

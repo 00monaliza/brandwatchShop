@@ -1,13 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { products } from '../data/products';
 import './RecentlyViewed.css';
 
 const RecentlyViewed = () => {
   const { t } = useTranslation();
-  // For demo purposes, we'll just show the first 2 products
-  // In a real app, this would come from localStorage or context
-  const recentProducts = products.slice(0, 2);
+  const [recentProducts, setRecentProducts] = useState([]);
+
+  // Load recently viewed from localStorage
+  const loadRecentlyViewed = () => {
+    try {
+      const stored = localStorage.getItem('recentlyViewed');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setRecentProducts(parsed.slice(0, 6)); // Show max 6 items
+      }
+    } catch (error) {
+      console.error('Error loading recently viewed:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Load on mount
+    loadRecentlyViewed();
+
+    // Listen for updates from ProductCard
+    const handleUpdate = () => {
+      loadRecentlyViewed();
+    };
+
+    window.addEventListener('recentlyViewedUpdated', handleUpdate);
+    
+    // Also listen for storage changes (for multi-tab support)
+    window.addEventListener('storage', handleUpdate);
+
+    return () => {
+      window.removeEventListener('recentlyViewedUpdated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
+  }, []);
 
   if (recentProducts.length === 0) return null;
 
@@ -24,7 +54,7 @@ const RecentlyViewed = () => {
               <div className="recent-card-info">
                 <h3 className="recent-card-brand">{product.brand} {product.title}</h3>
                 <div className="recent-card-price">
-                  {product.price.toLocaleString()} ₸
+                  ${product.price.toLocaleString()}
                 </div>
               </div>
             </div>

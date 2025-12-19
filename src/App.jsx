@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
+import { SettingsProvider } from './context/SettingsContext';
+import { ToastContainer } from './components/Toast';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import MagicNavigation from './components/MagicNavigation';
@@ -73,9 +75,13 @@ function App() {
   return (
     <AuthProvider>
       <AdminProvider>
-        <CartProvider>
-          <Router>
-            <div className="app">
+        <SettingsProvider>
+          <CartProvider>
+            <Router>
+              <div className="app">
+              {/* Toast Container */}
+              <ToastContainer />
+              
               {/* Динамичный фон с частицами */}
               <div className="background-animation">
                 {/* Floating Particles */}
@@ -112,13 +118,14 @@ function App() {
               {/* Magic Navigation Menu */}
               <MagicNavigation />
 
-              {/* Admin Panel */}
-              {showAdminPanel && (
-                <AdminPanel onClose={() => setShowAdminPanel(false)} />
-              )}
-            </div>
-          </Router>
-        </CartProvider>
+                {/* Admin Panel */}
+                {showAdminPanel && (
+                  <AdminPanel onClose={() => setShowAdminPanel(false)} />
+                )}
+              </div>
+            </Router>
+          </CartProvider>
+        </SettingsProvider>
       </AdminProvider>
     </AuthProvider>
   );

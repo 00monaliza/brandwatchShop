@@ -5,11 +5,12 @@ import SortDropdown from '../components/SortDropdown';
 import ProductGrid from '../components/ProductGrid';
 import HeroVideo from '../components/HeroVideo';
 import { useProducts } from '../hooks/useProducts';
-import { products as allProducts } from '../data/products';
+import { useAdmin } from '../context/AdminContext';
 import './Catalog.css';
 
 const Catalog = () => {
   const { t } = useTranslation();
+  const { products: allProducts } = useAdmin();
   const [sortType, setSortType] = useState('popularity');
   const [filters, setFilters] = useState({
     brand: [],

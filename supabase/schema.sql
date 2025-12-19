@@ -364,7 +364,65 @@ VALUES
   );
 
 -- ============================================
--- 10. CREATE STORAGE BUCKET FOR IMAGES
+-- 10. STORE SETTINGS TABLE (Настройки магазина)
+-- ============================================
+CREATE TABLE IF NOT EXISTS store_settings (
+  id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1), -- Только одна запись
+  store_name VARCHAR(255) DEFAULT 'brandwatch',
+  logo_url TEXT,
+  currency VARCHAR(10) DEFAULT '$',
+  
+  -- Контактная информация
+  whatsapp VARCHAR(50),
+  telegram VARCHAR(100),
+  email VARCHAR(255),
+  address TEXT,
+  working_hours VARCHAR(255),
+  instagram VARCHAR(255),
+  
+  -- Способы оплаты
+  payment_methods JSONB DEFAULT '[{"id": 1, "name": "Kaspi", "enabled": true}, {"id": 2, "name": "Карта", "enabled": true}, {"id": 3, "name": "Наличные", "enabled": true}]',
+  bank_details TEXT,
+  
+  -- Настройки уведомлений
+  notifications JSONB DEFAULT '{"telegramBotToken": "", "telegramChatId": "", "onNewOrder": true, "onOrderStatusChange": false, "onLowStock": false}',
+  
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Insert default settings
+INSERT INTO store_settings (id, store_name, whatsapp, telegram, email)
+VALUES (1, 'brandwatch', '+77778115151', '@baikadamov_a', 'info@brandwatch.kz')
+ON CONFLICT (id) DO NOTHING;
+
+-- Enable RLS
+ALTER TABLE store_settings ENABLE ROW LEVEL SECURITY;
+
+-- Everyone can read settings
+CREATE POLICY "Settings are viewable by everyone"
+  ON store_settings FOR SELECT
+  USING (true);
+
+-- Allow upsert for settings (needed for initial insert)
+CREATE POLICY "Allow settings upsert"
+  ON store_settings FOR INSERT
+  WITH CHECK (true);
+
+-- Allow update settings (для простоты разрешаем всем, в продакшене можно ограничить)
+-- В будущем можно ограничить только для админов через auth.uid()
+CREATE POLICY "Allow settings update"
+  ON store_settings FOR UPDATE
+  USING (true);
+
+-- Trigger for updated_at
+CREATE TRIGGER update_store_settings_updated_at
+  BEFORE UPDATE ON store_settings
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================
+-- 11. CREATE STORAGE BUCKET FOR IMAGES
 -- ============================================
 -- Run this in Supabase Dashboard -> Storage -> New Bucket
 -- Bucket name: product-images

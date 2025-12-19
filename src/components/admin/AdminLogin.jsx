@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAdmin } from '../../context/AdminContext';
+import { showAdminToast } from '../../utils/toast';
 import './AdminPanel.css';
 
 const AdminLogin = ({ onSuccess, onClose }) => {
@@ -20,9 +21,11 @@ const AdminLogin = ({ onSuccess, onClose }) => {
     const result = adminLogin(phone, password);
     
     if (result.success) {
+      showAdminToast.adminLogin(result.admin?.name);
       onSuccess(result.admin);
     } else {
       setError(result.error);
+      showAdminToast.error(result.error);
     }
     
     setIsLoading(false);

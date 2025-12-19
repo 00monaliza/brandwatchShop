@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { showToast } from '../utils/toast';
 
 const CartContext = createContext();
 
@@ -31,7 +32,7 @@ export const CartProvider = ({ children }) => {
   }, [favorites]);
 
   // Добавить товар в корзину
-  const addToCart = (product) => {
+  const addToCart = (product, silent = false) => {
     setCartItems(prev => {
       const existingItem = prev.find(item => item.id === product.id);
       if (existingItem) {
@@ -43,11 +44,15 @@ export const CartProvider = ({ children }) => {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
+    if (!silent) {
+      showToast.addedToCart(product.title || product.brand);
+    }
   };
 
   // Удалить товар из корзины
-  const removeFromCart = (productId) => {
+  const removeFromCart = (productId, productName = null) => {
     setCartItems(prev => prev.filter(item => item.id !== productId));
+    showToast.removedFromCart(productName);
   };
 
   // Обновить количество
@@ -64,19 +69,24 @@ export const CartProvider = ({ children }) => {
   };
 
   // Очистить корзину
-  const clearCart = () => {
+  const clearCart = (silent = false) => {
     setCartItems([]);
+    if (!silent) {
+      showToast.cartCleared();
+    }
   };
 
   // Добавить/убрать из избранного
   const toggleFavorite = (product) => {
-    setFavorites(prev => {
-      const isFavorite = prev.some(item => item.id === product.id);
-      if (isFavorite) {
-        return prev.filter(item => item.id !== product.id);
-      }
-      return [...prev, product];
-    });
+    const isFav = favorites.some(item => item.id === product.id);
+    
+    if (isFav) {
+      setFavorites(prev => prev.filter(item => item.id !== product.id));
+      showToast.removedFromFavorites(product.title || product.brand);
+    } else {
+      setFavorites(prev => [...prev, product]);
+      showToast.addedToFavorites(product.title || product.brand);
+    }
   };
 
   // Проверить, в избранном ли товар

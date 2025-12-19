@@ -46,10 +46,22 @@ export const AdminProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
-  // Товары
+  // Товары (добавляем stock если его нет)
   const [products, setProducts] = useState(() => {
     const saved = localStorage.getItem('adminProducts');
-    return saved ? JSON.parse(saved) : initialProducts;
+    const productsData = saved ? JSON.parse(saved) : initialProducts;
+    // Добавляем stock = 5 по умолчанию если его нет
+    return productsData.map(p => ({
+      ...p,
+      stock: p.stock !== undefined ? p.stock : 5,
+      isArchived: p.isArchived || false
+    }));
+  });
+
+  // Архивные товары
+  const [archivedProducts, setArchivedProducts] = useState(() => {
+    const saved = localStorage.getItem('archivedProducts');
+    return saved ? JSON.parse(saved) : [];
   });
 
   // Заказы
@@ -80,6 +92,10 @@ export const AdminProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('adminProducts', JSON.stringify(products));
   }, [products]);
+
+  useEffect(() => {
+    localStorage.setItem('archivedProducts', JSON.stringify(archivedProducts));
+  }, [archivedProducts]);
 
   useEffect(() => {
     localStorage.setItem('adminOrders', JSON.stringify(orders));
@@ -208,6 +224,43 @@ export const AdminProvider = ({ children }) => {
     setProducts(prev => prev.filter(p => p.id !== id));
   };
 
+  // Обновить количество товара
+  const updateProductStock = (id, newStock) => {
+    if (newStock <= 0) {
+      // Если 0, архивируем
+      const product = products.find(p => p.id === id);
+      if (product) {
+        setArchivedProducts(prev => [{ ...product, stock: 0, isArchived: true, archivedAt: new Date().toISOString() }, ...prev]);
+        setProducts(prev => prev.filter(p => p.id !== id));
+      }
+    } else {
+      setProducts(prev => prev.map(p => 
+        p.id === id ? { ...p, stock: newStock } : p
+      ));
+    }
+  };
+
+  // Восстановить товар из архива
+  const restoreFromArchive = (id, newStock = 5) => {
+    const product = archivedProducts.find(p => p.id === id);
+    if (product) {
+      const restoredProduct = { 
+        ...product, 
+        stock: newStock, 
+        isArchived: false,
+        restoredAt: new Date().toISOString()
+      };
+      delete restoredProduct.archivedAt;
+      setProducts(prev => [restoredProduct, ...prev]);
+      setArchivedProducts(prev => prev.filter(p => p.id !== id));
+    }
+  };
+
+  // Удалить из архива навсегда
+  const deleteFromArchive = (id) => {
+    setArchivedProducts(prev => prev.filter(p => p.id !== id));
+  };
+
   // Установить скидку
   const setProductDiscount = (id, discount) => {
     setProducts(prev => prev.map(p => {
@@ -227,15 +280,41 @@ export const AdminProvider = ({ children }) => {
 
   // ========== ЗАКАЗЫ ==========
   
-  // Добавить заказ
+  // Добавить заказ и уменьшить количество товаров
   const addOrder = (orderData) => {
     const newOrder = {
       ...orderData,
       id: Date.now(),
-      status: 'new',
+      status: 'pending',
       createdAt: new Date().toISOString()
     };
     setOrders(prev => [newOrder, ...prev]);
+
+    // Уменьшаем количество товаров на складе
+    const itemsToArchive = [];
+    
+    setProducts(prev => {
+      const updated = prev.map(product => {
+        const orderedItem = orderData.items?.find(item => item.id === product.id);
+        if (orderedItem) {
+          const newStock = Math.max(0, (product.stock || 0) - (orderedItem.quantity || 1));
+          if (newStock === 0) {
+            itemsToArchive.push({ ...product, stock: 0, isArchived: true, archivedAt: new Date().toISOString() });
+          }
+          return { ...product, stock: newStock };
+        }
+        return product;
+      });
+      
+      // Удаляем товары с нулевым остатком из активных
+      return updated.filter(p => p.stock > 0);
+    });
+
+    // Добавляем в архив
+    if (itemsToArchive.length > 0) {
+      setArchivedProducts(prev => [...itemsToArchive, ...prev]);
+    }
+
     return newOrder;
   };
 
@@ -289,11 +368,19 @@ export const AdminProvider = ({ children }) => {
   const getStatistics = () => {
     const totalProducts = products.length;
     const totalOrders = orders.length;
+    
+    // Выручка считается по доставленным заказам
+    const completedStatuses = ['completed', 'delivered'];
     const totalRevenue = orders
-      .filter(o => o.status === 'completed')
+      .filter(o => completedStatuses.includes(o.status))
       .reduce((sum, o) => sum + (o.total || 0), 0);
-    const pendingOrders = orders.filter(o => o.status === 'new' || o.status === 'processing').length;
-    const completedOrders = orders.filter(o => o.status === 'completed').length;
+    
+    // Ожидающие обработки
+    const pendingStatuses = ['new', 'pending', 'processing'];
+    const pendingOrders = orders.filter(o => pendingStatuses.includes(o.status)).length;
+    
+    // Завершенные заказы
+    const completedOrders = orders.filter(o => completedStatuses.includes(o.status)).length;
     
     // Заказы за последние 7 дней
     const last7Days = [];
@@ -307,19 +394,29 @@ export const AdminProvider = ({ children }) => {
       last7Days.push({
         date: dateStr,
         orders: dayOrders.length,
-        revenue: dayOrders.reduce((sum, o) => sum + (o.total || 0), 0)
+        revenue: dayOrders
+          .filter(o => completedStatuses.includes(o.status))
+          .reduce((sum, o) => sum + (o.total || 0), 0)
       });
     }
 
-    // Топ товары
+    // Топ товары (по всем заказам, не только завершенным)
     const productSales = {};
     orders.forEach(order => {
       (order.items || []).forEach(item => {
-        if (!productSales[item.id]) {
-          productSales[item.id] = { ...item, totalSold: 0, totalRevenue: 0 };
+        const itemId = item.id || item.title;
+        if (!productSales[itemId]) {
+          productSales[itemId] = { 
+            id: item.id,
+            brand: item.brand,
+            title: item.title,
+            image: item.image,
+            totalSold: 0, 
+            totalRevenue: 0 
+          };
         }
-        productSales[item.id].totalSold += item.quantity || 1;
-        productSales[item.id].totalRevenue += (item.price || 0) * (item.quantity || 1);
+        productSales[itemId].totalSold += item.quantity || 1;
+        productSales[itemId].totalRevenue += (item.price || 0) * (item.quantity || 1);
       });
     });
     const topProducts = Object.values(productSales)
@@ -332,6 +429,7 @@ export const AdminProvider = ({ children }) => {
       totalRevenue,
       pendingOrders,
       completedOrders,
+      archivedCount: archivedProducts.length,
       last7Days,
       topProducts
     };
@@ -349,11 +447,15 @@ export const AdminProvider = ({ children }) => {
     deleteAdmin,
     // Товары
     products,
+    archivedProducts,
     orders,
     settings,
     addProduct,
     updateProduct,
     deleteProduct,
+    updateProductStock,
+    restoreFromArchive,
+    deleteFromArchive,
     setProductDiscount,
     addOrder,
     updateOrderStatus,

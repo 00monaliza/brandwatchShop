@@ -3,6 +3,37 @@ import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
 import './ProductCard.css';
 
+// Helper function to add product to recently viewed
+const addToRecentlyViewed = (product) => {
+  try {
+    const stored = localStorage.getItem('recentlyViewed');
+    let recentlyViewed = stored ? JSON.parse(stored) : [];
+    
+    // Remove if already exists (to move to front)
+    recentlyViewed = recentlyViewed.filter(item => item.id !== product.id);
+    
+    // Add to beginning of array
+    recentlyViewed.unshift({
+      id: product.id,
+      title: product.title,
+      brand: product.brand,
+      price: product.price,
+      image: product.image,
+      viewedAt: Date.now()
+    });
+    
+    // Keep only last 10 items
+    recentlyViewed = recentlyViewed.slice(0, 10);
+    
+    localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+    
+    // Dispatch custom event to notify RecentlyViewed component
+    window.dispatchEvent(new CustomEvent('recentlyViewedUpdated'));
+  } catch (error) {
+    console.error('Error saving recently viewed:', error);
+  }
+};
+
 const ProductCard = ({ product }) => {
   const { t } = useTranslation();
   const { addToCart, toggleFavorite, isFavorite } = useCart();
@@ -14,7 +45,6 @@ const ProductCard = ({ product }) => {
     setIsAdding(true);
     addToCart(product);
     
-    // Анимация сброса через 600ms
     setTimeout(() => {
       setIsAdding(false);
     }, 600);
@@ -32,24 +62,37 @@ const ProductCard = ({ product }) => {
 
   const productIsFavorite = isFavorite(product.id);
 
+  const handleCardClick = () => {
+    addToRecentlyViewed(product);
+  };
+
   return (
-    <div className="product-card">
-      <div className="product-image-container">
-        <img 
-          src={product.image} 
-          alt={product.title}
-          className="product-image"
-        />
-        
-        {/* Кнопка лайка */}
+    <div className="product-card" onClick={handleCardClick}>
+      {/* Shine effect */}
+      <div className="product-card__shine"></div>
+      {/* Glow effect */}
+      <div className="product-card__glow"></div>
+      
+      <div className="product-card__content">
+        {/* Badges */}
+        <div className="product-card__badges">
+          {product.isNew && (
+            <div className="product-card__badge">{t('product.new')}</div>
+          )}
+          {product.discount > 0 && (
+            <div className="product-card__badge product-card__badge--discount">-{product.discount}%</div>
+          )}
+        </div>
+
+        {/* Favorite button */}
         <button 
-          className={`product-favorite-btn ${productIsFavorite ? 'active' : ''} ${isLiking ? 'animating' : ''}`}
+          className={`product-card__favorite ${productIsFavorite ? 'active' : ''} ${isLiking ? 'animating' : ''}`}
           onClick={handleToggleFavorite}
           title={productIsFavorite ? t('product.removeFromFavorites') : t('product.addToFavorites')}
         >
           <svg 
-            width="22" 
-            height="22" 
+            width="18" 
+            height="18" 
             viewBox="0 0 24 24" 
             fill={productIsFavorite ? "currentColor" : "none"} 
             stroke="currentColor" 
@@ -60,75 +103,66 @@ const ProductCard = ({ product }) => {
           {isLiking && <span className="like-burst"></span>}
           {isLiking && productIsFavorite && (
             <span className="flying-heart">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#DA7B93" stroke="#DA7B93" strokeWidth="2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#DA7B93" stroke="#DA7B93" strokeWidth="2">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
               </svg>
             </span>
           )}
         </button>
-        
-        <div className="product-badges">
-          {product.isNew && (
-            <span className="badge badge-new">{t('product.new')}</span>
-          )}
-          {product.discount > 0 && (
-            <span className="badge badge-discount">-{product.discount}%</span>
-          )}
+
+        {/* Image */}
+        <div className="product-card__image-wrapper">
+          <img 
+            src={product.image} 
+            alt={product.title}
+            className="product-card__image"
+          />
         </div>
 
-        <button 
-          className={`product-add-to-cart ${isAdding ? 'adding' : ''}`}
-          onClick={handleAddToCart}
-        >
-          {isAdding ? (
-            <>
-              <svg className="cart-check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+        {/* Text content */}
+        <div className="product-card__text">
+          <p className="product-card__brand">{product.brand}</p>
+          <p className="product-card__title">{product.title}</p>
+          <div className="product-card__specs">
+            <span>Ø {product.diameter}mm</span>
+            <span className="spec-separator">•</span>
+            <span>{product.movement}</span>
+          </div>
+        </div>
+
+        {/* Details tags */}
+        <div className="product-card__details">
+          <span className="product-card__detail-tag">{product.dialColor}</span>
+          <span className="product-card__detail-tag">{product.caseMaterial}</span>
+        </div>
+
+        {/* Footer */}
+        <div className="product-card__footer">
+          <div className="product-card__price-wrapper">
+            {product.discount > 0 && (
+              <span className="product-card__price-old">${product.oldPrice}</span>
+            )}
+            <div className="product-card__price">${product.price}</div>
+          </div>
+          <button 
+            className={`product-card__button ${isAdding ? 'adding' : ''}`}
+            onClick={handleAddToCart}
+          >
+            {isAdding ? (
+              <svg height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              {t('product.added')}
-            </>
-          ) : (
-            <>
-              <svg className="cart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="9" cy="21" r="1"/>
-                <circle cx="20" cy="21" r="1"/>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            ) : (
+              <svg height="16" width="16" viewBox="0 0 24 24">
+                <path
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  d="M4 12H20M12 4V20"
+                  fill="none"
+                />
               </svg>
-              {t('product.addToCart')}
-            </>
-          )}
-        </button>
-      </div>
-
-      <div className="product-info">
-        <div className="product-brand">
-          {product.brand}
-        </div>
-        
-        <h3 className="product-title">
-          {product.title}
-        </h3>
-
-        <div className="product-specs">
-          <span className="spec">Ø {product.diameter}mm</span>
-          <span className="spec-separator">•</span>
-          <span className="spec">{product.movement}</span>
-        </div>
-
-        <div className="product-price">
-          {product.discount > 0 ? (
-            <>
-              <span className="price-old">${product.oldPrice}</span>
-              <span className="price-new">${product.price}</span>
-            </>
-          ) : (
-            <span className="price-new">${product.price}</span>
-          )}
-        </div>
-
-        <div className="product-details">
-          <span className="detail-item">{product.dialColor}</span>
-          <span className="detail-item">{product.caseMaterial}</span>
+            )}
+          </button>
         </div>
       </div>
     </div>

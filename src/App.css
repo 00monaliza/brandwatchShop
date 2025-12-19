@@ -510,3 +510,99 @@ button, .btn, [role="button"] {
   transform: translateZ(0);
 }
 
+/* ========== HEROUI TOAST CUSTOMIZATION ========== */
+[data-slot="toast-region"] {
+  z-index: 99999 !important;
+}
+
+[data-slot="toast"] {
+  background: linear-gradient(135deg, rgba(47, 68, 84, 0.95) 0%, rgba(28, 51, 52, 0.95)) !important;
+  border: 1px solid rgba(218, 123, 147, 0.3) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(218, 123, 147, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+[data-slot="toast"] [data-slot="title"] {
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+[data-slot="toast"] [data-slot="description"] {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 13px !important;
+}
+
+[data-slot="toast"][data-color="success"] {
+  border-color: rgba(39, 174, 96, 0.4) !important;
+}
+
+[data-slot="toast"][data-color="success"] [data-slot="icon"] {
+  color: #27ae60 !important;
+}
+
+[data-slot="toast"][data-color="warning"] {
+  border-color: rgba(243, 156, 18, 0.4) !important;
+}
+
+[data-slot="toast"][data-color="warning"] [data-slot="icon"] {
+  color: #f39c12 !important;
+}
+
+[data-slot="toast"][data-color="danger"] {
+  border-color: rgba(231, 76, 60, 0.4) !important;
+}
+
+[data-slot="toast"][data-color="danger"] [data-slot="icon"] {
+  color: #e74c3c !important;
+}
+
+[data-slot="toast"][data-color="primary"] {
+  border-color: rgba(218, 123, 147, 0.4) !important;
+}
+
+[data-slot="toast"][data-color="primary"] [data-slot="icon"] {
+  color: #DA7B93 !important;
+}
+
+[data-slot="toast"] [data-slot="close-button"] {
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: color 0.2s ease !important;
+}
+
+[data-slot="toast"] [data-slot="close-button"]:hover {
+  color: #fff !important;
+}
+
+[data-slot="toast"] [data-slot="progress-track"] {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 4px !important;
+  height: 3px !important;
+}
+
+[data-slot="toast"][data-color="success"] [data-slot="progress-indicator"] {
+  background: linear-gradient(90deg, #27ae60, #2ecc71) !important;
+}
+
+[data-slot="toast"][data-color="warning"] [data-slot="progress-indicator"] {
+  background: linear-gradient(90deg, #f39c12, #f1c40f) !important;
+}
+
+[data-slot="toast"][data-color="danger"] [data-slot="progress-indicator"] {
+  background: linear-gradient(90deg, #e74c3c, #c0392b) !important;
+}
+
+[data-slot="toast"][data-color="primary"] [data-slot="progress-indicator"] {
+  background: linear-gradient(90deg, #DA7B93, #376E6F) !important;
+}
+
+[data-slot="toast"][data-color="default"] [data-slot="progress-indicator"] {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.3)) !important;
+}
+

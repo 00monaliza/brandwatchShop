@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
+import { showToast } from '../utils/toast';
 import './AuthModal.css';
 
 const countries = [
@@ -168,6 +169,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
         
         if (result.success) {
           setIsSubmitting(false);
+          showToast.loginSuccess(result.user?.name || result.user?.email);
           if (onSuccess) {
             onSuccess(result.user);
           }
@@ -183,6 +185,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
           } else {
             setServerError(result.error || t('auth.errors.unknown'));
           }
+          showToast.error('Ошибка входа');
         }
       } else {
         // Регистрация (теперь асинхронная)
@@ -195,6 +198,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
 
         if (result.success) {
           setIsSubmitting(false);
+          showToast.registrationSuccess();
           if (onSuccess) {
             onSuccess(result.user);
           }
@@ -210,11 +214,13 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
           } else {
             setServerError(result.error || t('auth.errors.unknown'));
           }
+          showToast.error('Ошибка регистрации');
         }
       }
     } catch (err) {
       setIsSubmitting(false);
       setServerError(err.message || t('auth.errors.unknown'));
+      showToast.error(err.message);
     }
   };
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAdmin } from '../../context/AdminContext';
+import { showAdminToast } from '../../utils/toast';
 import './AdminPanel.css';
 
 const AdminOrders = () => {
@@ -8,11 +9,11 @@ const AdminOrders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   const statusLabels = {
-    pending: { label: 'Ожидает', color: '#f39c12',},
-    processing: { label: 'В обработке', color: '#3498db', },
-    shipped: { label: 'Отправлен', color: '#9b59b6', },
-    delivered: { label: 'Доставлен', color: '#27ae60', },
-    cancelled: { label: 'Отменён', color: '#e74c3c', }
+    pending: { label: 'Новый', color: '#f39c12' },
+    processing: { label: 'В обработке', color: '#3498db' },
+    shipped: { label: 'Отправлен', color: '#9b59b6' },
+    delivered: { label: 'Доставлен', color: '#27ae60' },
+    cancelled: { label: 'Отменён', color: '#e74c3c' }
   };
 
   const filteredOrders = filterStatus === 'all' 
@@ -31,6 +32,7 @@ const AdminOrders = () => {
 
   const handleStatusChange = (orderId, newStatus) => {
     updateOrderStatus(orderId, newStatus);
+    showAdminToast.orderStatusChanged(orderId, newStatus);
   };
 
   return (
