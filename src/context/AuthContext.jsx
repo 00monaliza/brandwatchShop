@@ -370,12 +370,20 @@ export const AuthProvider = ({ children }) => {
       const { error } = await auth.resetPassword(email);
       if (error) {
         console.error('Reset password error:', error);
+        // Проверяем на ошибку сети
+        if (error.message?.includes('Failed to fetch') || error.name === 'AuthRetryableFetchError') {
+          return { success: false, error: 'Ошибка сети. Проверьте подключение к интернету.' };
+        }
         return { success: false, error: error.message };
       }
       console.log('Reset password email sent successfully');
       return { success: true };
     } catch (err) {
       console.error('Reset password exception:', err);
+      // Проверяем на ошибку сети
+      if (err.message?.includes('Failed to fetch') || err.name === 'TypeError') {
+        return { success: false, error: 'Ошибка сети. Проверьте подключение к интернету.' };
+      }
       return { success: false, error: err.message };
     }
   };

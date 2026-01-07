@@ -93,6 +93,27 @@
   background: rgba(218, 123, 147, 0.1);
 }
 
+.premium-footer__social-link.whatsapp:hover {
+  border-color: #25D366;
+  color: #25D366;
+  background: rgba(37, 211, 102, 0.15);
+  box-shadow: 0 0 15px rgba(37, 211, 102, 0.2);
+}
+
+.premium-footer__social-link.telegram:hover {
+  border-color: #0088cc;
+  color: #0088cc;
+  background: rgba(0, 136, 204, 0.15);
+  box-shadow: 0 0 15px rgba(0, 136, 204, 0.2);
+}
+
+.premium-footer__social-link.instagram:hover {
+  border-color: #bc1888;
+  color: #bc1888;
+  background: rgba(188, 24, 136, 0.15);
+  box-shadow: 0 0 15px rgba(188, 24, 136, 0.2);
+}
+
 /* Link Columns */
 .premium-footer__column {
   display: flex;

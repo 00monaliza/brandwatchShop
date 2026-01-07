@@ -35,9 +35,9 @@
   height: 100%;
   background: linear-gradient(
     180deg,
-    rgba(28, 51, 52, 0.3) 0%,
-    rgba(47, 68, 84, 0.5) 50%,
-    rgba(46, 21, 27, 0.7) 100%
+    rgba(15, 23, 42, 0.4) 0%,
+    rgba(15, 23, 42, 0.6) 50%,
+    rgba(0, 0, 0, 0.9) 100%
   );
 }
 
@@ -56,7 +56,7 @@
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.3em;
-  color: var(--accent-light, #DA7B93);
+  color: var(--accent-light, #D4AF37);
   margin-bottom: 1.5rem;
   text-transform: uppercase;
 }
@@ -109,13 +109,13 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: var(--accent-light, #DA7B93);
+  background: var(--accent-light, #D4AF37);
   transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -1;
 }
 
 .premium-hero__cta:hover {
-  border-color: var(--accent-light, #DA7B93);
+  border-color: var(--accent-light, #D4AF37);
   color: #FFFFFF;
 }
 

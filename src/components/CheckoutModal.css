@@ -680,86 +680,136 @@
 .payment-method-selection {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  animation: fadeIn 0.4s ease;
 }
 
 .payment-method-label {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.5px;
 }
 
 .payment-methods {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .payment-method-btn {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  gap: 20px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   text-align: left;
   width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-method-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: transparent;
+  transition: all 0.3s ease;
 }
 
 .payment-method-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(55, 110, 111, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.payment-method-btn.kaspi-btn:hover {
+  border-color: rgba(241, 70, 53, 0.4);
+  box-shadow: 0 15px 35px rgba(241, 70, 53, 0.15);
+}
+
+.payment-method-btn.kaspi-btn:hover::before {
+  background: #f14635;
+}
+
+.payment-method-btn.card-btn:hover {
+  border-color: rgba(218, 123, 147, 0.4);
+  box-shadow: 0 15px 35px rgba(218, 123, 147, 0.15);
+}
+
+.payment-method-btn.card-btn:hover::before {
+  background: #DA7B93;
 }
 
 .payment-method-icon {
-  width: 64px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.payment-method-btn:hover .payment-method-icon {
+  transform: scale(1.1);
 }
 
 .payment-method-icon img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 6px;
 }
 
 .payment-method-icon.card-icon {
-  background: linear-gradient(135deg, rgba(55, 110, 111, 0.3), rgba(47, 68, 84, 0.5));
+  background: linear-gradient(135deg, rgba(55, 110, 111, 0.2), rgba(47, 68, 84, 0.4));
   color: #F5F5F5;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .payment-method-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  flex: 1;
 }
 
 .payment-method-name {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
   color: #F5F5F5;
+  letter-spacing: 0.5px;
 }
 
 .payment-method-desc {
   font-size: 13px;
   color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
 }
 
 .checkout-back-btn.full-width {
   width: 100%;
-  margin-top: 12px;
+  margin-top: 16px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.checkout-back-btn.full-width:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* Kaspi QR Payment */
@@ -767,68 +817,128 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 28px;
+  animation: fadeIn 0.4s ease;
 }
 
 .kaspi-qr-container {
-  background: #fff;
-  padding: 16px;
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  background: #FFFFFF;
+  padding: 24px;
+  border-radius: 24px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.kaspi-qr-container:hover {
+  transform: translateY(-5px);
+}
+
+.kaspi-qr-container::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 26px;
+  padding: 3px;
+  background: linear-gradient(45deg, #f14635, #ff8c00);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
 }
 
 .kaspi-qr-image {
-  width: 240px;
-  height: 240px;
+  width: 260px;
+  height: 260px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 12px;
+  display: block;
 }
 
 .kaspi-instructions {
   text-align: center;
   color: #F5F5F5;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  width: 100%;
 }
 
 .kaspi-instructions h3 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 16px;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20px;
   color: #F5F5F5;
+  letter-spacing: 0.5px;
 }
 
 .kaspi-instructions ol {
   text-align: left;
-  padding-left: 20px;
-  margin: 0 0 20px 0;
-  list-style-type: decimal;
+  padding: 0;
+  margin: 0 0 24px 0;
+  list-style: none;
+  counter-reset: kaspi-steps;
 }
 
 .kaspi-instructions li {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+}
+
+.kaspi-instructions li::before {
+  counter-increment: kaspi-steps;
+  content: counter(kaspi-steps);
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  background: rgba(218, 123, 147, 0.2);
+  color: #DA7B93;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: -2px;
 }
 
 .kaspi-amount {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.08);
+  gap: 16px;
+  padding: 20px;
+  background: rgba(47, 68, 84, 0.4);
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .kaspi-amount span {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
 }
 
 .kaspi-amount strong {
-  font-size: 22px;
-  color: #4cd964;
-  font-weight: 600;
+  font-family: 'Cinzel', serif;
+  font-size: 24px;
+  background: linear-gradient(45deg, #DA7B93, #f14635);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
 }
 
 .kaspi-payment .card-form-buttons {

@@ -1,7 +1,7 @@
 /* ========== PREMIUM PRODUCT CARD ========== */
 .premium-card {
   position: relative;
-  background: rgba(47, 68, 84, 0.3);
+  background: rgba(26, 31, 36, 0.3);
   border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
@@ -10,7 +10,7 @@
 }
 
 .premium-card:hover {
-  box-shadow: 0 25px 50px -12px rgba(47, 68, 84, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
   transform: translateY(-8px);
 }
 
@@ -19,7 +19,7 @@
   position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: linear-gradient(135deg, #2F4454 0%, #1C3334 100%);
+  background: linear-gradient(135deg, #1A1F24 0%, #050608 100%);
 }
 
 .premium-card__image {
@@ -39,8 +39,8 @@
   height: 50%;
   background: linear-gradient(
     to top,
-    rgba(28, 51, 52, 0.95) 0%,
-    rgba(28, 51, 52, 0.7) 50%,
+    rgba(5, 6, 8, 0.95) 0%,
+    rgba(5, 6, 8, 0.7) 50%,
     transparent 100%
   );
   display: flex;
@@ -81,7 +81,7 @@
   left: 50%;
   width: 0;
   height: 2px;
-  background: var(--accent-light, #DA7B93);
+  background: var(--accent-light, #D4AF37);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateX(-50%);
 }

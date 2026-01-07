@@ -137,20 +137,54 @@
 }
 
 .social-icon {
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(55, 110, 111, 0.4);
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--secondary);
-  transition: all 0.3s ease;
+  color: var(--text-muted);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-icon svg {
+  width: 20px;
+  height: 20px;
+  transition: all 0.4s ease;
+  z-index: 1;
 }
 
 .social-icon:hover {
-  background-color: var(--accent-light);
-  color: var(--text-light);
-  border-color: var(--accent-light);
+  transform: translateY(-4px);
+}
+
+.social-icon.whatsapp:hover {
+  background: rgba(37, 211, 102, 0.15);
+  border-color: #25D366;
+  color: #25D366;
+  box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+}
+
+.social-icon.telegram:hover {
+  background: rgba(0, 136, 204, 0.15);
+  border-color: #0088cc;
+  color: #0088cc;
+  box-shadow: 0 5px 15px rgba(0, 136, 204, 0.2);
+}
+
+.social-icon.instagram:hover {
+  background: rgba(188, 24, 136, 0.15);
+  border-color: #bc1888;
+  color: #bc1888;
+  box-shadow: 0 5px 15px rgba(188, 24, 136, 0.2);
+}
+
+.social-icon:hover svg {
+  transform: scale(1.1);
 }
 
 .contact-info {

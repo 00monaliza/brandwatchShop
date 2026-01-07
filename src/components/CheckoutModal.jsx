@@ -408,7 +408,7 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
                     onClick={() => setPaymentMethod('kaspi')}
                   >
                     <div className="payment-method-icon kaspi-icon">
-                      <img src="/images/kaspiQR.jpg" alt="Kaspi QR" />
+                      <img src="/images/qr.jpg" alt="Kaspi QR" />
                     </div>
                     <div className="payment-method-info">
                       <span className="payment-method-name">Kaspi QR</span>
@@ -447,7 +447,7 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
               /* Kaspi QR Payment */
               <div className="kaspi-payment">
                 <div className="kaspi-qr-container">
-                  <img src="/images/kaspiQR.jpg" alt="Kaspi QR" className="kaspi-qr-image" />
+                  <img src="/images/qr.jpg" alt="Kaspi QR" className="kaspi-qr-image" />
                 </div>
                 <div className="kaspi-instructions">
                   <h3>{t('checkout.kaspiInstructions')}</h3>

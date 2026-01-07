@@ -1,15 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
-  --primary: #2F4454;
-  --accent-dark: #2E151B;
-  --accent-light: #DA7B93;
-  --secondary: #376E6F;
-  --dark: #1C3334;
-  --text-light: #FFFFFF;
-  --text-muted: rgba(255, 255, 255, 0.8);
-  --shadow-light: rgba(47, 68, 84, 0.2);
-  --shadow-dark: rgba(28, 51, 52, 0.4);
+  /* Luxury Dark Theme Palette - "Midnight Gold" */
+  --primary: #0F1215;         /* Deep, rich black-blue primarily background */
+  --secondary: #1A1F24;       /* Slightly lighter for cards/surfaces */
+  
+  --accent-dark: #8E6E34;     /* Antique Bronze/Dark Gold */
+  --accent-light: #D4AF37;    /* Classic Metallic Gold */
+  
+  --dark: #050608;            /* Almost pure black for depth */
+  
+  --text-light: #F8F9FA;      /* Crisp white-grey for reading */
+  --text-muted: #8899A6;      /* Cool grey for secondary text */
+  
+  --shadow-light: rgba(212, 175, 55, 0.15); /* Subtle gold glow */
+  --shadow-dark: rgba(0, 0, 0, 0.5);        /* Deep shadow */
   
   /* Premium Easing */
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
@@ -35,15 +40,18 @@ body {
   font-family: 'Montserrat', sans-serif;
   background-color: var(--primary);
   color: var(--text-light);
-  line-height: 1.6;
+  line-height: 1.7; /* Slightly increased for elegance */
+  letter-spacing: 0.02em; /* Slight breathing room for text */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-family: 'Playfair Display', serif; /* Pairing Serif for headings */
+  font-weight: 500; /* Lighter weight is often more luxurious */
+  letter-spacing: 0.03em;
   margin-top: 0;
+  color: var(--text-light);
 }
 
 .app {
@@ -78,7 +86,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(218, 123, 147, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%); /* Subtle gold glow */
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
@@ -91,11 +99,11 @@ h1, h2, h3, h4, h5, h6 {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #DA7B93;
+  background-color: var(--accent-light);
   pointer-events: none;
   z-index: 10000;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px #DA7B93, 0 0 20px rgba(218, 123, 147, 0.5);
+  box-shadow: 0 0 10px var(--accent-dark), 0 0 20px rgba(212, 175, 55, 0.3);
 }
 
 /* ========== GRADIENT MESH BACKGROUND ========== */
@@ -107,9 +115,9 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(ellipse at 20% 20%, rgba(55, 110, 111, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(218, 123, 147, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(47, 68, 84, 1) 0%, rgba(28, 51, 52, 1) 100%);
+    radial-gradient(ellipse at 20% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(26, 31, 36, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, var(--primary) 0%, var(--dark) 100%);
   background-size: 200% 200%;
   animation: gradientMesh 15s ease-in-out infinite;
   z-index: -1;
@@ -313,7 +321,7 @@ h1, h2, h3, h4, h5, h6 {
 .orb-1 {
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, #DA7B93, transparent);
+  background: radial-gradient(circle, var(--accent-dark), transparent);
   top: 15%;
   right: -50px;
   animation-delay: 0s;
@@ -322,7 +330,7 @@ h1, h2, h3, h4, h5, h6 {
 .orb-2 {
   width: 250px;
   height: 250px;
-  background: radial-gradient(circle, #376E6F, transparent);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent);
   bottom: 10%;
   left: -80px;
   animation-delay: -2s;
@@ -423,13 +431,13 @@ button:active::after, .btn:active::after, a.icon-btn:active::after {
 
 /* Дефолтные стили для ссылок */
 a {
-  color: #376E6F;
+  color: var(--text-light);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 a:hover {
-  color: #DA7B93;
+  color: var(--accent-light);
 }
 
 /* Кастомный скроллбар */
@@ -438,16 +446,16 @@ a:hover {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1C3334;
+  background: var(--primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #376E6F 0%, #2F4454 100%);
+  background: linear-gradient(180deg, var(--accent-dark) 0%, var(--secondary) 100%);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #DA7B93 0%, #376E6F 100%);
+  background: linear-gradient(180deg, var(--accent-light) 0%, var(--accent-dark) 100%);
 }
 
 /* Восстановление курсора для интерактивных элементов */
@@ -516,15 +524,15 @@ button, .btn, [role="button"] {
 }
 
 [data-slot="toast"] {
-  background: linear-gradient(135deg, rgba(47, 68, 84, 0.95) 0%, rgba(28, 51, 52, 0.95)) !important;
-  border: 1px solid rgba(218, 123, 147, 0.3) !important;
+  background: linear-gradient(135deg, rgba(26, 31, 36, 0.98) 0%, rgba(5, 6, 8, 0.98)) !important;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 0 40px rgba(218, 123, 147, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-  border-radius: 16px !important;
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(212, 175, 55, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  border-radius: 4px !important; /* Sharper corners for luxury feel */
   font-family: 'Montserrat', sans-serif !important;
 }
 
@@ -564,11 +572,11 @@ button, .btn, [role="button"] {
 }
 
 [data-slot="toast"][data-color="primary"] {
-  border-color: rgba(218, 123, 147, 0.4) !important;
+  border-color: rgba(212, 175, 55, 0.4) !important;
 }
 
 [data-slot="toast"][data-color="primary"] [data-slot="icon"] {
-  color: #DA7B93 !important;
+  color: #D4AF37 !important;
 }
 
 [data-slot="toast"] [data-slot="close-button"] {
@@ -577,7 +585,7 @@ button, .btn, [role="button"] {
 }
 
 [data-slot="toast"] [data-slot="close-button"]:hover {
-  color: #fff !important;
+  color: #D4AF37 !important;
 }
 
 [data-slot="toast"] [data-slot="progress-track"] {
@@ -599,7 +607,7 @@ button, .btn, [role="button"] {
 }
 
 [data-slot="toast"][data-color="primary"] [data-slot="progress-indicator"] {
-  background: linear-gradient(90deg, #DA7B93, #376E6F) !important;
+  background: linear-gradient(90deg, #D4AF37, #8E6E34) !important;
 }
 
 [data-slot="toast"][data-color="default"] [data-slot="progress-indicator"] {

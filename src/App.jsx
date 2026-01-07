@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
@@ -7,19 +7,21 @@ import { SettingsProvider } from './context/SettingsContext';
 import { ToastContainer } from './components/Toast';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import MagicNavigation from './components/MagicNavigation';
 import RecentlyViewed from './components/RecentlyViewed';
+import ResetPasswordModal from './components/ResetPasswordModal';
 import Catalog from './pages/Catalog';
 import Cart from './pages/Cart';
 import Favorites from './pages/Favorites';
 import Profile from './pages/Profile';
 import AdminPanel from './components/admin/AdminPanel';
 import Premium from './pages/Premium';
+import { supabase } from './lib/supabase';
 import i18n from './i18n';
 import './App.css';
 
 function App() {
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
 
   // Ripple эффект для всех кнопок
   const createRipple = useCallback((e) => {
@@ -47,6 +49,27 @@ function App() {
     const savedLanguage = localStorage.getItem('language') || 'ru';
     i18n.changeLanguage(savedLanguage);
 
+    // Слушаем события авторизации для PASSWORD_RECOVERY
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth event:', event);
+      if (event === 'PASSWORD_RECOVERY') {
+        // Показываем модалку для ввода нового пароля
+        setShowResetPasswordModal(true);
+      }
+    });
+
+    // Проверяем URL hash на наличие токена восстановления
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    const type = hashParams.get('type');
+    
+    if (accessToken && type === 'recovery') {
+      // Устанавливаем сессию с токеном и показываем модалку
+      setShowResetPasswordModal(true);
+      // Очищаем URL от токенов
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+
     // Ripple эффект на все кнопки
     const addRippleToButtons = () => {
       const buttons = document.querySelectorAll('button, .btn, [role="button"]');
@@ -70,6 +93,7 @@ function App() {
 
     return () => {
       observer.disconnect();
+      subscription?.unsubscribe();
     };
   }, [createRipple]);
 
@@ -111,18 +135,25 @@ function App() {
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/premium" element={<Premium />} />
+                <Route path="/reset-password" element={<Navigate to="/catalog" replace />} />
                 <Route path="*" element={<Navigate to="/catalog" replace />} />
               </Routes>
 
               <RecentlyViewed />
               <Footer />
-              
-              {/* Magic Navigation Menu */}
-              <MagicNavigation />
 
                 {/* Admin Panel */}
                 {showAdminPanel && (
                   <AdminPanel onClose={() => setShowAdminPanel(false)} />
+                )}
+
+                {/* Reset Password Modal */}
+                {showResetPasswordModal && (
+                  <ResetPasswordModal 
+                    isOpen={showResetPasswordModal} 
+                    onClose={() => setShowResetPasswordModal(false)}
+                    onSuccess={() => setShowResetPasswordModal(false)}
+                  />
                 )}
               </div>
             </Router>

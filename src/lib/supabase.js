@@ -48,10 +48,15 @@ export const auth = {
 
   // Сброс пароля
   resetPassword: async (email) => {
+    // Определяем URL для редиректа в зависимости от окружения
+    const redirectUrl = window.location.hostname === 'localhost' 
+      ? `${window.location.origin}/reset-password`
+      : 'https://brandwatch.kz/reset-password';
+    
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://brandwatch.kz/reset-password'
+      redirectTo: redirectUrl
     });
-    console.log('Reset password response:', { data, error });
+    console.log('Reset password response:', { data, error, redirectUrl });
     return { data, error };
   },
 
