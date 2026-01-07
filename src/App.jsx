@@ -9,10 +9,15 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import RecentlyViewed from './components/RecentlyViewed';
 import ResetPasswordModal from './components/ResetPasswordModal';
+import Home from './pages/Home';
 import Catalog from './pages/Catalog';
+import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Favorites from './pages/Favorites';
 import Profile from './pages/Profile';
+import About from './pages/About';
+import Contacts from './pages/Contacts';
+import Sales from './pages/Sales';
 import AdminPanel from './components/admin/AdminPanel';
 import Premium from './pages/Premium';
 import { supabase } from './lib/supabase';
@@ -129,14 +134,18 @@ function App() {
               <Header onOpenAdmin={() => setShowAdminPanel(true)} />
               
               <Routes>
-                <Route path="/" element={<Navigate to="/catalog" replace />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/catalog" element={<Catalog />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contacts" element={<Contacts />} />
+                <Route path="/sales" element={<Sales />} />
                 <Route path="/premium" element={<Premium />} />
-                <Route path="/reset-password" element={<Navigate to="/catalog" replace />} />
-                <Route path="*" element={<Navigate to="/catalog" replace />} />
+                <Route path="/reset-password" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
 
               <RecentlyViewed />

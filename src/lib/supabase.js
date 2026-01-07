@@ -53,11 +53,32 @@ export const auth = {
       ? `${window.location.origin}/reset-password`
       : 'https://brandwatch.kz/reset-password';
     
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: redirectUrl
-    });
-    console.log('Reset password response:', { data, error, redirectUrl });
-    return { data, error };
+    console.log('=== Password Reset Debug ===');
+    console.log('Email:', email);
+    console.log('Redirect URL:', redirectUrl);
+    console.log('Supabase URL:', supabaseUrl);
+    
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: redirectUrl
+      });
+      
+      console.log('Reset password response:');
+      console.log('- Data:', data);
+      console.log('- Error:', error);
+      
+      if (error) {
+        console.error('Reset password API error:', error.message, error.status);
+      } else {
+        console.log('✅ Reset email request sent successfully!');
+        console.log('Note: Check spam folder if email not received');
+      }
+      
+      return { data, error };
+    } catch (err) {
+      console.error('Reset password exception:', err);
+      return { data: null, error: err };
+    }
   },
 
   // Обновить пароль

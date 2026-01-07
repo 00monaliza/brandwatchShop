@@ -1,0 +1,259 @@
+.home-page {
+  min-height: 100vh;
+}
+
+/* Features Section */
+.features-section {
+  padding: 80px 20px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.features-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.feature-card {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(212, 175, 55, 0.3);
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+  border-radius: 50%;
+}
+
+.feature-icon svg {
+  color: #d4af37;
+}
+
+.feature-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+
+/* Products Section */
+.products-section {
+  padding: 80px 20px;
+}
+
+.products-section .container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.section-header h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.view-all-link {
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.view-all-link:hover {
+  color: #e5c55b;
+}
+
+/* Brands Section */
+.brands-section {
+  padding: 80px 20px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.brands-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brands-section h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 40px;
+}
+
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+}
+
+.brand-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.brand-card span {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.brand-card:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.3);
+  transform: translateY(-3px);
+}
+
+.brand-card:hover span {
+  color: #d4af37;
+}
+
+/* CTA Section */
+.cta-section {
+  padding: 100px 20px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.02));
+}
+
+.cta-section .container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-content {
+  text-align: center;
+}
+
+.cta-content h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.cta-content p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 16px 48px;
+  background: linear-gradient(135deg, #d4af37, #b8962e);
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  background: linear-gradient(135deg, #e5c55b, #d4af37);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .brands-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .features-section,
+  .products-section,
+  .brands-section,
+  .cta-section {
+    padding: 60px 16px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .feature-card {
+    padding: 30px 20px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .brands-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .brand-card {
+    padding: 20px 15px;
+  }
+
+  .cta-content h2 {
+    font-size: 1.8rem;
+  }
+
+  .cta-content p {
+    font-size: 1rem;
+  }
+
+  .cta-button {
+    padding: 14px 36px;
+  }
+}

@@ -6,6 +6,18 @@
     "aboutUs": "About Us",
     "contacts": "Contacts"
   },
+  "sales": {
+    "badge": "Special Offer",
+    "title": "Sale",
+    "subtitle": "Best prices on premium watches. Get your dream watch at a great price!",
+    "bigDiscount": "Hot Deals",
+    "mediumDiscount": "Great Offers",
+    "smallDiscount": "Special Prices",
+    "upTo": "Up to",
+    "off": "off",
+    "noSales": "No active sales right now",
+    "noSalesText": "Subscribe to our newsletter to be the first to know about sales"
+  },
   "header": {
     "search": "Search",
     "cart": "Cart",
@@ -330,5 +342,91 @@
       "delivered": "Delivered",
       "cancelled": "Cancelled"
     }
+  },
+  "home": {
+    "features": {
+      "authentic": "100% Authentic",
+      "authenticDesc": "Only genuine watches from authorized dealers",
+      "warranty": "2 Year Warranty",
+      "warrantyDesc": "Official manufacturer warranty",
+      "delivery": "Free Delivery",
+      "deliveryDesc": "Free shipping in Kazakhstan on orders over $500",
+      "support": "24/7 Support",
+      "supportDesc": "Expert consultation anytime"
+    },
+    "newArrivals": "New Arrivals",
+    "popular": "Popular Models",
+    "viewAll": "View All",
+    "brands": "Popular Brands",
+    "cta": {
+      "title": "Find Your Perfect Watch",
+      "subtitle": "Over 500 premium watch models from world-leading brands",
+      "button": "Browse Catalog"
+    }
+  },
+  "product": {
+    "notFound": "Product not found",
+    "backToCatalog": "Back to Catalog",
+    "specifications": "Specifications",
+    "diameter": "Diameter",
+    "caseMaterial": "Case Material",
+    "movement": "Movement",
+    "waterResistance": "Water Resistance",
+    "glass": "Glass",
+    "strapMaterial": "Strap Material",
+    "addToCart": "Add to Cart",
+    "guarantee": "2 Year Warranty",
+    "freeDelivery": "Free Delivery",
+    "return": "14 Day Return",
+    "related": "Related Products",
+    "defaultDescription": "Elegant watch from a renowned brand with impeccable quality and stylish design."
+  },
+  "about": {
+    "title": "About BrandWatch",
+    "subtitle": "We specialize in selling original Swiss and Japanese watches",
+    "storyTitle": "Our Story",
+    "storyText1": "BrandWatch is a team of enthusiasts and connoisseurs of watchmaking art. Since 2019, we have been helping our clients find the perfect watches that emphasize their individuality and status.",
+    "storyText2": "Over the years, we have established direct connections with authorized dealers of leading world brands, which allows us to guarantee the authenticity of every watch and offer competitive prices.",
+    "valuesTitle": "Our Values",
+    "value1Title": "Quality and Authenticity",
+    "value1Desc": "Every watch is verified for authenticity and comes with full documentation",
+    "value2Title": "Customer Care",
+    "value2Desc": "Individual approach and expert consultations for every customer",
+    "value3Title": "Transparency",
+    "value3Desc": "Honest prices without hidden fees and complete product information",
+    "statYears": "years in market",
+    "statClients": "satisfied clients",
+    "statBrands": "brands",
+    "statAuthentic": "authentic",
+    "teamTitle": "Our Team",
+    "teamSubtitle": "Professionals in their field",
+    "team1Name": "Alexander Kim",
+    "team1Role": "Founder",
+    "team2Name": "Maria Ivanova",
+    "team2Role": "Watch Expert",
+    "team3Name": "Yerzhan Suleimenov",
+    "team3Role": "Sales Manager"
+  },
+  "contacts": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with us in any convenient way",
+    "infoTitle": "Our Contacts",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "workingHours": "Working Hours",
+    "weekdays": "Mon-Fri",
+    "weekend": "Sat-Sun",
+    "followUs": "Follow Us",
+    "formTitle": "Send us a message",
+    "formName": "Your name",
+    "formEmail": "Email",
+    "formPhone": "Phone",
+    "formSubject": "Subject",
+    "formMessage": "Message",
+    "formSubmit": "Send Message",
+    "successTitle": "Message sent!",
+    "successMessage": "We will contact you shortly",
+    "mapPlaceholder": "Map is loading..."
   }
 }

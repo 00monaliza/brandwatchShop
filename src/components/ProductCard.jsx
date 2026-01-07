@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import './ProductCard.css';
 
@@ -36,6 +37,7 @@ const addToRecentlyViewed = (product) => {
 
 const ProductCard = ({ product }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { addToCart, toggleFavorite, isFavorite } = useCart();
   const [isAdding, setIsAdding] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
@@ -64,6 +66,7 @@ const ProductCard = ({ product }) => {
 
   const handleCardClick = () => {
     addToRecentlyViewed(product);
+    navigate(`/product/${product.id}`);
   };
 
   return (
