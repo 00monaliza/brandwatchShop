@@ -23,11 +23,11 @@
     "framer-motion": "^12.23.26",
     "i18next": "^23.7.0",
     "lucide-react": "^0.562.0",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-i18next": "^13.5.0",
     "react-router-dom": "^6.20.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
