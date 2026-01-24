@@ -70,14 +70,14 @@ const FilterSidebar = memo(({ filters, onFilterChange, onReset, isOpen, onClose 
 
   const FilterGroup = memo(({ filterKey, title }) => {
     const isExpanded = expandedFilters[filterKey];
-    const options = filterOptions[filterKey] || [];
     const searchQuery = searchQueries[filterKey].toLowerCase();
     
-    const filteredOptions = useMemo(() => 
-      options.filter(option => 
+    const filteredOptions = useMemo(() => {
+      const options = filterOptions[filterKey] || [];
+      return options.filter(option => 
         option.toLowerCase().includes(searchQuery)
-      ), [options, searchQuery]
-    );
+      );
+    }, [filterKey, searchQuery]);
 
     return (
       <div className="filter-group">

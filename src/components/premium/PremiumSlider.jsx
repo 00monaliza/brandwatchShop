@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { getProductImage } from '../../utils/productImage';
 import { useCurrency } from '../../hooks/useCurrency';
 import './PremiumSlider.css';
@@ -13,7 +13,6 @@ const PremiumSlider = ({
   const { formatPrice } = useCurrency();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [direction, setDirection] = useState(0);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
@@ -24,7 +23,6 @@ const PremiumSlider = ({
     if (!autoPlay || isPaused || products.length <= slidesPerView) return;
 
     const interval = setInterval(() => {
-      setDirection(1);
       setCurrentIndex(prev => prev >= maxIndex ? 0 : prev + 1);
     }, autoPlayInterval);
 
@@ -32,17 +30,14 @@ const PremiumSlider = ({
   }, [autoPlay, isPaused, maxIndex, autoPlayInterval, products.length, slidesPerView]);
 
   const goToSlide = (index) => {
-    setDirection(index > currentIndex ? 1 : -1);
     setCurrentIndex(index);
   };
 
   const goNext = () => {
-    setDirection(1);
     setCurrentIndex(prev => prev >= maxIndex ? 0 : prev + 1);
   };
 
   const goPrev = () => {
-    setDirection(-1);
     setCurrentIndex(prev => prev <= 0 ? maxIndex : prev - 1);
   };
 
@@ -60,32 +55,6 @@ const PremiumSlider = ({
       if (diff > 0) goNext();
       else goPrev();
     }
-  };
-
-  const slideVariants = {
-    enter: (direction) => ({
-      x: direction > 0 ? 100 : -100,
-      opacity: 0,
-      scale: 0.95
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.65, 0, 0.35, 1]
-      }
-    },
-    exit: (direction) => ({
-      x: direction < 0 ? 100 : -100,
-      opacity: 0,
-      scale: 0.95,
-      transition: {
-        duration: 0.6,
-        ease: [0.65, 0, 0.35, 1]
-      }
-    })
   };
 
   return (

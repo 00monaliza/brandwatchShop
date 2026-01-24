@@ -1,7 +1,6 @@
 const RATE_LIMIT_KEY = 'upload_rate_limit';
 const MAX_UPLOADS_PER_MINUTE = 10;
 const MAX_UPLOADS_PER_HOUR = 50;
-const CLEANUP_INTERVAL = 60 * 60 * 1000; // 1 час
 
 
 const cleanupOldRecords = () => {

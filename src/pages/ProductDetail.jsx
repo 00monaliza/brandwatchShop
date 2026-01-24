@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
 import { useAdmin } from '../context/AdminContext';
@@ -10,7 +10,6 @@ import './ProductDetail.css';
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const { addToCart } = useCart();
   const { products } = useAdmin();
@@ -30,6 +29,13 @@ const ProductDetail = () => {
     return product.oldPriceInKZT || product.oldPrice || null;
   }, [product]);
 
+  const addToRecentlyViewed = useCallback((product) => {
+    const recent = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+    const filtered = recent.filter(p => p.id !== product.id);
+    const updated = [product, ...filtered].slice(0, 10);
+    localStorage.setItem('recentlyViewed', JSON.stringify(updated));
+  }, []);
+
   useEffect(() => {
     const foundProduct = products.find(p => p.id === parseInt(id) || p.id === id);
     if (foundProduct) {
@@ -38,14 +44,7 @@ const ProductDetail = () => {
       setIsFavorite(favorites.some(f => f.id === foundProduct.id));
       addToRecentlyViewed(foundProduct);
     }
-  }, [id, products]);
-
-  const addToRecentlyViewed = useCallback((product) => {
-    const recent = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
-    const filtered = recent.filter(p => p.id !== product.id);
-    const updated = [product, ...filtered].slice(0, 10);
-    localStorage.setItem('recentlyViewed', JSON.stringify(updated));
-  }, []);
+  }, [id, products, addToRecentlyViewed]);
 
   const handleAddToCart = useCallback(() => {
     if (!product) return;

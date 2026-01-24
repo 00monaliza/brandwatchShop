@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCurrency } from '../../hooks/useCurrency';
 import PremiumImageGallery from './PremiumImageGallery';
@@ -55,7 +54,7 @@ const PremiumProductDetail = ({
     if (demoProduct.variants?.length > 0 && !selectedVariant) {
       setSelectedVariant(demoProduct.variants[0]);
     }
-  }, [demoProduct.variants]);
+  }, [demoProduct.variants, selectedVariant]);
 
   const { formatPrice } = useCurrency();
 

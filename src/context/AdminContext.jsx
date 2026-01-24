@@ -125,13 +125,13 @@ export const AdminProvider = ({ children }) => {
   // ========== АДМИНИСТРАТОРЫ ==========
   
   // Проверка, является ли пользователь админом
-  const isAdmin = (phone) => {
+  const isAdmin = useCallback((phone) => {
     const normalizedPhone = normalizePhone(phone);
     return admins.some(admin => normalizePhone(admin.phone) === normalizedPhone);
-  };
+  }, [admins]);
 
   // Вход администратора
-  const adminLogin = (phone, password) => {
+  const adminLogin = useCallback((phone, password) => {
     const normalizedPhone = normalizePhone(phone);
     const admin = admins.find(a => 
       normalizePhone(a.phone) === normalizedPhone && a.password === password
@@ -141,16 +141,16 @@ export const AdminProvider = ({ children }) => {
       return { success: true, admin };
     }
     return { success: false, error: 'Неверный номер или пароль' };
-  };
+  }, [admins]);
 
   // Выход администратора
-  const adminLogout = () => {
+  const adminLogout = useCallback(() => {
     logout();
     setCurrentAdmin(null);
-  };
+  }, [logout]);
 
   // Добавить администратора
-  const addAdmin = (adminData) => {
+  const addAdmin = useCallback((adminData) => {
     const normalizedPhone = normalizePhone(adminData.phone);
     // Проверка на существование
     if (admins.some(a => normalizePhone(a.phone) === normalizedPhone)) {
@@ -163,10 +163,10 @@ export const AdminProvider = ({ children }) => {
     };
     setAdmins(prev => [...prev, newAdmin]);
     return { success: true, admin: newAdmin };
-  };
+  }, [admins]);
 
   // Обновить данные администратора
-  const updateAdmin = (id, updates) => {
+  const updateAdmin = useCallback((id, updates) => {
     if (updates.phone) {
       updates.phone = normalizePhone(updates.phone);
       // Проверка на дублирование номера
@@ -181,10 +181,10 @@ export const AdminProvider = ({ children }) => {
       setCurrentAdmin(prev => ({ ...prev, ...updates }));
     }
     return { success: true };
-  };
+  }, [admins, currentAdmin]);
 
   // Удалить администратора
-  const deleteAdmin = (id) => {
+  const deleteAdmin = useCallback((id) => {
     // Нельзя удалить последнего админа
     if (admins.length <= 1) {
       return { success: false, error: 'Нельзя удалить последнего администратора' };
@@ -195,12 +195,12 @@ export const AdminProvider = ({ children }) => {
     }
     setAdmins(prev => prev.filter(a => a.id !== id));
     return { success: true };
-  };
+  }, [admins, currentAdmin]);
 
   // ========== ТОВАРЫ (продолжение) ==========
   
   // Добавить товар
-  const addProduct = (product) => {
+  const addProduct = useCallback((product) => {
     const newProduct = {
       ...product,
       id: Date.now(),
@@ -208,59 +208,65 @@ export const AdminProvider = ({ children }) => {
     };
     setProducts(prev => [...prev, newProduct]);
     return newProduct;
-  };
+  }, []);
 
   // Обновить товар
-  const updateProduct = (id, updates) => {
+  const updateProduct = useCallback((id, updates) => {
     setProducts(prev => prev.map(p => 
       p.id === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p
     ));
-  };
+  }, []);
 
   // Удалить товар
-  const deleteProduct = (id) => {
+  const deleteProduct = useCallback((id) => {
     setProducts(prev => prev.filter(p => p.id !== id));
-  };
+  }, []);
 
   // Обновить количество товара
-  const updateProductStock = (id, newStock) => {
+  const updateProductStock = useCallback((id, newStock) => {
     if (newStock <= 0) {
       // Если 0, архивируем
-      const product = products.find(p => p.id === id);
-      if (product) {
-        setArchivedProducts(prev => [{ ...product, stock: 0, isArchived: true, archivedAt: new Date().toISOString() }, ...prev]);
-        setProducts(prev => prev.filter(p => p.id !== id));
-      }
+      setProducts(prev => {
+        const product = prev.find(p => p.id === id);
+        if (product) {
+          setArchivedProducts(archived => [{ ...product, stock: 0, isArchived: true, archivedAt: new Date().toISOString() }, ...archived]);
+          return prev.filter(p => p.id !== id);
+        }
+        return prev;
+      });
     } else {
       setProducts(prev => prev.map(p => 
         p.id === id ? { ...p, stock: newStock } : p
       ));
     }
-  };
+  }, []);
 
   // Восстановить товар из архива
-  const restoreFromArchive = (id, newStock = 5) => {
-    const product = archivedProducts.find(p => p.id === id);
-    if (product) {
-      const restoredProduct = { 
-        ...product, 
-        stock: newStock, 
-        isArchived: false,
-        restoredAt: new Date().toISOString()
-      };
-      delete restoredProduct.archivedAt;
-      setProducts(prev => [restoredProduct, ...prev]);
-      setArchivedProducts(prev => prev.filter(p => p.id !== id));
-    }
-  };
+  const restoreFromArchive = useCallback((id, newStock = 5) => {
+    setArchivedProducts(prev => {
+      const product = prev.find(p => p.id === id);
+      if (product) {
+        const restoredProduct = { 
+          ...product, 
+          stock: newStock, 
+          isArchived: false,
+          restoredAt: new Date().toISOString()
+        };
+        delete restoredProduct.archivedAt;
+        setProducts(products => [restoredProduct, ...products]);
+        return prev.filter(p => p.id !== id);
+      }
+      return prev;
+    });
+  }, []);
 
   // Удалить из архива навсегда
-  const deleteFromArchive = (id) => {
+  const deleteFromArchive = useCallback((id) => {
     setArchivedProducts(prev => prev.filter(p => p.id !== id));
-  };
+  }, []);
 
   // Установить скидку
-  const setProductDiscount = (id, discount) => {
+  const setProductDiscount = useCallback((id, discount) => {
     setProducts(prev => prev.map(p => {
       if (p.id === id) {
         const oldPrice = p.oldPrice || p.price;
@@ -274,12 +280,12 @@ export const AdminProvider = ({ children }) => {
       }
       return p;
     }));
-  };
+  }, []);
 
   // ========== ЗАКАЗЫ ==========
   
   // Добавить заказ и уменьшить количество товаров
-  const addOrder = (orderData) => {
+  const addOrder = useCallback((orderData) => {
     const newOrder = {
       ...orderData,
       id: Date.now(),
@@ -314,56 +320,56 @@ export const AdminProvider = ({ children }) => {
     }
 
     return newOrder;
-  };
+  }, []);
 
   // Обновить статус заказа
-  const updateOrderStatus = (id, status) => {
+  const updateOrderStatus = useCallback((id, status) => {
     setOrders(prev => prev.map(o => 
       o.id === id ? { ...o, status, updatedAt: new Date().toISOString() } : o
     ));
-  };
+  }, []);
 
   // Удалить заказ
-  const deleteOrder = (id) => {
+  const deleteOrder = useCallback((id) => {
     setOrders(prev => prev.filter(o => o.id !== id));
-  };
+  }, []);
 
   // ========== НАСТРОЙКИ ==========
   
   // Обновить настройки
-  const updateSettings = (updates) => {
+  const updateSettings = useCallback((updates) => {
     setSettings(prev => ({ ...prev, ...updates }));
-  };
+  }, []);
 
   // Обновить способ оплаты
-  const updatePaymentMethod = (id, updates) => {
+  const updatePaymentMethod = useCallback((id, updates) => {
     setSettings(prev => ({
       ...prev,
       paymentMethods: prev.paymentMethods.map(pm =>
         pm.id === id ? { ...pm, ...updates } : pm
       )
     }));
-  };
+  }, []);
 
   // Добавить способ оплаты
-  const addPaymentMethod = (method) => {
+  const addPaymentMethod = useCallback((method) => {
     setSettings(prev => ({
       ...prev,
       paymentMethods: [...prev.paymentMethods, { ...method, id: Date.now() }]
     }));
-  };
+  }, []);
 
   // Удалить способ оплаты
-  const deletePaymentMethod = (id) => {
+  const deletePaymentMethod = useCallback((id) => {
     setSettings(prev => ({
       ...prev,
       paymentMethods: prev.paymentMethods.filter(pm => pm.id !== id)
     }));
-  };
+  }, []);
 
   // ========== СТАТИСТИКА ==========
   
-  const getStatistics = () => {
+  const getStatistics = useCallback(() => {
     const totalProducts = products.length;
     const totalOrders = orders.length;
     
@@ -431,7 +437,7 @@ export const AdminProvider = ({ children }) => {
       last7Days,
       topProducts
     };
-  };
+  }, [products, orders, archivedProducts]);
 
   const value = useMemo(() => ({
     // Администраторы

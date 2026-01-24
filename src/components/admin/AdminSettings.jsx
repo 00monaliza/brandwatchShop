@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSettings } from '../../context/SettingsContext';
 import { storage } from '../../lib/supabase';
 import { showAdminToast } from '../../utils/toast';
-import { CURRENCIES, CODE_TO_SYMBOL } from '../../utils/currency';
+import { CODE_TO_SYMBOL } from '../../utils/currency';
 import './AdminPanel.css';
 
 const AdminSettings = () => {

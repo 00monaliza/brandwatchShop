@@ -38,7 +38,7 @@ const PremiumImageGallery = ({
           >
             <img
               src={images[selectedIndex]}
-              alt={`${productTitle} - Image ${selectedIndex + 1}`}
+              alt={`${productTitle} ${selectedIndex + 1}`}
               className="premium-gallery__image"
               style={isZoomed ? {
                 transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,

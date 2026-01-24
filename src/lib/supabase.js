@@ -484,7 +484,7 @@ export const storage = {
     // Загружаем файл
     // Примечание: Проверка авторизации админа выполняется на уровне компонента
     // Здесь мы просто загружаем файл, полагаясь на политики RLS в Supabase
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from('product-images')
       .upload(filePath, file, {
         cacheControl: '3600',

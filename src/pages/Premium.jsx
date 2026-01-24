@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   PremiumHero,
   PremiumSection,
@@ -11,7 +10,6 @@ import {
 import './Premium.css';
 
 const Premium = () => {
-  const { t } = useTranslation();
   const [email, setEmail] = useState('');
 
   // Demo products data

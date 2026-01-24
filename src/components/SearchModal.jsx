@@ -78,7 +78,7 @@ const SearchModal = ({ isOpen, onClose }) => {
       
       return searchableText.includes(query);
     }).slice(0, 8); // Limit to 8 results
-  }, [searchQuery]);
+  }, [searchQuery, products]);
 
   // Save search to recent
   const saveRecentSearch = (query) => {
