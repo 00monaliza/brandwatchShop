@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useAdmin } from '../../context/AdminContext';
+import { useCurrency } from '../../hooks/useCurrency';
 import { showAdminToast } from '../../utils/toast';
+import ImageUploader from './ImageUploader';
+import { storage } from '../../lib/supabase';
 import './AdminPanel.css';
 
 const AdminProducts = () => {
@@ -14,6 +17,7 @@ const AdminProducts = () => {
     restoreFromArchive,
     deleteFromArchive 
   } = useAdmin();
+  const { formatPrice } = useCurrency();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,7 +27,7 @@ const AdminProducts = () => {
     title: '',
     price: '',
     originalPrice: '',
-    image: '',
+    images: [], // Массив изображений вместо одного image
     category: '',
     gender: 'унисекс',
     description: '',
@@ -43,12 +47,23 @@ const AdminProducts = () => {
   const handleOpenModal = (product = null) => {
     if (product) {
       setEditingProduct(product);
+      // Преобразуем старый формат image в новый формат images
+      let images = [];
+      if (product.images && Array.isArray(product.images)) {
+        images = product.images.map(img => 
+          typeof img === 'string' ? { url: img, isTemporary: false } : img
+        );
+      } else if (product.image) {
+        // Поддержка старого формата с одним изображением
+        images = [{ url: product.image, isTemporary: false }];
+      }
+      
       setFormData({
         brand: product.brand || '',
         title: product.title || '',
         price: product.price || '',
         originalPrice: product.originalPrice || '',
-        image: product.image || '',
+        images: images,
         category: product.category || '',
         gender: product.gender || 'унисекс',
         description: product.description || '',
@@ -61,7 +76,7 @@ const AdminProducts = () => {
         title: '',
         price: '',
         originalPrice: '',
-        image: '',
+        images: [],
         category: '',
         gender: 'унисекс',
         description: '',
@@ -84,21 +99,80 @@ const AdminProducts = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Валидация изображений
+    if (!formData.images || formData.images.length === 0) {
+      alert('Пожалуйста, добавьте хотя бы одно изображение товара');
+      return;
+    }
+
+    // Загружаем временные изображения в Supabase
+    const imagesToUpload = formData.images.filter(img => img.isTemporary);
+    let uploadedImages = formData.images.filter(img => !img.isTemporary);
+
+    if (imagesToUpload.length > 0) {
+      try {
+        // Для новых товаров создаем временный ID
+        const tempProductId = editingProduct?.id || `temp_${Date.now()}`;
+        
+        for (const tempImage of imagesToUpload) {
+          const file = tempImage.file;
+          if (file) {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${tempProductId}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+            const result = await storage.uploadProductImage(file, fileName);
+            
+            if (result.error) {
+              console.error('Ошибка загрузки изображения:', result.error);
+              continue;
+            }
+            
+            uploadedImages.push({
+              url: result.url,
+              path: result.path,
+              isTemporary: false
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Ошибка при загрузке изображений:', error);
+        alert('Ошибка при загрузке изображений. Попробуйте еще раз.');
+        return;
+      }
+    }
+
+    // Извлекаем только URL для сохранения в БД
+    const imageUrls = uploadedImages.map(img => img.url);
+    
+    // Сохраняем цены в KZT (админ вводит цены в KZT)
+    const priceInKZT = Number(formData.price);
+    const originalPriceInKZT = formData.originalPrice ? Number(formData.originalPrice) : null;
     
     const productData = {
       ...formData,
-      price: Number(formData.price),
-      originalPrice: formData.originalPrice ? Number(formData.originalPrice) : null,
-      stock: Number(formData.stock) || 5
+      price: priceInKZT, // Сохраняем в KZT
+      priceInKZT: priceInKZT, // Явно указываем, что это KZT
+      originalPrice: originalPriceInKZT,
+      oldPrice: originalPriceInKZT, // Для обратной совместимости
+      originalPriceInKZT: originalPriceInKZT,
+      stock: Number(formData.stock) || 5,
+      images: imageUrls,
+      // Сохраняем первое изображение как image для обратной совместимости
+      image: imageUrls[0] || ''
     };
 
     if (editingProduct) {
       updateProduct(editingProduct.id, productData);
       showAdminToast.productUpdated(productData.title || productData.brand);
     } else {
-      addProduct(productData);
+      const newProduct = addProduct(productData);
+      // Обновляем пути изображений с правильным productId
+      if (newProduct && newProduct.id) {
+        // Переименовываем файлы с temp_ на реальный ID
+        // Это можно сделать позже, если нужно
+      }
       showAdminToast.productAdded(productData.title || productData.brand);
     }
 
@@ -187,7 +261,7 @@ const AdminProducts = () => {
           {filteredProducts.map(product => (
             <div key={product.id} className="admin-product-card">
               <div className="admin-product-image">
-                <img src={product.image} alt={product.title} />
+                <img src={product.images?.[0] || product.image || ''} alt={product.title} />
                 {calculateDiscount(product.price, product.originalPrice) && (
                   <span className="admin-product-discount">
                     -{calculateDiscount(product.price, product.originalPrice)}%
@@ -201,10 +275,18 @@ const AdminProducts = () => {
                 <h3 className="admin-product-brand">{product.brand}</h3>
                 <p className="admin-product-title">{product.title}</p>
                 <div className="admin-product-price">
-                  <span className="current-price">${product.price}</span>
-                  {product.originalPrice && (
-                    <span className="original-price">${product.originalPrice}</span>
-                  )}
+                  <span className="current-price">
+                    {formatPrice(product.priceInKZT || product.price || 0)}
+                  </span>
+                  {(() => {
+                    const originalPriceInKZT = product.originalPriceInKZT || product.originalPrice || null;
+                    const priceInKZT = product.priceInKZT || product.price || 0;
+                    return originalPriceInKZT && originalPriceInKZT > priceInKZT ? (
+                      <span className="original-price">
+                        {formatPrice(originalPriceInKZT)}
+                      </span>
+                    ) : null;
+                  })()}
                 </div>
                 <div className="admin-stock-control">
                   <label>Остаток:</label>
@@ -244,7 +326,7 @@ const AdminProducts = () => {
           {filteredArchived.map(product => (
             <div key={product.id} className="admin-product-card archived">
               <div className="admin-product-image">
-                <img src={product.image} alt={product.title} />
+                <img src={product.images?.[0] || product.image || ''} alt={product.title} />
                 <div className="archived-overlay">
                   <span>В архиве</span>
                 </div>
@@ -253,7 +335,9 @@ const AdminProducts = () => {
                 <h3 className="admin-product-brand">{product.brand}</h3>
                 <p className="admin-product-title">{product.title}</p>
                 <div className="admin-product-price">
-                  <span className="current-price">${product.price}</span>
+                  <span className="current-price">
+                    {formatPrice(product.priceInKZT || product.price || 0)}
+                  </span>
                 </div>
                 <p className="archived-date">
                   Архивирован: {new Date(product.archivedAt).toLocaleDateString('ru-RU')}
@@ -319,7 +403,7 @@ const AdminProducts = () => {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label>Цена ($) *</label>
+                  <label>Цена (₸) *</label>
                   <input
                     type="number"
                     name="price"
@@ -329,9 +413,10 @@ const AdminProducts = () => {
                     min="0"
                     placeholder="15000"
                   />
+                  <span className="form-hint">Цена в тенге (KZT) - базовой валюте</span>
                 </div>
                 <div className="form-group">
-                  <label>Старая цена ($) - для скидки</label>
+                  <label>Старая цена (₸) - для скидки</label>
                   <input
                     type="number"
                     name="originalPrice"
@@ -340,6 +425,7 @@ const AdminProducts = () => {
                     min="0"
                     placeholder="18000"
                   />
+                  <span className="form-hint">Старая цена в тенге (KZT)</span>
                 </div>
                 <div className="form-group">
                   <label>Количество *</label>
@@ -356,20 +442,12 @@ const AdminProducts = () => {
               </div>
 
               <div className="form-group">
-                <label>URL изображения *</label>
-                <input
-                  type="url"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleChange}
-                  required
-                  placeholder="https://example.com/watch.jpg"
+                <ImageUploader
+                  images={formData.images}
+                  onChange={(images) => setFormData(prev => ({ ...prev, images }))}
+                  productId={editingProduct?.id}
+                  maxSizeMB={20}
                 />
-                {formData.image && (
-                  <div className="image-preview">
-                    <img src={formData.image} alt="Preview" />
-                  </div>
-                )}
               </div>
 
               <div className="form-row">

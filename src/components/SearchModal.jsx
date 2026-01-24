@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAdmin } from '../context/AdminContext';
 import { useCart } from '../context/CartContext';
+import { getProductImage } from '../utils/productImage';
+import { useCurrency } from '../hooks/useCurrency';
 import './SearchModal.css';
 
 const SearchModal = ({ isOpen, onClose }) => {
@@ -10,6 +12,7 @@ const SearchModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { products } = useAdmin();
+  const { formatPrice } = useCurrency();
   const [searchQuery, setSearchQuery] = useState('');
   const [recentSearches, setRecentSearches] = useState([]);
   const inputRef = useRef(null);
@@ -105,7 +108,7 @@ const SearchModal = ({ isOpen, onClose }) => {
         title: product.title,
         brand: product.brand,
         price: product.price,
-        image: product.image,
+        image: getProductImage(product),
         viewedAt: Date.now()
       });
       recentlyViewed = recentlyViewed.slice(0, 10);
@@ -265,7 +268,7 @@ const SearchModal = ({ isOpen, onClose }) => {
                         onClick={() => handleProductClick(product)}
                       >
                         <div className="result-image">
-                          <img src={product.image} alt={product.title} />
+                          <img src={getProductImage(product)} alt={product.title} />
                         </div>
                         <div className="result-info">
                           <span className="result-brand">{product.brand}</span>
@@ -276,10 +279,18 @@ const SearchModal = ({ isOpen, onClose }) => {
                             <span>{product.movement}</span>
                           </div>
                           <div className="result-price">
-                            {product.discount > 0 && (
-                              <span className="result-old-price">${product.oldPrice}</span>
-                            )}
-                            <span className="result-current-price">${product.price}</span>
+                            {(() => {
+                              const priceInKZT = product.priceInKZT || product.price || 0;
+                              const oldPriceInKZT = product.oldPriceInKZT || product.oldPrice || null;
+                              return (
+                                <>
+                                  {oldPriceInKZT && oldPriceInKZT > priceInKZT && (
+                                    <span className="result-old-price">{formatPrice(oldPriceInKZT)}</span>
+                                  )}
+                                  <span className="result-current-price">{formatPrice(priceInKZT)}</span>
+                                </>
+                              );
+                            })()}
                           </div>
                         </div>
                         <button 

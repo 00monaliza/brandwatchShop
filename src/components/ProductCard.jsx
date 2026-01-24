@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { getProductImage } from '../utils/productImage';
+import { useCurrency } from '../hooks/useCurrency';
 import './ProductCard.css';
 
 // Helper function to add product to recently viewed
@@ -19,7 +21,7 @@ const addToRecentlyViewed = (product) => {
       title: product.title,
       brand: product.brand,
       price: product.price,
-      image: product.image,
+      image: getProductImage(product),
       viewedAt: Date.now()
     });
     
@@ -35,14 +37,25 @@ const addToRecentlyViewed = (product) => {
   }
 };
 
-const ProductCard = ({ product }) => {
+const ProductCard = memo(({ product }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { addToCart, toggleFavorite, isFavorite } = useCart();
+  const { formatPrice } = useCurrency();
   const [isAdding, setIsAdding] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
+  
+  // Предполагаем, что цены в product хранятся в KZT
+  // Если они хранятся в другой валюте, нужно будет конвертировать
+  const priceInKZT = product.priceInKZT || product.price || 0;
+  const oldPriceInKZT = product.oldPriceInKZT || product.oldPrice || product.originalPrice || null;
+  
+  // Динамически рассчитываем скидку на основе цен
+  const discount = oldPriceInKZT && oldPriceInKZT > priceInKZT 
+    ? Math.round((1 - priceInKZT / oldPriceInKZT) * 100) 
+    : 0;
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = useCallback((e) => {
     e.stopPropagation();
     setIsAdding(true);
     addToCart(product);
@@ -50,9 +63,9 @@ const ProductCard = ({ product }) => {
     setTimeout(() => {
       setIsAdding(false);
     }, 600);
-  };
+  }, [product, addToCart]);
 
-  const handleToggleFavorite = (e) => {
+  const handleToggleFavorite = useCallback((e) => {
     e.stopPropagation();
     setIsLiking(true);
     toggleFavorite(product);
@@ -60,14 +73,14 @@ const ProductCard = ({ product }) => {
     setTimeout(() => {
       setIsLiking(false);
     }, 400);
-  };
+  }, [product, toggleFavorite]);
 
   const productIsFavorite = isFavorite(product.id);
 
-  const handleCardClick = () => {
+  const handleCardClick = useCallback(() => {
     addToRecentlyViewed(product);
     navigate(`/product/${product.id}`);
-  };
+  }, [product, navigate]);
 
   return (
     <div className="product-card" onClick={handleCardClick}>
@@ -82,8 +95,8 @@ const ProductCard = ({ product }) => {
           {product.isNew && (
             <div className="product-card__badge">{t('product.new')}</div>
           )}
-          {product.discount > 0 && (
-            <div className="product-card__badge product-card__badge--discount">-{product.discount}%</div>
+          {discount > 0 && (
+            <div className="product-card__badge product-card__badge--discount">-{discount}%</div>
           )}
         </div>
 
@@ -116,7 +129,7 @@ const ProductCard = ({ product }) => {
         {/* Image */}
         <div className="product-card__image-wrapper">
           <img 
-            src={product.image} 
+            src={getProductImage(product)} 
             alt={product.title}
             className="product-card__image"
           />
@@ -142,10 +155,10 @@ const ProductCard = ({ product }) => {
         {/* Footer */}
         <div className="product-card__footer">
           <div className="product-card__price-wrapper">
-            {product.discount > 0 && (
-              <span className="product-card__price-old">${product.oldPrice}</span>
+            {oldPriceInKZT && oldPriceInKZT > priceInKZT && (
+              <span className="product-card__price-old">{formatPrice(oldPriceInKZT)}</span>
             )}
-            <div className="product-card__price">${product.price}</div>
+            <div className="product-card__price">{formatPrice(priceInKZT)}</div>
           </div>
           <button 
             className={`product-card__button ${isAdding ? 'adding' : ''}`}
@@ -170,6 +183,8 @@ const ProductCard = ({ product }) => {
       </div>
     </div>
   );
-};
+});
+
+ProductCard.displayName = 'ProductCard';
 
 export default ProductCard;

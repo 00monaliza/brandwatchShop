@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { products as initialProducts } from '../data/products';
 import { defaultAdmins } from '../data/admins';
@@ -13,12 +13,10 @@ export const useAdmin = () => {
   return context;
 };
 
-// Нормализация номера телефона (удаление пробелов и оставление только цифр и +)
 const normalizePhone = (phone) => {
   return phone.replace(/[\s()-]/g, '');
 };
 
-// Начальные настройки магазина
 const defaultSettings = {
   logo: null,
   storeName: 'brandwatch',
@@ -435,7 +433,7 @@ export const AdminProvider = ({ children }) => {
     };
   };
 
-  const value = {
+  const value = useMemo(() => ({
     // Администраторы
     admins,
     currentAdmin,
@@ -465,7 +463,7 @@ export const AdminProvider = ({ children }) => {
     addPaymentMethod,
     deletePaymentMethod,
     getStatistics
-  };
+  }), [admins, currentAdmin, products, archivedProducts, orders, settings, isAdmin, adminLogin, adminLogout, addAdmin, updateAdmin, deleteAdmin, addProduct, updateProduct, deleteProduct, updateProductStock, restoreFromArchive, deleteFromArchive, setProductDiscount, addOrder, updateOrderStatus, deleteOrder, updateSettings, updatePaymentMethod, addPaymentMethod, deletePaymentMethod, getStatistics]);
 
   return (
     <AdminContext.Provider value={value}>

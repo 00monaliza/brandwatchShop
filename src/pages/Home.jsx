@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import HeroVideo from '../components/HeroVideo';
@@ -10,9 +10,9 @@ const Home = () => {
   const { t } = useTranslation();
   const { products } = useAdmin();
   
-  // Получаем новинки и популярные товары
-  const newProducts = products.filter(p => p.isNew).slice(0, 4);
-  const popularProducts = products.slice(0, 8);
+  // Получаем новинки и популярные товары (мемоизировано)
+  const newProducts = useMemo(() => products.filter(p => p.isNew).slice(0, 4), [products]);
+  const popularProducts = useMemo(() => products.slice(0, 8), [products]);
 
   return (
     <div className="home-page">

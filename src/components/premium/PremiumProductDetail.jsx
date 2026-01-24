@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useCurrency } from '../../hooks/useCurrency';
 import PremiumImageGallery from './PremiumImageGallery';
 import PremiumButton from './PremiumButton';
 import PremiumSection from './PremiumSection';
@@ -56,9 +57,7 @@ const PremiumProductDetail = ({
     }
   }, [demoProduct.variants]);
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('ru-RU').format(price) + ' ₸';
-  };
+  const { formatPrice } = useCurrency();
 
   const tabs = [
     { id: 'description', label: 'Описание' },

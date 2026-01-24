@@ -1,15 +1,5 @@
--- ============================================
--- SUPABASE DATABASE SCHEMA FOR BRAND WATCH SHOP
--- ============================================
--- Run these SQL commands in Supabase SQL Editor
--- Dashboard -> SQL Editor -> New Query
-
--- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- ============================================
--- 1. PRODUCTS TABLE (Товары/Часы)
--- ============================================
 CREATE TABLE IF NOT EXISTS products (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -28,15 +18,12 @@ CREATE TABLE IF NOT EXISTS products (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Index for faster searches
+
 CREATE INDEX IF NOT EXISTS idx_products_brand ON products(brand);
 CREATE INDEX IF NOT EXISTS idx_products_gender ON products(gender);
 CREATE INDEX IF NOT EXISTS idx_products_price ON products(price);
 CREATE INDEX IF NOT EXISTS idx_products_created_at ON products(created_at);
 
--- ============================================
--- 2. PROFILES TABLE (Профили пользователей)
--- ============================================
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   email VARCHAR(255),
@@ -50,9 +37,6 @@ CREATE TABLE IF NOT EXISTS profiles (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- ============================================
--- 3. ORDERS TABLE (Заказы)
--- ============================================
 CREATE TABLE IF NOT EXISTS orders (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
@@ -71,14 +55,10 @@ CREATE TABLE IF NOT EXISTS orders (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Index for faster queries
 CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
 CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at);
 
--- ============================================
--- 4. FAVORITES TABLE (Избранное)
--- ============================================
 CREATE TABLE IF NOT EXISTS favorites (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
@@ -87,12 +67,8 @@ CREATE TABLE IF NOT EXISTS favorites (
   UNIQUE(user_id, product_id)
 );
 
--- Index for faster queries
 CREATE INDEX IF NOT EXISTS idx_favorites_user_id ON favorites(user_id);
 
--- ============================================
--- 5. CART ITEMS TABLE (Корзина)
--- ============================================
 CREATE TABLE IF NOT EXISTS cart_items (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
@@ -103,12 +79,8 @@ CREATE TABLE IF NOT EXISTS cart_items (
   UNIQUE(user_id, product_id)
 );
 
--- Index for faster queries
 CREATE INDEX IF NOT EXISTS idx_cart_items_user_id ON cart_items(user_id);
 
--- ============================================
--- 6. TRIGGERS FOR UPDATED_AT
--- ============================================
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -424,36 +396,3 @@ CREATE TRIGGER update_store_settings_updated_at
   BEFORE UPDATE ON store_settings
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
-
--- ============================================
--- 11. CREATE STORAGE BUCKETS FOR IMAGES
--- ============================================
--- Run this in Supabase Dashboard -> Storage -> New Bucket
-
--- Bucket 1: product-images
--- Bucket name: product-images
--- Public: Yes
--- Description: Хранилище изображений товаров
-
--- Bucket 2: store-assets
--- Bucket name: store-assets
--- Public: Yes
--- Description: Хранилище логотипа и других ассетов магазина
-
--- ВАЖНО: После создания бакетов в Supabase Dashboard, 
--- добавьте политики доступа через SQL Editor:
-
--- Storage Policy для store-assets (публичное чтение, загрузка для всех)
--- INSERT INTO storage.buckets (id, name, public) VALUES ('store-assets', 'store-assets', true);
-
--- Политика: любой может читать файлы из store-assets
--- CREATE POLICY "Public Access store-assets" ON storage.objects FOR SELECT USING (bucket_id = 'store-assets');
-
--- Политика: любой может загружать файлы в store-assets
--- CREATE POLICY "Allow uploads store-assets" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'store-assets');
-
--- Политика: любой может удалять файлы из store-assets
--- CREATE POLICY "Allow deletes store-assets" ON storage.objects FOR DELETE USING (bucket_id = 'store-assets');
-
--- Политика: любой может обновлять файлы в store-assets
--- CREATE POLICY "Allow updates store-assets" ON storage.objects FOR UPDATE USING (bucket_id = 'store-assets');

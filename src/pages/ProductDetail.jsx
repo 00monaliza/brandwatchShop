@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
 import { useAdmin } from '../context/AdminContext';
 import { showToast } from '../utils/toast';
+import { getProductImages } from '../utils/productImage';
+import { useCurrency } from '../hooks/useCurrency';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -12,38 +14,53 @@ const ProductDetail = () => {
   const { t } = useTranslation();
   const { addToCart } = useCart();
   const { products } = useAdmin();
+  const { formatPrice } = useCurrency();
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  
+  const priceInKZT = useMemo(() => {
+    if (!product) return 0;
+    return product.priceInKZT || product.price || 0;
+  }, [product]);
+  
+  const oldPriceInKZT = useMemo(() => {
+    if (!product) return null;
+    return product.oldPriceInKZT || product.oldPrice || null;
+  }, [product]);
 
   useEffect(() => {
     const foundProduct = products.find(p => p.id === parseInt(id) || p.id === id);
     if (foundProduct) {
       setProduct(foundProduct);
-      // Проверяем избранное
       const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
       setIsFavorite(favorites.some(f => f.id === foundProduct.id));
-      // Добавляем в недавно просмотренные
       addToRecentlyViewed(foundProduct);
     }
   }, [id, products]);
 
-  const addToRecentlyViewed = (product) => {
+  const addToRecentlyViewed = useCallback((product) => {
     const recent = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
     const filtered = recent.filter(p => p.id !== product.id);
     const updated = [product, ...filtered].slice(0, 10);
     localStorage.setItem('recentlyViewed', JSON.stringify(updated));
-  };
+  }, []);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = useCallback(() => {
+    if (!product) return;
     for (let i = 0; i < quantity; i++) {
-      addToCart(product);
+      addToCart(product, true); // silent = true
     }
-    showToast.addedToCart(product.title);
-  };
+    if (quantity > 1) {
+      showToast.addedToCart(`${quantity}x ${product.title}`);
+    } else {
+      showToast.addedToCart(product.title);
+    }
+  }, [product, quantity, addToCart]);
 
-  const toggleFavorite = () => {
+  const toggleFavorite = useCallback(() => {
+    if (!product) return;
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     if (isFavorite) {
       const updated = favorites.filter(f => f.id !== product.id);
@@ -57,7 +74,20 @@ const ProductDetail = () => {
       showToast.addedToFavorites(product.title);
     }
     window.dispatchEvent(new Event('favoritesUpdated'));
-  };
+  }, [product, isFavorite]);
+
+  // Хуки должны вызываться до условного return
+  const images = useMemo(() => {
+    if (!product) return [];
+    return getProductImages(product);
+  }, [product]);
+  
+  const relatedProducts = useMemo(() => {
+    if (!product) return [];
+    return products
+      .filter(p => p.brand === product.brand && p.id !== product.id)
+      .slice(0, 4);
+  }, [products, product]);
 
   if (!product) {
     return (
@@ -73,11 +103,6 @@ const ProductDetail = () => {
       </div>
     );
   }
-
-  const images = product.images || [product.image];
-  const relatedProducts = products
-    .filter(p => p.brand === product.brand && p.id !== product.id)
-    .slice(0, 4);
 
   return (
     <div className="product-detail-page">
@@ -123,9 +148,9 @@ const ProductDetail = () => {
             <h1 className="product-title">{product.title}</h1>
             
             <div className="product-price-block">
-              <span className="product-price">${product.price}</span>
-              {product.oldPrice && (
-                <span className="product-old-price">${product.oldPrice}</span>
+              <span className="product-price">{formatPrice(priceInKZT)}</span>
+              {oldPriceInKZT && oldPriceInKZT > priceInKZT && (
+                <span className="product-old-price">{formatPrice(oldPriceInKZT)}</span>
               )}
             </div>
 
@@ -247,7 +272,7 @@ const ProductDetail = () => {
                   <div className="related-info">
                     <span className="related-brand">{p.brand}</span>
                     <span className="related-title">{p.title}</span>
-                    <span className="related-price">${p.price}</span>
+                    <span className="related-price">{formatPrice(p.priceInKZT || p.price || 0)}</span>
                   </div>
                 </Link>
               ))}

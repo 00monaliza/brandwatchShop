@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useAdmin } from '../context/AdminContext';
+import { useCurrency } from '../hooks/useCurrency';
 import { sendTelegramNotification } from '../services/telegram';
 import { showToast } from '../utils/toast';
 import './CheckoutModal.css';
@@ -12,6 +13,7 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
   const { user } = useAuth();
   const { cartItems, cartTotal, clearCart } = useCart();
   const { addOrder } = useAdmin();
+  const { formatPrice } = useCurrency();
   const [step, setStep] = useState(1); // 1 - info, 2 - payment
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -198,15 +200,20 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
           city: formData.city,
           address: formData.city
         },
-        items: cartItems.map(item => ({
-          id: item.id,
-          title: item.title,
-          brand: item.brand,
-          price: item.price,
-          quantity: item.quantity,
-          image: item.image
-        })),
-        total: cartTotal,
+        items: cartItems.map(item => {
+          const priceInKZT = item.priceInKZT || item.price || 0;
+          return {
+            id: item.id,
+            title: item.title,
+            brand: item.brand,
+            price: priceInKZT, // Сохраняем цену в KZT
+            priceInKZT: priceInKZT, // Явно указываем, что это KZT
+            quantity: item.quantity,
+            image: item.image
+          };
+        }),
+        total: cartTotal, // Общая сумма в KZT
+        totalInKZT: cartTotal, // Явно указываем, что это KZT
         comment: formData.comment,
         orderDate: new Date().toLocaleString('ru-RU'),
         paymentMethod: paymentMethod,
@@ -305,12 +312,17 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
                     <span className="checkout-item-title">{item.title}</span>
                     <span className="checkout-item-qty">x{item.quantity}</span>
                   </div>
-                  <span className="checkout-item-price">${item.price * item.quantity}</span>
+                  <span className="checkout-item-price">
+                    {(() => {
+                      const priceInKZT = item.priceInKZT || item.price || 0;
+                      return formatPrice(priceInKZT * item.quantity);
+                    })()}
+                  </span>
                 </div>
               ))}
               <div className="checkout-total">
                 <span>{t('checkout.total')}:</span>
-                <span className="checkout-total-price">${cartTotal}</span>
+                <span className="checkout-total-price">{formatPrice(cartTotal)}</span>
               </div>
             </div>
 
@@ -458,7 +470,7 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
                   </ol>
                   <div className="kaspi-amount">
                     <span>{t('checkout.amountToPay')}:</span>
-                    <strong>${cartTotal}</strong>
+                    <strong>{formatPrice(cartTotal)}</strong>
                   </div>
                 </div>
 
@@ -631,7 +643,7 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
                       {isSubmitting ? (
                         <span className="loading-spinner"></span>
                       ) : (
-                        `${t('checkout.pay')} $${cartTotal}`
+                        `${t('checkout.pay')} ${formatPrice(cartTotal)}`
                       )}
                     </button>
                   </div>

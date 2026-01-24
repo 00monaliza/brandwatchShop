@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../hooks/useCurrency';
 import { showToast } from '../utils/toast';
 import './Profile.css';
 
@@ -11,6 +12,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const { user, profile, isAuthenticated, logout, updateProfile } = useAuth();
   const { cartItems, favoritesCount } = useCart();
+  const { formatPrice } = useCurrency();
   
   const [activeTab, setActiveTab] = useState('info');
   const [isEditing, setIsEditing] = useState(false);
@@ -21,7 +23,6 @@ const Profile = () => {
   });
   const [saving, setSaving] = useState(false);
 
-  // Получаем имя пользователя из разных источников
   const getUserName = () => {
     if (profile?.first_name) return profile.first_name;
     if (user?.name) return user.name;
@@ -41,7 +42,7 @@ const Profile = () => {
     return '';
   };
 
-  // Редирект если не авторизован
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/catalog');
@@ -283,7 +284,9 @@ const Profile = () => {
                         <span className="order-date">
                           {new Date(order.createdAt).toLocaleDateString('ru-RU')}
                         </span>
-                        <span className="order-total">{order.total} ₸</span>
+                        <span className="order-total">
+                          {formatPrice(order.totalInKZT || order.total || 0)}
+                        </span>
                       </div>
                       <div className="order-items">
                         {order.items?.slice(0, 3).map((item, idx) => (

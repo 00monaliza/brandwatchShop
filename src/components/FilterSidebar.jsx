@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import './FilterSidebar.css';
 
-const FilterSidebar = ({ filters, onFilterChange, onReset, isOpen, onClose }) => {
+const FilterSidebar = memo(({ filters, onFilterChange, onReset, isOpen, onClose }) => {
   const { t } = useTranslation();
   const [expandedFilters, setExpandedFilters] = useState({
     brand: true,
@@ -32,29 +32,29 @@ const FilterSidebar = ({ filters, onFilterChange, onReset, isOpen, onClose }) =>
     waterResistance: '',
   });
 
-  const toggleFilter = (filterName) => {
+  const toggleFilter = useCallback((filterName) => {
     setExpandedFilters(prev => ({
       ...prev,
       [filterName]: !prev[filterName]
     }));
-  };
+  }, []);
 
-  const handleCheckboxChange = (filterName, value) => {
+  const handleCheckboxChange = useCallback((filterName, value) => {
     const current = filters[filterName];
     const updated = current.includes(value)
       ? current.filter(item => item !== value)
       : [...current, value];
     onFilterChange(filterName, updated);
-  };
+  }, [filters, onFilterChange]);
 
-  const handleSearchChange = (filterName, value) => {
+  const handleSearchChange = useCallback((filterName, value) => {
     setSearchQueries(prev => ({
       ...prev,
       [filterName]: value
     }));
-  };
+  }, []);
 
-  const filterOptions = {
+  const filterOptions = useMemo(() => ({
     brand: ['Rolex', 'Omega', 'Cartier', 'Tag Heuer', 'Patek Philippe', 'Chopard', 'Breitling', 'Skagen', 'Hamilton', 'Submariner', 'Guess', 'Citizen', 'Piaget', 'Fossil', 'Seiko', 'Longines', 'Bulova', 'Tissot', 'Jaeger-LeCoultre', 'IWC'],
     diameter: ['34', '36', '38', '40', '42', '44'],
     gender: ['Male', 'Female', 'Unisex'],
@@ -66,15 +66,17 @@ const FilterSidebar = ({ filters, onFilterChange, onReset, isOpen, onClose }) =>
     strapMaterial: ['Metal', 'Leather', 'Rubber', 'Fabric'],
     claspType: ['Folding', 'Buckle'],
     waterResistance: ['30m', '50m', '100m', '200m', '300m', '500m', '1000m']
-  };
+  }), []);
 
-  const FilterGroup = ({ filterKey, title }) => {
+  const FilterGroup = memo(({ filterKey, title }) => {
     const isExpanded = expandedFilters[filterKey];
     const options = filterOptions[filterKey] || [];
     const searchQuery = searchQueries[filterKey].toLowerCase();
     
-    const filteredOptions = options.filter(option => 
-      option.toLowerCase().includes(searchQuery)
+    const filteredOptions = useMemo(() => 
+      options.filter(option => 
+        option.toLowerCase().includes(searchQuery)
+      ), [options, searchQuery]
     );
 
     return (
@@ -131,7 +133,9 @@ const FilterSidebar = ({ filters, onFilterChange, onReset, isOpen, onClose }) =>
         )}
       </div>
     );
-  };
+  });
+
+  FilterGroup.displayName = 'FilterGroup';
 
   return (
     <>
@@ -167,6 +171,8 @@ const FilterSidebar = ({ filters, onFilterChange, onReset, isOpen, onClose }) =>
       </aside>
     </>
   );
-};
+});
+
+FilterSidebar.displayName = 'FilterSidebar';
 
 export default FilterSidebar;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
@@ -11,7 +11,7 @@ import { showToast } from '../utils/toast';
 import defaultLogoImage from '../images/image.png';
 import './Header.css';
 
-const Header = ({ onOpenAdmin }) => {
+const Header = memo(({ onOpenAdmin }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -23,12 +23,21 @@ const Header = ({ onOpenAdmin }) => {
   const { user, profile, isAuthenticated, logout } = useAuth();
   const { settings } = useSettings();
 
-  const logoImage = settings?.logo || defaultLogoImage;
-  const storeName = settings?.storeName || 'brandwatch';
+  const logoImage = useMemo(() => settings?.logo || defaultLogoImage, [settings?.logo]);
+  const storeName = useMemo(() => settings?.storeName || 'brandwatch', [settings?.storeName]);
 
-  const displayName = profile?.first_name || user?.name || user?.user_metadata?.name || '';
-  const displayEmail = profile?.email || user?.email || '';
-  const displayPhone = profile?.phone || user?.phone || '';
+  const displayName = useMemo(() => 
+    profile?.first_name || user?.name || user?.user_metadata?.name || '', 
+    [profile?.first_name, user?.name, user?.user_metadata?.name]
+  );
+  const displayEmail = useMemo(() => 
+    profile?.email || user?.email || '', 
+    [profile?.email, user?.email]
+  );
+  const displayPhone = useMemo(() => 
+    profile?.phone || user?.phone || '', 
+    [profile?.phone, user?.phone]
+  );
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -38,13 +47,25 @@ const Header = ({ onOpenAdmin }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
+  const navItems = useMemo(() => [
     { key: 'nav.main', path: '/' },
     { key: 'nav.catalog', path: '/catalog' },
     { key: 'nav.sales', path: '/sales' },
     { key: 'nav.aboutUs', path: '/about' },
     { key: 'nav.contacts', path: '/contacts' }
-  ];
+  ], []);
+
+  const handleLogout = useCallback(async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowUserMenu(false);
+    try {
+      await logout();
+      showToast.logoutSuccess();
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+  }, [logout]);
 
   return (
     <header className={`header ${scrolled ? 'scrolled' : ''}`}>
@@ -174,17 +195,7 @@ const Header = ({ onOpenAdmin }) => {
                         {t('profile.favorites')}
                       </button>
                     </div>
-                    <button className="logout-btn" onClick={async (e) => { 
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setShowUserMenu(false);
-                      try {
-                        await logout();
-                        showToast.logoutSuccess();
-                      } catch (err) {
-                        console.error('Logout error:', err);
-                      }
-                    }}>
+                    <button className="logout-btn" onClick={handleLogout}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                         <polyline points="16 17 21 12 16 7"/>
@@ -234,6 +245,8 @@ const Header = ({ onOpenAdmin }) => {
       />
     </header>
   );
-};
+});
+
+Header.displayName = 'Header';
 
 export default Header;

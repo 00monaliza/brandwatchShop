@@ -2,19 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { useSettings } from '../../context/SettingsContext';
 import { storage } from '../../lib/supabase';
 import { showAdminToast } from '../../utils/toast';
+import { CURRENCIES, CODE_TO_SYMBOL } from '../../utils/currency';
 import './AdminPanel.css';
 
 const AdminSettings = () => {
   const { settings, updateSettings, loading } = useSettings();
   const [activeSection, setActiveSection] = useState('general');
-  const [formData, setFormData] = useState(settings);
+  const [formData, setFormData] = useState(() => {
+    // Используем код валюты напрямую (теперь хранится как код)
+    const currencyCode = settings?.currency || 'KZT';
+    return {
+      ...settings,
+      currency: currencyCode
+    };
+  });
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
 
-  // Синхронизация formData с settings при изменении
   useEffect(() => {
-    setFormData(settings);
+    if (settings) {
+      // Используем код валюты напрямую
+      const currencyCode = settings.currency || 'KZT';
+      setFormData(prev => ({
+        ...prev,
+        ...settings,
+        currency: currencyCode
+      }));
+    }
   }, [settings]);
 
   const handleChange = (section, field, value) => {
@@ -30,7 +45,13 @@ const AdminSettings = () => {
 
   const handleSave = async () => {
     setSaving(true);
-    const result = await updateSettings(formData);
+    
+    const dataToSave = {
+      ...formData,
+      currency: formData.currency || 'KZT'
+    };
+    
+    const result = await updateSettings(dataToSave);
     setSaving(false);
     
     if (result.success) {
@@ -46,13 +67,11 @@ const AdminSettings = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Проверка размера файла (2MB)
     if (file.size > 2 * 1024 * 1024) {
       showAdminToast.settingsError('Файл слишком большой. Максимум 2MB');
       return;
     }
 
-    // Проверка типа файла
     if (!file.type.startsWith('image/')) {
       showAdminToast.settingsError('Пожалуйста, загрузите изображение');
       return;
@@ -61,7 +80,6 @@ const AdminSettings = () => {
     setUploadingLogo(true);
 
     try {
-      // Загружаем логотип в Supabase Storage
       const { url, error } = await storage.uploadStoreLogo(file);
       
       if (error) {
@@ -71,7 +89,6 @@ const AdminSettings = () => {
         return;
       }
 
-      // Обновляем formData с новым URL логотипа
       setFormData(prev => ({
         ...prev,
         logo: url
@@ -195,16 +212,24 @@ const AdminSettings = () => {
               </div>
 
               <div className="form-group">
-                <label>Валюта</label>
+                <label>Валюта отображения</label>
                 <select
-                  value={formData.currency || 'USD'}
-                  onChange={(e) => setFormData(prev => ({ ...prev, currency: e.target.value }))}
+                  value={formData.currency || 'KZT'}
+                  onChange={(e) => {
+                    setFormData(prev => ({ ...prev, currency: e.target.value }));
+                    setSaved(false);
+                  }}
                 >
-                  <option value="USD">USD ($)</option>
-                  <option value="EUR">EUR (€)</option>
-                  <option value="KZT">KZT (₸)</option>
-                  <option value="RUB">RUB (₽)</option>
+                  <option value="KZT">KZT (₸) - Тенге</option>
+                  <option value="USD">USD ($) - Доллар США</option>
+                  <option value="EUR">EUR (€) - Евро</option>
+                  <option value="RUB">RUB (₽) - Рубль</option>
                 </select>
+                <span className="form-hint">
+                  Текущая валюта: {CODE_TO_SYMBOL[formData.currency] || '₸'} ({formData.currency || 'KZT'})
+                  <br />
+                  <small>Все цены хранятся в KZT и автоматически конвертируются при отображении</small>
+                </span>
               </div>
             </div>
           )}

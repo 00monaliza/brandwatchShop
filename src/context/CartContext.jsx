@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { showToast } from '../utils/toast';
 
 const CartContext = createContext();
@@ -32,7 +32,10 @@ export const CartProvider = ({ children }) => {
   }, [favorites]);
 
   // Добавить товар в корзину
-  const addToCart = (product, silent = false) => {
+  const addToCart = useCallback((product, silent = false) => {
+    // Убеждаемся, что цена в KZT сохранена
+    const priceInKZT = product.priceInKZT || product.price || 0;
+    
     setCartItems(prev => {
       const existingItem = prev.find(item => item.id === product.id);
       if (existingItem) {
@@ -42,21 +45,27 @@ export const CartProvider = ({ children }) => {
             : item
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      // Сохраняем товар с ценой в KZT
+      return [...prev, { 
+        ...product, 
+        quantity: 1,
+        priceInKZT: priceInKZT,
+        price: priceInKZT // Для обратной совместимости
+      }];
     });
     if (!silent) {
       showToast.addedToCart(product.title || product.brand);
     }
-  };
+  }, []);
 
   // Удалить товар из корзины
-  const removeFromCart = (productId, productName = null) => {
+  const removeFromCart = useCallback((productId, productName = null) => {
     setCartItems(prev => prev.filter(item => item.id !== productId));
     showToast.removedFromCart(productName);
-  };
+  }, []);
 
   // Обновить количество
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = useCallback((productId, quantity) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
@@ -66,41 +75,54 @@ export const CartProvider = ({ children }) => {
         item.id === productId ? { ...item, quantity } : item
       )
     );
-  };
+  }, [removeFromCart]);
 
   // Очистить корзину
-  const clearCart = (silent = false) => {
+  const clearCart = useCallback((silent = false) => {
     setCartItems([]);
     if (!silent) {
       showToast.cartCleared();
     }
-  };
+  }, []);
 
   // Добавить/убрать из избранного
-  const toggleFavorite = (product) => {
-    const isFav = favorites.some(item => item.id === product.id);
-    
-    if (isFav) {
-      setFavorites(prev => prev.filter(item => item.id !== product.id));
-      showToast.removedFromFavorites(product.title || product.brand);
-    } else {
-      setFavorites(prev => [...prev, product]);
-      showToast.addedToFavorites(product.title || product.brand);
-    }
-  };
+  const toggleFavorite = useCallback((product) => {
+    setFavorites(prev => {
+      const isFav = prev.some(item => item.id === product.id);
+      
+      if (isFav) {
+        showToast.removedFromFavorites(product.title || product.brand);
+        return prev.filter(item => item.id !== product.id);
+      } else {
+        showToast.addedToFavorites(product.title || product.brand);
+        return [...prev, product];
+      }
+    });
+  }, []);
 
   // Проверить, в избранном ли товар
-  const isFavorite = (productId) => {
+  const isFavorite = useCallback((productId) => {
     return favorites.some(item => item.id === productId);
-  };
+  }, [favorites]);
 
-  // Подсчёт общего количества товаров
-  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  // Подсчёт общего количества товаров (мемоизировано)
+  const cartCount = useMemo(() => {
+    return cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  }, [cartItems]);
 
-  // Подсчёт общей суммы
-  const cartTotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  // Подсчёт общей суммы в базовой валюте (KZT) (мемоизировано)
+  const cartTotal = useMemo(() => {
+    return cartItems.reduce((sum, item) => {
+      // Используем priceInKZT если есть, иначе price (предполагаем, что это уже в KZT)
+      const priceInKZT = item.priceInKZT || item.price || 0;
+      return sum + priceInKZT * item.quantity;
+    }, 0);
+  }, [cartItems]);
 
-  const value = {
+  // Количество избранного (мемоизировано)
+  const favoritesCount = useMemo(() => favorites.length, [favorites]);
+
+  const value = useMemo(() => ({
     cartItems,
     favorites,
     addToCart,
@@ -111,8 +133,8 @@ export const CartProvider = ({ children }) => {
     isFavorite,
     cartCount,
     cartTotal,
-    favoritesCount: favorites.length
-  };
+    favoritesCount
+  }), [cartItems, favorites, addToCart, removeFromCart, updateQuantity, clearCart, toggleFavorite, isFavorite, cartCount, cartTotal, favoritesCount]);
 
   return (
     <CartContext.Provider value={value}>

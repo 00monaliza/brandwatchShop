@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
@@ -27,6 +27,18 @@ import './App.css';
 function App() {
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+
+  // Мемоизация частиц для фона
+  const particles = useMemo(() => 
+    [...Array(12)].map((_, i) => (
+      <div key={i} className="particle" />
+    )), []
+  );
+
+  // Мемоизация callback для открытия админ-панели
+  const handleOpenAdmin = useCallback(() => {
+    setShowAdminPanel(true);
+  }, []);
 
   // Ripple эффект для всех кнопок
   const createRipple = useCallback((e) => {
@@ -115,9 +127,7 @@ function App() {
               {/* Динамичный фон с частицами */}
               <div className="background-animation">
                 {/* Floating Particles */}
-                {[...Array(12)].map((_, i) => (
-                  <div key={i} className="particle" />
-                ))}
+                {particles}
                 <div className="clock clock-1"></div>
                 <div className="clock clock-2"></div>
                 <div className="clock clock-3"></div>
@@ -131,7 +141,7 @@ function App() {
                 <div className="glow-orb orb-2"></div>
               </div>
 
-              <Header onOpenAdmin={() => setShowAdminPanel(true)} />
+              <Header onOpenAdmin={handleOpenAdmin} />
               
               <Routes>
                 <Route path="/" element={<Home />} />

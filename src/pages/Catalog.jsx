@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import FilterSidebar from '../components/FilterSidebar';
 import SortDropdown from '../components/SortDropdown';
@@ -29,14 +29,14 @@ const Catalog = () => {
 
   const filteredProducts = useProducts(allProducts, filters, sortType);
 
-  const handleFilterChange = (filterName, value) => {
+  const handleFilterChange = useCallback((filterName, value) => {
     setFilters(prev => ({
       ...prev,
       [filterName]: value
     }));
-  };
+  }, []);
 
-  const handleResetFilters = () => {
+  const handleResetFilters = useCallback(() => {
     setFilters({
       brand: [],
       diameter: [],
@@ -50,13 +50,24 @@ const Catalog = () => {
       claspType: [],
       waterResistance: []
     });
-  };
+  }, []);
 
-  const handleSortChange = (newSortType) => {
+  const handleSortChange = useCallback((newSortType) => {
     setSortType(newSortType);
-  };
+  }, []);
 
-  const hasActiveFilters = Object.values(filters).some(arr => arr.length > 0);
+  const handleCloseSidebar = useCallback(() => {
+    setSidebarOpen(false);
+  }, []);
+
+  const handleToggleSidebar = useCallback(() => {
+    setSidebarOpen(prev => !prev);
+  }, []);
+
+  const hasActiveFilters = useMemo(() => 
+    Object.values(filters).some(arr => arr.length > 0), 
+    [filters]
+  );
 
   return (
     <div className="catalog">
@@ -66,7 +77,7 @@ const Catalog = () => {
         onFilterChange={handleFilterChange}
         onReset={handleResetFilters}
         isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
+        onClose={handleCloseSidebar}
       />
 
       {/* Основной контент */}
@@ -77,7 +88,7 @@ const Catalog = () => {
           <div className="catalog-header-left">
             <button 
               className="filter-burger-btn"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
+              onClick={handleToggleSidebar}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="3" y1="6" x2="21" y2="6"/>

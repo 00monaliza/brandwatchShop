@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getProductImage } from '../../utils/productImage';
+import { useCurrency } from '../../hooks/useCurrency';
 import './PremiumSlider.css';
 
 const PremiumSlider = ({ 
@@ -8,6 +10,7 @@ const PremiumSlider = ({
   autoPlay = true,
   autoPlayInterval = 5000
 }) => {
+  const { formatPrice } = useCurrency();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [direction, setDirection] = useState(0);
@@ -144,7 +147,7 @@ const PremiumSlider = ({
               <div className="premium-slider__card">
                 <div className="premium-slider__image-wrapper">
                   <img 
-                    src={product.image} 
+                    src={getProductImage(product)} 
                     alt={product.title}
                     loading="lazy"
                   />
@@ -152,7 +155,7 @@ const PremiumSlider = ({
                     <span className="premium-slider__brand">{product.brand}</span>
                     <h3 className="premium-slider__card-title">{product.title}</h3>
                     <span className="premium-slider__price">
-                      {product.price.toLocaleString()} ₸
+                      {formatPrice(product.priceInKZT || product.price || 0)}
                     </span>
                   </div>
                 </div>

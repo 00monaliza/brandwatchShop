@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useAdmin } from '../../context/AdminContext';
+import { useCurrency } from '../../hooks/useCurrency';
 import { showAdminToast } from '../../utils/toast';
 import './AdminPanel.css';
 
 const AdminOrders = () => {
   const { orders, updateOrderStatus } = useAdmin();
+  const { formatPrice } = useCurrency();
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState(null);
 
@@ -110,7 +112,7 @@ const AdminOrders = () => {
 
                 <div className="order-total">
                   <h4>Сумма</h4>
-                  <span className="total-amount">${order.total?.toLocaleString()}</span>
+                  <span className="total-amount">{formatPrice(order.totalInKZT || order.total || 0)}</span>
                   <p className="payment-method">{order.paymentMethod || 'Не указано'}</p>
                 </div>
               </div>
@@ -166,9 +168,13 @@ const AdminOrders = () => {
                       <div className="item-info">
                         <span className="item-brand">{item.brand}</span>
                         <span className="item-title">{item.title}</span>
-                        <span className="item-price">${item.price} × {item.quantity}</span>
+                        <span className="item-price">
+                          {formatPrice(item.priceInKZT || item.price || 0)} × {item.quantity}
+                        </span>
                       </div>
-                      <span className="item-total">${item.price * item.quantity}</span>
+                      <span className="item-total">
+                        {formatPrice((item.priceInKZT || item.price || 0) * item.quantity)}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -190,7 +196,7 @@ const AdminOrders = () => {
 
               <div className="order-total-section">
                 <span>Итого:</span>
-                <span className="total-big">${selectedOrder.total?.toLocaleString()}</span>
+                <span className="total-big">{formatPrice(selectedOrder.totalInKZT || selectedOrder.total || 0)}</span>
               </div>
             </div>
 

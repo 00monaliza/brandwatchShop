@@ -1,14 +1,12 @@
 import React from 'react';
 import { useAdmin } from '../../context/AdminContext';
+import { useCurrency } from '../../hooks/useCurrency';
 import './AdminPanel.css';
 
 const AdminStatistics = () => {
   const { getStatistics } = useAdmin();
+  const { formatPrice } = useCurrency();
   const stats = getStatistics();
-
-  const formatCurrency = (value) => {
-    return '$' + value.toLocaleString();
-  };
 
   return (
     <div className="admin-statistics">
@@ -39,7 +37,7 @@ const AdminStatistics = () => {
 
         <div className="stats-card highlight">
           <div className="stats-card-info">
-            <span className="stats-card-value">{formatCurrency(stats.totalRevenue)}</span>
+            <span className="stats-card-value">{formatPrice(stats.totalRevenue || 0)}</span>
             <span className="stats-card-label">Выручка</span>
           </div>
         </div>
@@ -95,7 +93,7 @@ const AdminStatistics = () => {
                   <div className="top-product-info">
                     <span className="top-product-name">{product.brand} {product.title}</span>
                     <span className="top-product-stats">
-                      Продано: {product.totalSold} | {formatCurrency(product.totalRevenue)}
+                      Продано: {product.totalSold} | {formatPrice(product.totalRevenue || 0)}
                     </span>
                   </div>
                 </li>

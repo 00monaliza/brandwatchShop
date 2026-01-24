@@ -442,27 +442,112 @@ export const storeSettings = {
 
 // Storage helpers
 export const storage = {
-  uploadProductImage: async (file, productId) => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${productId}/${Date.now()}.${fileExt}`;
+  // Загрузка одного изображения товара
+  uploadProductImage: async (file, fileName, admin = null) => {
+    // Если fileName передан как путь (строка), используем его
+    // Если передан как productId (число), создаем путь
+    let filePath;
+    if (typeof fileName === 'string') {
+      filePath = fileName;
+    } else {
+      const fileExt = file.name.split('.').pop();
+      // Преобразуем productId в строку для безопасности
+      const productIdStr = String(fileName || 'temp');
+      filePath = `${productIdStr}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+    }
     
-    const { error } = await supabase.storage
+    // Дополнительная валидация на стороне клиента
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const maxSize = 20 * 1024 * 1024; // 20 МБ
+    
+    if (!allowedTypes.includes(file.type)) {
+      return {
+        url: null,
+        path: null,
+        error: { message: 'Неподдерживаемый тип файла' }
+      };
+    }
+    
+    if (file.size > maxSize) {
+      return {
+        url: null,
+        path: null,
+        error: { message: 'Файл слишком большой (максимум 20 МБ)' }
+      };
+    }
+
+    // Логирование загрузки (для аудита)
+    if (admin) {
+      console.log(`[Upload] Admin: ${admin.name || admin.phone}, File: ${file.name}, Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+    }
+    
+    // Загружаем файл
+    // Примечание: Проверка авторизации админа выполняется на уровне компонента
+    // Здесь мы просто загружаем файл, полагаясь на политики RLS в Supabase
+    const { data, error } = await supabase.storage
       .from('product-images')
-      .upload(fileName, file);
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: file.type || 'image/jpeg'
+      });
 
-    if (error) return { url: null, error };
+    if (error) {
+      console.error('Storage upload error:', error);
+      return { url: null, path: null, error };
+    }
 
+    // Получаем публичный URL
     const { data: { publicUrl } } = supabase.storage
       .from('product-images')
-      .getPublicUrl(fileName);
+      .getPublicUrl(filePath);
 
-    return { url: publicUrl, error: null };
+    return { url: publicUrl, path: filePath, error: null };
   },
 
+  // Загрузка нескольких изображений товара
+  uploadProductImages: async (files, productId) => {
+    const results = [];
+    
+    for (const file of files) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${productId}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+      
+      const result = await storage.uploadProductImage(file, fileName);
+      if (result.error) {
+        console.error('Ошибка загрузки изображения:', result.error);
+        continue;
+      }
+      
+      results.push({
+        url: result.url,
+        path: result.path
+      });
+      
+      // Небольшая задержка между загрузками для избежания rate limiting
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    return results;
+  },
+
+  // Удаление изображения товара
   deleteProductImage: async (path) => {
     const { error } = await supabase.storage
       .from('product-images')
       .remove([path]);
+    return { error };
+  },
+
+  // Удаление нескольких изображений товара
+  deleteProductImages: async (paths) => {
+    if (!paths || paths.length === 0) {
+      return { error: null };
+    }
+    
+    const { error } = await supabase.storage
+      .from('product-images')
+      .remove(paths);
     return { error };
   },
 

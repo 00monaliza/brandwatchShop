@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useCurrency } from '../hooks/useCurrency';
 import AuthModal from '../components/AuthModal';
 import CheckoutModal from '../components/CheckoutModal';
 import './Cart.css';
@@ -11,6 +12,7 @@ const Cart = () => {
   const { t } = useTranslation();
   const { cartItems, removeFromCart, updateQuantity, clearCart, cartTotal } = useCart();
   const { isAuthenticated } = useAuth();
+  const { formatPrice } = useCurrency();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
@@ -91,10 +93,18 @@ const Cart = () => {
                 </div>
 
                 <div className="cart-item-price">
-                  <span className="item-total">${(item.price * item.quantity).toLocaleString()}</span>
-                  {item.quantity > 1 && (
-                    <span className="item-unit-price">${item.price.toLocaleString()} / шт</span>
-                  )}
+                  {(() => {
+                    const priceInKZT = item.priceInKZT || item.price || 0;
+                    const totalInKZT = priceInKZT * item.quantity;
+                    return (
+                      <>
+                        <span className="item-total">{formatPrice(totalInKZT)}</span>
+                        {item.quantity > 1 && (
+                          <span className="item-unit-price">{formatPrice(priceInKZT)} / шт</span>
+                        )}
+                      </>
+                    );
+                  })()}
                 </div>
 
                 <button 
@@ -113,7 +123,7 @@ const Cart = () => {
             <h3>{t('cart.summary')}</h3>
             <div className="summary-row">
               <span>{t('cart.subtotal')}</span>
-              <span>${cartTotal.toLocaleString()}</span>
+              <span>{formatPrice(cartTotal)}</span>
             </div>
             <div className="summary-row">
               <span>{t('cart.shipping')}</span>
@@ -122,7 +132,7 @@ const Cart = () => {
             <div className="summary-divider"></div>
             <div className="summary-row summary-total">
               <span>{t('cart.total')}</span>
-              <span>${cartTotal.toLocaleString()}</span>
+              <span>{formatPrice(cartTotal)}</span>
             </div>
             <button className="checkout-btn" onClick={handleCheckout}>
               {t('cart.checkout')}

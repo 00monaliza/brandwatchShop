@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getProductImage } from '../utils/productImage';
+import { useCurrency } from '../hooks/useCurrency';
 import './RecentlyViewed.css';
 
-const RecentlyViewed = () => {
+const RecentlyViewed = memo(() => {
   const { t } = useTranslation();
+  const { formatPrice } = useCurrency();
   const [recentProducts, setRecentProducts] = useState([]);
 
   // Load recently viewed from localStorage
-  const loadRecentlyViewed = () => {
+  const loadRecentlyViewed = useCallback(() => {
     try {
       const stored = localStorage.getItem('recentlyViewed');
       if (stored) {
@@ -17,7 +20,7 @@ const RecentlyViewed = () => {
     } catch (error) {
       console.error('Error loading recently viewed:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     // Load on mount
@@ -37,7 +40,7 @@ const RecentlyViewed = () => {
       window.removeEventListener('recentlyViewedUpdated', handleUpdate);
       window.removeEventListener('storage', handleUpdate);
     };
-  }, []);
+  }, [loadRecentlyViewed]);
 
   if (recentProducts.length === 0) return null;
 
@@ -49,12 +52,12 @@ const RecentlyViewed = () => {
           {recentProducts.map(product => (
             <div key={product.id} className="recent-card">
               <div className="recent-card-image">
-                <img src={product.image} alt={product.title} />
+                <img src={getProductImage(product)} alt={product.title} />
               </div>
               <div className="recent-card-info">
                 <h3 className="recent-card-brand">{product.brand} {product.title}</h3>
                 <div className="recent-card-price">
-                  ${product.price.toLocaleString()}
+                  {formatPrice(product.priceInKZT || product.price || 0)}
                 </div>
               </div>
             </div>
@@ -63,6 +66,8 @@ const RecentlyViewed = () => {
       </div>
     </div>
   );
-};
+});
+
+RecentlyViewed.displayName = 'RecentlyViewed';
 
 export default RecentlyViewed;

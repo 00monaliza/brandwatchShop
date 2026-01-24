@@ -1,5 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { getProductImage } from '../../utils/productImage';
+import { useCurrency } from '../../hooks/useCurrency';
 import './PremiumProductCard.css';
 
 const PremiumProductCard = ({ 
@@ -10,6 +12,15 @@ const PremiumProductCard = ({
 }) => {
   const cardRef = useRef(null);
   const isInView = useInView(cardRef, { once: true, margin: "-50px" });
+  const { formatPrice } = useCurrency();
+  
+  const priceInKZT = product.priceInKZT || product.price || 0;
+  const oldPriceInKZT = product.oldPriceInKZT || product.oldPrice || product.originalPrice || null;
+  
+  // Динамически рассчитываем скидку на основе цен
+  const discount = oldPriceInKZT && oldPriceInKZT > priceInKZT 
+    ? Math.round((1 - priceInKZT / oldPriceInKZT) * 100) 
+    : 0;
 
   const cardVariants = {
     hidden: { 
@@ -41,7 +52,7 @@ const PremiumProductCard = ({
       {/* Image Container */}
       <div className="premium-card__image-container">
         <motion.img
-          src={product.image}
+          src={getProductImage(product)}
           alt={product.title}
           className="premium-card__image"
           loading="lazy"
@@ -73,9 +84,9 @@ const PremiumProductCard = ({
             Новинка
           </span>
         )}
-        {product.discount > 0 && (
+        {discount > 0 && (
           <span className="premium-card__badge premium-card__badge--sale">
-            -{product.discount}%
+            -{discount}%
           </span>
         )}
       </div>
@@ -99,13 +110,13 @@ const PremiumProductCard = ({
 
         <div className="premium-card__footer">
           <div className="premium-card__price">
-            {product.oldPrice && (
+            {oldPriceInKZT && oldPriceInKZT > priceInKZT && (
               <span className="premium-card__price-old">
-                {product.oldPrice.toLocaleString()} ₸
+                {formatPrice(oldPriceInKZT)}
               </span>
             )}
             <span className="premium-card__price-current">
-              {product.price.toLocaleString()} ₸
+              {formatPrice(priceInKZT)}
             </span>
           </div>
 

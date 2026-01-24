@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { supabase, auth, db } from '../lib/supabase';
 import { defaultAdmins } from '../data/admins';
 
@@ -115,7 +115,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Регистрация нового пользователя через Supabase
-  const register = async (userData) => {
+  const register = useCallback(async (userData) => {
     const { name, phone, email, password } = userData;
     setAuthError(null);
 
@@ -190,10 +190,10 @@ export const AuthProvider = ({ children }) => {
       console.error('Registration error:', err);
       return { success: false, error: err.message };
     }
-  };
+  }, []);
 
   // Авторизация пользователя
-  const login = async (phoneOrEmail, password) => {
+  const login = useCallback(async (phoneOrEmail, password) => {
     setAuthError(null);
 
     try {
@@ -280,10 +280,10 @@ export const AuthProvider = ({ children }) => {
       console.error('Login error:', err);
       return { success: false, error: err.message };
     }
-  };
+  }, []);
 
   // Выход из системы
-  const logout = async () => {
+  const logout = useCallback(async () => {
     // Сначала очищаем локальное состояние
     setUser(null);
     setProfile(null);
@@ -295,10 +295,10 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error('Logout error:', err);
     }
-  };
+  }, []);
 
   // Обновление данных пользователя
-  const updateUser = async (userData) => {
+  const updateUser = useCallback(async (userData) => {
     try {
       if (user?.id) {
         const { data, error } = await db.profiles.update(user.id, {
@@ -318,10 +318,10 @@ export const AuthProvider = ({ children }) => {
       console.error('Update user error:', err);
       return { success: false, error: err.message };
     }
-  };
+  }, [user]);
 
   // Обновление профиля пользователя
-  const updateProfile = async (profileData) => {
+  const updateProfile = useCallback(async (profileData) => {
     try {
       if (user?.id) {
         const { data, error } = await db.profiles.update(user.id, {
@@ -361,10 +361,10 @@ export const AuthProvider = ({ children }) => {
       console.error('Update profile error:', err);
       return { success: false, error: err.message };
     }
-  };
+  }, [user]);
 
   // Сброс пароля
-  const resetPassword = async (email) => {
+  const resetPassword = useCallback(async (email) => {
     try {
       console.log('Attempting to reset password for:', email);
       const { error } = await auth.resetPassword(email);
@@ -386,22 +386,26 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, error: err.message };
     }
-  };
+  }, []);
 
-  const value = {
+  // Мемоизация вычисляемых значений
+  const isAuthenticated = useMemo(() => !!user, [user]);
+  const isAdmin = useMemo(() => profile?.is_admin || user?.role === 'admin', [profile, user]);
+
+  const value = useMemo(() => ({
     user,
     profile,
     isLoading,
     authError,
-    isAuthenticated: !!user,
-    isAdmin: profile?.is_admin || user?.role === 'admin',
+    isAuthenticated,
+    isAdmin,
     register,
     login,
     logout,
     updateUser,
     updateProfile,
     resetPassword
-  };
+  }), [user, profile, isLoading, authError, isAuthenticated, isAdmin, register, login, logout, updateUser, updateProfile, resetPassword]);
 
   return (
     <AuthContext.Provider value={value}>

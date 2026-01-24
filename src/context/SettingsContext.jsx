@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { storeSettings } from '../lib/supabase';
+import { getCurrencyCode, CODE_TO_SYMBOL } from '../utils/currency';
 
 const SettingsContext = createContext();
 
@@ -15,10 +16,15 @@ export const useSettings = () => {
 const transformFromDb = (dbSettings) => {
   if (!dbSettings) return null;
   
+  // Преобразуем символ валюты в код для единообразия
+  const currencySymbol = dbSettings.currency || '$';
+  const currencyCode = getCurrencyCode(currencySymbol);
+  
   return {
     storeName: dbSettings.store_name || 'brandwatch',
     logo: dbSettings.logo_url || null,
-    currency: dbSettings.currency || '$',
+    currency: currencyCode, // Храним код валюты, а не символ
+    currencySymbol: CODE_TO_SYMBOL[currencyCode] || '$', // Для обратной совместимости
     contacts: {
       whatsapp: dbSettings.whatsapp || '',
       telegram: dbSettings.telegram || '',
@@ -43,7 +49,8 @@ const transformFromDb = (dbSettings) => {
 const defaultSettings = {
   storeName: 'brandwatch',
   logo: null,
-  currency: '$',
+  currency: 'KZT', // Базовая валюта по умолчанию
+  currencySymbol: '₸',
   contacts: {
     whatsapp: '+77778115151',
     telegram: '@baikadamov_a',
@@ -105,13 +112,22 @@ export const SettingsProvider = ({ children }) => {
   // Обновление настроек
   const updateSettings = useCallback(async (updates) => {
     try {
+      // Если обновляется валюта, преобразуем код в символ для Supabase
+      const updatesForDb = { ...updates };
+      if (updates.currency && CODE_TO_SYMBOL[updates.currency]) {
+        // Сохраняем символ в БД для обратной совместимости
+        updatesForDb.currency = CODE_TO_SYMBOL[updates.currency];
+        // Но в локальном состоянии храним код
+        updates.currencySymbol = CODE_TO_SYMBOL[updates.currency];
+      }
+      
       // Оптимистичное обновление
       const newSettings = { ...settings, ...updates };
       setSettings(newSettings);
       localStorage.setItem('storeSettings', JSON.stringify(newSettings));
       
-      // Сохраняем в Supabase
-      const { error: updateError } = await storeSettings.update(updates);
+      // Сохраняем в Supabase (с символом валюты)
+      const { error: updateError } = await storeSettings.update(updatesForDb);
       
       if (updateError) {
         console.error('Error updating settings:', updateError);
@@ -120,6 +136,11 @@ export const SettingsProvider = ({ children }) => {
         localStorage.setItem('storeSettings', JSON.stringify(settings));
         return { success: false, error: updateError };
       }
+      
+      // Уведомляем все компоненты об изменении валюты
+      window.dispatchEvent(new CustomEvent('currencyChanged', { 
+        detail: { currency: updates.currency || settings.currency } 
+      }));
       
       return { success: true };
     } catch (err) {
@@ -148,13 +169,13 @@ export const SettingsProvider = ({ children }) => {
     };
   }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     settings,
     loading,
     error,
     updateSettings,
     refreshSettings: fetchSettings
-  };
+  }), [settings, loading, error, updateSettings, fetchSettings]);
 
   return (
     <SettingsContext.Provider value={value}>

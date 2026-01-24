@@ -1,0 +1,227 @@
+.image-uploader {
+  margin-bottom: 20px;
+}
+
+.image-uploader-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.image-uploader-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.image-uploader-hint {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.image-uploader-input {
+  display: none;
+}
+
+.image-uploader-btn {
+  padding: 10px 20px;
+  background: rgba(55, 110, 111, 0.3);
+  border: 1px solid rgba(55, 110, 111, 0.5);
+  border-radius: 8px;
+  color: #DA7B93;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  align-self: flex-start;
+}
+
+.image-uploader-btn:hover:not(:disabled) {
+  background: rgba(55, 110, 111, 0.5);
+  border-color: rgba(55, 110, 111, 0.7);
+}
+
+.image-uploader-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.image-uploader-progress {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: rgba(55, 110, 111, 0.1);
+  border-radius: 8px;
+}
+
+.progress-item {
+  margin-bottom: 8px;
+}
+
+.progress-item:last-child {
+  margin-bottom: 0;
+}
+
+.progress-item span {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 4px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(55, 110, 111, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #DA7B93, #376F6F);
+  transition: width 0.3s ease;
+}
+
+.image-uploader-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.image-preview-item {
+  position: relative;
+}
+
+.image-preview-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* Квадратное соотношение */
+  background: rgba(55, 110, 111, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(55, 110, 111, 0.3);
+}
+
+.image-preview-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-temporary-badge {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: rgba(255, 193, 7, 0.9);
+  color: #1C3334;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.image-preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-preview-wrapper:hover .image-preview-overlay {
+  opacity: 1;
+}
+
+.image-preview-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.image-preview-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.image-preview-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.image-preview-btn-danger {
+  background: rgba(255, 107, 107, 0.3);
+}
+
+.image-preview-btn-danger:hover {
+  background: rgba(255, 107, 107, 0.5);
+}
+
+.image-preview-number {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.image-uploader-empty {
+  padding: 40px 20px;
+  text-align: center;
+  background: rgba(55, 110, 111, 0.05);
+  border: 2px dashed rgba(55, 110, 111, 0.3);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.image-uploader-empty p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.image-uploader-empty-hint {
+  margin-top: 8px !important;
+  font-size: 12px !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .image-uploader-preview {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+  }
+
+  .image-preview-overlay {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.5);
+  }
+}

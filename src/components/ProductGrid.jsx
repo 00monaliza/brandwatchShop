@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProductCard from './ProductCard';
 import './ProductGrid.css';
 
-const ProductGrid = ({ products }) => {
+const ProductGrid = memo(({ products }) => {
   const { t } = useTranslation();
 
   if (products.length === 0) {
@@ -32,6 +32,8 @@ const ProductGrid = ({ products }) => {
       ))}
     </div>
   );
-};
+});
+
+ProductGrid.displayName = 'ProductGrid';
 
 export default ProductGrid;

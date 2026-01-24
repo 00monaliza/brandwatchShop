@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import videoSrc from '../images/IMG_0644.MP4';
 import './HeroVideo.css';
+
+// Видео временно отключено, так как файл был удален
+// Можно заменить на URL из внешнего источника или загрузить новое видео
+const videoSrc = null;
 
 const HeroVideo = () => {
   const { t } = useTranslation();
@@ -21,17 +24,23 @@ const HeroVideo = () => {
 
   return (
     <div className="hero-video-container">
-      <video 
-        ref={videoRef}
-        className="hero-video" 
-        autoPlay 
-        loop 
-        muted 
-        playsInline
-      >
-        <source src={videoSrc} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      {videoSrc ? (
+        <video 
+          ref={videoRef}
+          className="hero-video" 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+        >
+          <source src={videoSrc} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <div className="hero-video-placeholder">
+          {/* Placeholder для видео - можно добавить фоновое изображение */}
+        </div>
+      )}
       <div className="hero-overlay">
         <div className="hero-content">
           <h1>brandwatch</h1>
