@@ -56,7 +56,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .app {
   min-height: 100vh;
-  background-color: var(--primary);
+  background: transparent; /* чтобы был виден анимированный фон .background-animation */
   position: relative;
   overflow-x: hidden;
   padding-bottom: 90px; /* Space for Magic Navigation */
@@ -122,6 +122,133 @@ h1, h2, h3, h4, h5, h6 {
   animation: gradientMesh 15s ease-in-out infinite;
   z-index: -1;
   overflow: hidden;
+}
+
+/* ========== СВЕТЛЫЕ ДВИЖУЩИЕСЯ ПОЛОСКИ ========== */
+.light-stripes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.light-stripes .light-stripe {
+  position: absolute;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 15%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 85%,
+    transparent 100%
+  );
+  height: 2px;
+  width: 80%;
+  animation: lightStripeMove 18s ease-in-out infinite;
+}
+
+.light-stripe-1 { top: 10%; left: -50%; animation-duration: 20s; animation-delay: 0s; }
+.light-stripe-2 { top: 22%; left: -50%; animation-duration: 22s; animation-delay: -3s; }
+.light-stripe-3 { top: 38%; left: -50%; animation-duration: 19s; animation-delay: -6s; }
+.light-stripe-4 { top: 52%; left: -50%; animation-duration: 24s; animation-delay: -2s; }
+.light-stripe-5 { top: 68%; left: -50%; animation-duration: 21s; animation-delay: -8s; }
+.light-stripe-6 { top: 82%; left: -50%; animation-duration: 23s; animation-delay: -4s; }
+.light-stripe-7 { top: 95%; left: -50%; animation-duration: 20s; animation-delay: -5s; }
+
+@keyframes lightStripeMove {
+  0% { transform: translateX(0); opacity: 0.6; }
+  50% { transform: translateX(120%); opacity: 1; }
+  100% { transform: translateX(240%); opacity: 0.6; }
+}
+
+/* ========== АНИМИРОВАННЫЕ ЛИНИИ НА ЗАДНЕМ ФОНЕ ========== */
+.animated-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.animated-lines .line {
+  position: absolute;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.06) 20%,
+    rgba(55, 110, 111, 0.08) 50%,
+    rgba(212, 175, 55, 0.06) 80%,
+    transparent 100%
+  );
+  opacity: 0.7;
+}
+
+/* Горизонтальные линии — движутся влево/вправо */
+.animated-lines .line-h {
+  width: 150%;
+  height: 1px;
+  left: -25%;
+  animation: lineMoveH 25s ease-in-out infinite;
+}
+
+.line-h-1 { top: 15%; animation-duration: 28s; animation-delay: 0s; }
+.line-h-2 { top: 28%; animation-duration: 32s; animation-delay: -5s; }
+.line-h-3 { top: 45%; animation-duration: 26s; animation-delay: -10s; }
+.line-h-4 { top: 62%; animation-duration: 30s; animation-delay: -3s; }
+.line-h-5 { top: 78%; animation-duration: 24s; animation-delay: -8s; }
+
+/* Вертикальные линии — движутся вверх/вниз */
+.animated-lines .line-v {
+  width: 1px;
+  height: 150%;
+  top: -25%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(55, 110, 111, 0.07) 30%,
+    rgba(212, 175, 55, 0.08) 50%,
+    rgba(55, 110, 111, 0.07) 70%,
+    transparent 100%
+  );
+  animation: lineMoveV 22s ease-in-out infinite;
+}
+
+.line-v-1 { left: 20%; animation-duration: 26s; animation-delay: -2s; }
+.line-v-2 { left: 50%; animation-duration: 24s; animation-delay: -7s; }
+.line-v-3 { left: 80%; animation-duration: 28s; animation-delay: -4s; }
+
+/* Диагональные линии — плавное движение */
+.animated-lines .line-diag {
+  width: 2px;
+  height: 200%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.04) 40%,
+    rgba(212, 175, 55, 0.06) 50%,
+    rgba(212, 175, 55, 0.04) 60%,
+    transparent 100%
+  );
+  animation: lineMoveDiag 35s ease-in-out infinite;
+}
+
+.line-diag-1 { left: 10%; --line-rotation: -25deg; transform-origin: center center; animation-duration: 40s; animation-delay: 0s; }
+.line-diag-2 { right: 15%; --line-rotation: 25deg; transform-origin: center center; animation-duration: 38s; animation-delay: -12s; }
+.line-diag-3 { left: 40%; --line-rotation: -15deg; transform-origin: center center; animation-duration: 42s; animation-delay: -20s; }
+.line-diag-4 { right: 35%; --line-rotation: 15deg; transform-origin: center center; animation-duration: 36s; animation-delay: -8s; }
+
+@keyframes lineMoveH {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(15%); }
+}
+
+@keyframes lineMoveV {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(12%); }
+}
+
+@keyframes lineMoveDiag {
+  0%, 100% { transform: translateY(-25%) rotate(var(--line-rotation, -25deg)); }
+  50% { transform: translateY(25%) rotate(var(--line-rotation, -25deg)); }
 }
 
 @keyframes gradientMesh {

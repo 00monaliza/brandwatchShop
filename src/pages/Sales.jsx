@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAdmin } from '../context/AdminContext';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import ProductCard from '../components/ProductCard';
 import './Sales.css';
 
@@ -27,8 +25,6 @@ const Sales = () => {
 
   return (
     <div className="sales-page">
-      <Header />
-      
       <main className="sales-main">
         {/* Hero Section */}
         <section className="sales-hero">
@@ -104,8 +100,6 @@ const Sales = () => {
           </section>
         )}
       </main>
-
-      <Footer />
     </div>
   );
 };

@@ -203,7 +203,7 @@ const PremiumProductDetail = ({
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
               </svg>
-              <span>Бесплатная доставка</span>
+              <span>Доставка</span>
             </div>
           </div>
         </motion.div>
@@ -259,7 +259,7 @@ const PremiumProductDetail = ({
             {activeTab === 'delivery' && (
               <div className="tab-delivery">
                 <h4>Доставка по Казахстану</h4>
-                <p>Бесплатная доставка по всем городам Казахстана. Срок доставки 2-5 рабочих дней.</p>
+                <p>Доставка по всем городам Казахстана. Срок доставки 2-5 рабочих дней.</p>
                 <h4>Международная доставка</h4>
                 <p>Доставка в страны СНГ осуществляется в течение 5-10 рабочих дней.</p>
               </div>

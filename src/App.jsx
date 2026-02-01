@@ -124,8 +124,33 @@ function App() {
               {/* Toast Container */}
               <ToastContainer />
               
-              {/* Динамичный фон с частицами */}
+              {/* Динамичный фон с частицами и анимированными линиями */}
               <div className="background-animation">
+                {/* Светлые движущиеся полоски */}
+                <div className="light-stripes">
+                  <div className="light-stripe light-stripe-1"></div>
+                  <div className="light-stripe light-stripe-2"></div>
+                  <div className="light-stripe light-stripe-3"></div>
+                  <div className="light-stripe light-stripe-4"></div>
+                  <div className="light-stripe light-stripe-5"></div>
+                  <div className="light-stripe light-stripe-6"></div>
+                  <div className="light-stripe light-stripe-7"></div>
+                </div>
+                {/* Анимированные линии на заднем фоне */}
+                <div className="animated-lines">
+                  <div className="line line-h line-h-1"></div>
+                  <div className="line line-h line-h-2"></div>
+                  <div className="line line-h line-h-3"></div>
+                  <div className="line line-h line-h-4"></div>
+                  <div className="line line-h line-h-5"></div>
+                  <div className="line line-v line-v-1"></div>
+                  <div className="line line-v line-v-2"></div>
+                  <div className="line line-v line-v-3"></div>
+                  <div className="line line-diag line-diag-1"></div>
+                  <div className="line line-diag line-diag-2"></div>
+                  <div className="line line-diag line-diag-3"></div>
+                  <div className="line line-diag line-diag-4"></div>
+                </div>
                 {/* Floating Particles */}
                 {particles}
                 <div className="clock clock-1"></div>
