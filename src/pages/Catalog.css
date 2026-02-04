@@ -31,7 +31,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(218, 123, 147, 0.4);
   color: #DA7B93;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
   padding: 0.7rem 1.2rem;
@@ -52,7 +52,7 @@
 }
 
 .catalog-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 2.2rem;
   font-weight: 500;
   color: #F5F5F5;
@@ -67,7 +67,7 @@
 }
 
 .active-filters-count {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   color: #376E6F;
   font-weight: 600;

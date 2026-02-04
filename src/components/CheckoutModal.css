@@ -66,7 +66,7 @@
 }
 
 .checkout-modal-header h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 28px;
   font-weight: 500;
   color: #F5F5F5;
@@ -126,7 +126,7 @@
 }
 
 .checkout-item-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 13px;
   color: #F5F5F5;
 }
@@ -137,7 +137,7 @@
 }
 
 .checkout-item-price {
-  font-family: 'Cinzel', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #F5F5F5;
@@ -155,7 +155,7 @@
 }
 
 .checkout-total-price {
-  font-family: 'Cinzel', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 22px;
   font-weight: 600;
   color: #DA7B93;
@@ -195,7 +195,7 @@
   color: #F5F5F5;
   font-size: 14px;
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   resize: none;
 }
 
@@ -234,7 +234,7 @@
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-top: 10px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   position: relative;
   overflow: hidden;
 }
@@ -331,7 +331,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .success-btn:hover {
@@ -509,7 +509,7 @@
   font-weight: 500;
   color: #fff;
   letter-spacing: 3px;
-  font-family: 'Courier New', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
 .card-info-row {
@@ -624,7 +624,7 @@
   background: rgba(255, 255, 255, 0.03);
   color: #F5F5F5;
   font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
   transition: all 0.3s ease;
   appearance: none;
@@ -662,7 +662,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .checkout-back-btn:hover {
@@ -689,7 +689,7 @@
   color: rgba(255, 255, 255, 0.8);
   text-align: center;
   margin-bottom: 10px;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 0.5px;
 }
 
@@ -869,7 +869,7 @@
 }
 
 .kaspi-instructions h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 18px;
   font-weight: 500;
   margin-bottom: 20px;
@@ -933,7 +933,7 @@
 }
 
 .kaspi-amount strong {
-  font-family: 'Cinzel', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 24px;
   background: linear-gradient(45deg, #DA7B93, #f14635);
   -webkit-background-clip: text;

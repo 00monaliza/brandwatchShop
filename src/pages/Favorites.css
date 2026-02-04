@@ -17,7 +17,7 @@
 }
 
 .favorites-header h1 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 2rem;
   font-weight: 700;
   color: #FFFFFF;
@@ -25,7 +25,7 @@
 }
 
 .favorites-count {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   color: #DA7B93;
   font-weight: 600;
@@ -54,7 +54,7 @@
 }
 
 .favorites-empty h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: #FFFFFF;
@@ -62,7 +62,7 @@
 }
 
 .favorites-empty p {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   color: #999;
   margin: 0 0 2rem 0;
@@ -72,7 +72,7 @@
   background-color: #DA7B93;
   color: #FFFFFF;
   text-decoration: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   padding: 0.75rem 2rem;

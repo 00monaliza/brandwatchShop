@@ -63,7 +63,7 @@
 }
 
 .brand-name {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -81,7 +81,7 @@
 .nav-link {
   color: var(--text-muted);
   text-decoration: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -167,7 +167,7 @@ a.icon-btn {
   right: 0;
   background-color: #e74c3c;
   color: #FFFFFF;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
   font-weight: 700;
   min-width: 16px;
@@ -282,7 +282,7 @@ a.icon-btn {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   text-align: left;
 }
 
@@ -310,7 +310,7 @@ a.icon-btn {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   margin-bottom: 10px;
 }
 
@@ -342,7 +342,7 @@ a.icon-btn {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .logout-btn:hover {
@@ -421,7 +421,7 @@ a.icon-btn {
     color: #fff;
     font-size: 1.2rem;
     font-weight: 600;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Inter', sans-serif;
   }
 
   .close-menu-btn {

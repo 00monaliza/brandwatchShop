@@ -17,7 +17,7 @@
 }
 
 .cart-header h1 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 2rem;
   font-weight: 700;
   color: #FFFFFF;
@@ -28,7 +28,7 @@
   background: none;
   border: 1px solid #666;
   color: #999;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
@@ -89,7 +89,7 @@
 }
 
 .cart-item-brand {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   color: #DA7B93;
@@ -98,7 +98,7 @@
 }
 
 .cart-item-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: #FFFFFF;
@@ -109,7 +109,7 @@
 }
 
 .cart-item-specs {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   color: #999;
   display: flex;
@@ -146,7 +146,7 @@
 }
 
 .quantity-value {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: #FFFFFF;
@@ -160,7 +160,7 @@
 }
 
 .item-total {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   color: #DA7B93;
@@ -168,7 +168,7 @@
 }
 
 .item-unit-price {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   color: #666;
 }
@@ -198,7 +198,7 @@
 }
 
 .cart-summary h3 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   color: #FFFFFF;
@@ -208,7 +208,7 @@
 .summary-row {
   display: flex;
   justify-content: space-between;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
   color: #E0E0E0;
   margin-bottom: 0.75rem;
@@ -236,7 +236,7 @@
   background: #DA7B93;
   color: #FFFFFF;
   border: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 700;
   padding: 1.1rem;
@@ -293,7 +293,7 @@
 }
 
 .cart-empty h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: #FFFFFF;
@@ -301,7 +301,7 @@
 }
 
 .cart-empty p {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   color: #999;
   margin: 0 0 2rem 0;
@@ -311,7 +311,7 @@
   background-color: #DA7B93;
   color: #FFFFFF;
   text-decoration: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   padding: 0.75rem 2rem;

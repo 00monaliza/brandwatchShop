@@ -55,7 +55,7 @@
 }
 
 .filter-title-main {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.3rem;
   font-weight: 500;
   color: #F5F5F5;
@@ -85,7 +85,7 @@
   background: transparent;
   border: 1px solid rgba(218, 123, 147, 0.5);
   color: #DA7B93;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.5rem 1rem;
@@ -121,7 +121,7 @@
   background: none;
   border: none;
   color: rgba(245, 245, 245, 0.8);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
   padding: 1.2rem 0;
@@ -182,7 +182,7 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   padding: 0.6rem 2rem 0.6rem 2.2rem;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   color: #F5F5F5;
   outline: none;
@@ -241,7 +241,7 @@
 
 .filter-no-results {
   color: rgba(245, 245, 245, 0.4);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   font-style: italic;
 }
@@ -263,7 +263,7 @@
   gap: 0.75rem;
   cursor: pointer;
   color: rgba(245, 245, 245, 0.7);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   transition: all 0.3s ease;
   padding: 0.3rem 0;

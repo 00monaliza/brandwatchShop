@@ -74,7 +74,7 @@
 }
 
 .auth-modal-header h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 26px;
   font-weight: 600;
   color: #FFFFFF;
@@ -120,7 +120,7 @@
   color: #FFFFFF;
   font-size: 15px;
   transition: all 0.3s ease;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .form-group input::placeholder {
@@ -178,7 +178,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 10px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   position: relative;
   overflow: hidden;
   text-transform: none;
@@ -233,7 +233,7 @@
   font-size: 14px;
   font-weight: 600;
   transition: all 0.3s ease;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .auth-switch button:hover {
