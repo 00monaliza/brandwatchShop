@@ -397,15 +397,7 @@
     "statYears": "лет на рынке",
     "statClients": "довольных клиентов",
     "statBrands": "брендов",
-    "statAuthentic": "оригинал",
-    "teamTitle": "Наша команда",
-    "teamSubtitle": "Профессионалы своего дела",
-    "team1Name": "Александр Ким",
-    "team1Role": "Основатель",
-    "team2Name": "Мария Иванова",
-    "team2Role": "Эксперт по часам",
-    "team3Name": "Ержан Сулейменов",
-    "team3Role": "Менеджер по продажам"
+    "statAuthentic": "оригинал"
   },
   "contacts": {
     "title": "Контакты",

@@ -68,8 +68,7 @@ const Contacts = () => {
                   </div>
                   <div className="info-content">
                     <h3>{t('contacts.address')}</h3>
-                    <p>Алматы, ул. Абая 150</p>
-                    <p>БЦ "Almaty Towers", офис 505</p>
+                    <p>Астана, ул. Гейдар Алиева 10</p>
                   </div>
                 </div>
 
@@ -96,7 +95,6 @@ const Contacts = () => {
                   <div className="info-content">
                     <h3>{t('contacts.email')}</h3>
                     <p>info@brandwatch.kz</p>
-                    <p>support@brandwatch.kz</p>
                   </div>
                 </div>
 

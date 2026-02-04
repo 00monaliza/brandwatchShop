@@ -397,15 +397,7 @@
     "statYears": "years in market",
     "statClients": "satisfied clients",
     "statBrands": "brands",
-    "statAuthentic": "authentic",
-    "teamTitle": "Our Team",
-    "teamSubtitle": "Professionals in their field",
-    "team1Name": "Alexander Kim",
-    "team1Role": "Founder",
-    "team2Name": "Maria Ivanova",
-    "team2Role": "Watch Expert",
-    "team3Name": "Yerzhan Suleimenov",
-    "team3Role": "Sales Manager"
+    "statAuthentic": "authentic"
   },
   "contacts": {
     "title": "Contact Us",

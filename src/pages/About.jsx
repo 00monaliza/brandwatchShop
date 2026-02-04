@@ -99,36 +99,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="about-team">
-        <div className="container">
-          <h2>{t('about.teamTitle')}</h2>
-          <p className="team-subtitle">{t('about.teamSubtitle')}</p>
-          <div className="team-grid">
-            <div className="team-card">
-              <div className="team-avatar">
-                <span>АК</span>
-              </div>
-              <h4>{t('about.team1Name')}</h4>
-              <span className="team-role">{t('about.team1Role')}</span>
-            </div>
-            <div className="team-card">
-              <div className="team-avatar">
-                <span>МИ</span>
-              </div>
-              <h4>{t('about.team2Name')}</h4>
-              <span className="team-role">{t('about.team2Role')}</span>
-            </div>
-            <div className="team-card">
-              <div className="team-avatar">
-                <span>ЕС</span>
-              </div>
-              <h4>{t('about.team3Name')}</h4>
-              <span className="team-role">{t('about.team3Role')}</span>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

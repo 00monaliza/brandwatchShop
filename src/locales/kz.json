@@ -397,15 +397,7 @@
     "statYears": "жыл нарықта",
     "statClients": "қанағаттанған клиент",
     "statBrands": "бренд",
-    "statAuthentic": "түпнұсқа",
-    "teamTitle": "Біздің команда",
-    "teamSubtitle": "Өз ісінің мамандары",
-    "team1Name": "Александр Ким",
-    "team1Role": "Негізін қалаушы",
-    "team2Name": "Мария Иванова",
-    "team2Role": "Сағат сарапшысы",
-    "team3Name": "Ержан Сулейменов",
-    "team3Role": "Сату менеджері"
+    "statAuthentic": "түпнұсқа"
   },
   "contacts": {
     "title": "Байланыс",
