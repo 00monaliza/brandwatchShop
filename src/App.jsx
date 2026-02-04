@@ -75,16 +75,16 @@ function App() {
       }
     });
 
-    // Проверяем URL hash на наличие токена восстановления
+    // Проверяем URL (hash или query) на наличие токена восстановления от Supabase
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
-    const type = hashParams.get('type');
+    const queryParams = new URLSearchParams(window.location.search);
+    const accessToken = hashParams.get('access_token') || queryParams.get('access_token');
+    const type = hashParams.get('type') || queryParams.get('type');
     
     if (accessToken && type === 'recovery') {
-      // Устанавливаем сессию с токеном и показываем модалку
       setShowResetPasswordModal(true);
-      // Очищаем URL от токенов
-      window.history.replaceState(null, '', window.location.pathname);
+      // Очищаем URL от токенов (оставляем только путь)
+      window.history.replaceState(null, '', window.location.pathname || '/');
     }
 
     // Ripple эффект на все кнопки
