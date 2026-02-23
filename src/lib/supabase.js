@@ -49,31 +49,31 @@ export const auth = {
   // Сброс пароля
   resetPassword: async (email) => {
     // Определяем URL для редиректа в зависимости от окружения
-    const redirectUrl = window.location.hostname === 'localhost' 
+    const redirectUrl = window.location.hostname === 'localhost'
       ? `${window.location.origin}/reset-password`
       : 'https://brandwatch.kz/reset-password';
-    
+
     console.log('=== Password Reset Debug ===');
     console.log('Email:', email);
     console.log('Redirect URL:', redirectUrl);
     console.log('Supabase URL:', supabaseUrl);
-    
+
     try {
       const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl
       });
-      
+
       console.log('Reset password response:');
       console.log('- Data:', data);
       console.log('- Error:', error);
-      
+
       if (error) {
         console.error('Reset password API error:', error.message, error.status);
       } else {
         console.log('✅ Reset email request sent successfully!');
         console.log('Note: Check spam folder if email not received');
       }
-      
+
       return { data, error };
     } catch (err) {
       console.error('Reset password exception:', err);
@@ -165,6 +165,32 @@ export const db = {
         .delete()
         .eq('id', id);
       return { error };
+    },
+
+    // Уменьшить количество товара на складе после покупки
+    decrementStock: async (productId, quantity = 1) => {
+      // Получаем текущее количество
+      const { data: product, error: fetchError } = await supabase
+        .from('products')
+        .select('stock_quantity')
+        .eq('id', productId)
+        .single();
+
+      if (fetchError) return { data: null, error: fetchError };
+
+      const newStock = Math.max(0, (product.stock_quantity || 0) - quantity);
+
+      const { data, error } = await supabase
+        .from('products')
+        .update({
+          stock_quantity: newStock,
+          in_stock: newStock > 0
+        })
+        .eq('id', productId)
+        .select()
+        .single();
+
+      return { data, error };
     }
   },
 
@@ -356,9 +382,9 @@ export const storeSettings = {
       .select('*')
       .eq('id', 1)
       .single();
-    
+
     if (error && error.code === 'PGRST116') {
-      return { 
+      return {
         data: {
           id: 1,
           store_name: 'brandwatch',
@@ -381,11 +407,11 @@ export const storeSettings = {
             onOrderStatusChange: false,
             onLowStock: false
           }
-        }, 
-        error: null 
+        },
+        error: null
       };
     }
-    
+
     return { data, error };
   },
 
@@ -393,7 +419,7 @@ export const storeSettings = {
   update: async (updates) => {
     // Преобразуем camelCase в snake_case для Supabase
     const dbUpdates = {};
-    
+
     if (updates.storeName !== undefined) dbUpdates.store_name = updates.storeName;
     if (updates.logo !== undefined) dbUpdates.logo_url = updates.logo;
     if (updates.currency !== undefined) dbUpdates.currency = updates.currency;
@@ -412,7 +438,7 @@ export const storeSettings = {
       .upsert({ id: 1, ...dbUpdates })
       .select()
       .single();
-    
+
     return { data, error };
   },
 
@@ -428,7 +454,7 @@ export const storeSettings = {
         }
       )
       .subscribe();
-    
+
     return subscription;
   },
 
@@ -455,11 +481,11 @@ export const storage = {
       const productIdStr = String(fileName || 'temp');
       filePath = `${productIdStr}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
     }
-    
+
     // Дополнительная валидация на стороне клиента
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     const maxSize = 20 * 1024 * 1024; // 20 МБ
-    
+
     if (!allowedTypes.includes(file.type)) {
       return {
         url: null,
@@ -467,7 +493,7 @@ export const storage = {
         error: { message: 'Неподдерживаемый тип файла' }
       };
     }
-    
+
     if (file.size > maxSize) {
       return {
         url: null,
@@ -480,7 +506,7 @@ export const storage = {
     if (admin) {
       console.log(`[Upload] Admin: ${admin.name || admin.phone}, File: ${file.name}, Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
     }
-    
+
     // Загружаем файл
     // Примечание: Проверка авторизации админа выполняется на уровне компонента
     // Здесь мы просто загружаем файл, полагаясь на политики RLS в Supabase
@@ -508,26 +534,26 @@ export const storage = {
   // Загрузка нескольких изображений товара
   uploadProductImages: async (files, productId) => {
     const results = [];
-    
+
     for (const file of files) {
       const fileExt = file.name.split('.').pop();
       const fileName = `${productId}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-      
+
       const result = await storage.uploadProductImage(file, fileName);
       if (result.error) {
         console.error('Ошибка загрузки изображения:', result.error);
         continue;
       }
-      
+
       results.push({
         url: result.url,
         path: result.path
       });
-      
+
       // Небольшая задержка между загрузками для избежания rate limiting
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    
+
     return results;
   },
 
@@ -544,7 +570,7 @@ export const storage = {
     if (!paths || paths.length === 0) {
       return { error: null };
     }
-    
+
     const { error } = await supabase.storage
       .from('product-images')
       .remove(paths);
@@ -555,19 +581,19 @@ export const storage = {
   uploadStoreLogo: async (file) => {
     const fileExt = file.name.split('.').pop();
     const fileName = `store-logo-${Date.now()}.${fileExt}`;
-    
+
     // Удаляем старые логотипы
     const { data: existingFiles } = await supabase.storage
       .from('store-assets')
       .list('', { search: 'store-logo' });
-    
+
     if (existingFiles && existingFiles.length > 0) {
       const filesToRemove = existingFiles.map(f => f.name);
       await supabase.storage
         .from('store-assets')
         .remove(filesToRemove);
     }
-    
+
     const { error } = await supabase.storage
       .from('store-assets')
       .upload(fileName, file, {
@@ -589,7 +615,7 @@ export const storage = {
     const { data: existingFiles } = await supabase.storage
       .from('store-assets')
       .list('', { search: 'store-logo' });
-    
+
     if (existingFiles && existingFiles.length > 0) {
       const filesToRemove = existingFiles.map(f => f.name);
       const { error } = await supabase.storage

@@ -396,3 +396,18 @@ CREATE TRIGGER update_store_settings_updated_at
   BEFORE UPDATE ON store_settings
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================
+-- 11. ATOMIC STOCK DECREMENT FUNCTION
+-- ============================================
+-- Функция для атомарного уменьшения количества товара на складе
+-- Использование: SELECT decrement_stock('product-uuid', 2);
+CREATE OR REPLACE FUNCTION decrement_stock(product_id UUID, qty INTEGER)
+RETURNS void AS $$
+BEGIN
+  UPDATE products 
+  SET stock_quantity = GREATEST(0, stock_quantity - qty),
+      in_stock = (stock_quantity - qty) > 0
+  WHERE id = product_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;

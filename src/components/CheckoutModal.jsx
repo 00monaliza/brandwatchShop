@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext';
 import { useAdmin } from '../context/AdminContext';
 import { useCurrency } from '../hooks/useCurrency';
 import { sendTelegramNotification } from '../services/telegram';
+import { db } from '../lib/supabase';
 import { showToast } from '../utils/toast';
 import './CheckoutModal.css';
 
@@ -223,6 +224,15 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
 
       // Добавляем заказ в админ-панель
       addOrder(orderData);
+
+      // Обновляем количество товара в базе данных Supabase
+      for (const item of cartItems) {
+        try {
+          await db.products.decrementStock(item.id, item.quantity);
+        } catch (stockError) {
+          console.error(`Failed to update stock for product ${item.id}:`, stockError);
+        }
+      }
 
       // Отправляем уведомление в Telegram
       await sendTelegramNotification(orderData);
