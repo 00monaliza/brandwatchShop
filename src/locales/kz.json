@@ -375,6 +375,8 @@
     "glass": "Шыны",
     "strapMaterial": "Белбеу материалы",
     "addToCart": "Себетке қосу",
+    "outOfStock": "Қоймада жоқ",
+    "lowStock": "Тек {{count}} дана қалды",
     "guarantee": "2 жыл кепілдік",
     "freeDelivery": "Тегін жеткізу",
     "return": "14 күн қайтару",

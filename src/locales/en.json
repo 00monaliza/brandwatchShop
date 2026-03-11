@@ -375,6 +375,8 @@
     "glass": "Glass",
     "strapMaterial": "Strap Material",
     "addToCart": "Add to Cart",
+    "outOfStock": "Out of Stock",
+    "lowStock": "Only {{count}} left",
     "guarantee": "2 Year Warranty",
     "freeDelivery": "Free Delivery",
     "return": "14 Day Return",

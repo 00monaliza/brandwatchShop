@@ -375,6 +375,8 @@
     "glass": "Стекло",
     "strapMaterial": "Материал ремешка",
     "addToCart": "В корзину",
+    "outOfStock": "Нет в наличии",
+    "lowStock": "Осталось {{count}} шт.",
     "guarantee": "Гарантия 2 года",
     "freeDelivery": "Доставка",
     "return": "Возврат 14 дней",
