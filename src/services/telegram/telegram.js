@@ -11,5 +11,5 @@ export const sendOrderNotification = async ({ orderId, items, total, customerNam
   return data;
 };
 
-// Alias for backward compatibility
+
 export const sendTelegramNotification = sendOrderNotification;
