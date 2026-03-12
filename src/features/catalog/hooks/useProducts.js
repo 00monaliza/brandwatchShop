@@ -53,7 +53,7 @@ export const useProducts = (products, filters, sortType) => {
         sorted.sort((a, b) => b.isNew - a.isNew);
         break;
       case 'maxDiscount':
-        sorted.sort((a, b) => b.discount - a.discount);
+        sorted.sort((a, b) => (b.discount || 0) - (a.discount || 0));
         break;
       case 'popularity':
       default:
