@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, memo } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../../context/CartContext';
@@ -19,6 +19,7 @@ const Header = memo(({ onOpenAdmin }) => {
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const userMenuRef = useRef(null);
   const { cartCount, favoritesCount } = useCart();
   const { user, profile, isAuthenticated, logout } = useAuth();
   const { settings } = useSettings();
@@ -46,6 +47,27 @@ const Header = memo(({ onOpenAdmin }) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Закрытие user dropdown при клике вне и по Escape
+  useEffect(() => {
+    if (!showUserMenu) return;
+
+    const handleClickOutside = (e) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setShowUserMenu(false);
+      }
+    };
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') setShowUserMenu(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [showUserMenu]);
 
   const navItems = useMemo(() => [
     { key: 'nav.main', path: '/' },
@@ -152,8 +174,8 @@ const Header = memo(({ onOpenAdmin }) => {
 
             {/* Кнопка профиля/авторизации */}
             {isAuthenticated ? (
-              <div className="user-menu-container">
-                <button 
+              <div className="user-menu-container" ref={userMenuRef}>
+                <button
                   className="icon-btn user-btn"
                   onClick={() => setShowUserMenu(!showUserMenu)}
                 >
