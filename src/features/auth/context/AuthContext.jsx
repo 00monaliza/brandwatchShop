@@ -32,20 +32,33 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Форматирование телефона в единый формат
+  const formatPhone = (phone) => {
+    if (!phone) return null;
+    const digits = phone.replace(/\D/g, '');
+    if (digits.startsWith('8') && digits.length === 11) {
+      return '+7' + digits.slice(1);
+    }
+    if (!digits.startsWith('7') && digits.length === 10) {
+      return '+7' + digits;
+    }
+    return '+' + digits;
+  };
+
   // Создание профиля пользователя в БД
   const createProfile = async (userId, profileData) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .insert({
+        .upsert({
           id: userId,
           email: profileData.email || '',
-          phone: profileData.phone || '',
+          phone: profileData.phone || null,
           first_name: profileData.name || profileData.first_name || '',
-          last_name: profileData.last_name || '',
           is_admin: false,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          created_at: new Date().toISOString()
+        }, {
+          onConflict: 'id'
         })
         .select()
         .single();
@@ -148,9 +161,10 @@ export const AuthProvider = ({ children }) => {
 
       if (data?.user) {
         // Создаём профиль в таблице profiles
+        const formattedPhone = formatPhone(phone);
         const profileData = await createProfile(data.user.id, {
           email: userEmail,
-          phone: phone,
+          phone: formattedPhone,
           name: name
         });
 
