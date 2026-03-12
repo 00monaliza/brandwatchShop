@@ -291,3 +291,31 @@
     height: 300px;
   }
 }
+
+@media (max-width: 480px) {
+  .contacts-hero {
+    padding: 40px 12px;
+  }
+
+  .contacts-hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .contacts-main {
+    padding: 40px 12px;
+  }
+
+  .contact-form-wrapper {
+    padding: 18px;
+  }
+
+  .info-card {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .contacts-map {
+    height: 250px;
+  }
+}

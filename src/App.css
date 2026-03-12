@@ -24,14 +24,23 @@
   /* Spacing */
   --spacing-section-desktop: 120px;
   --spacing-section-mobile: 60px;
+
+  /* Unified Breakpoints */
+  --bp-xs: 320px;
+  --bp-sm: 375px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1440px;
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -44,6 +53,24 @@ body {
   letter-spacing: 0.02em; /* Slight breathing room for text */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-width: 320px;
+}
+
+/* Global responsive media defaults */
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Global touch target minimums */
+button, a, [role="button"] {
+  min-height: 44px;
+}
+
+/* Prevent iOS zoom on input focus */
+input, select, textarea {
+  font-size: 16px;
 }
 
 h1, h2, h3, h4, h5, h6 {

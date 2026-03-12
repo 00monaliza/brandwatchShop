@@ -321,3 +321,32 @@
     height: 200px;
   }
 }
+
+@media (max-width: 480px) {
+  .about-hero {
+    padding: 40px 12px;
+  }
+
+  .about-hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .about-story,
+  .about-values,
+  .about-team {
+    padding: 40px 12px;
+  }
+
+  .value-card {
+    padding: 30px 20px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .stat-number {
+    font-size: 1.6rem;
+  }
+}

@@ -80,7 +80,7 @@
 }
 
 .section-header h2 {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 600;
   color: #fff;
 }
@@ -232,10 +232,6 @@
     text-align: center;
   }
 
-  .section-header h2 {
-    font-size: 1.5rem;
-  }
-
   .brands-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
@@ -255,5 +251,39 @@
 
   .cta-button {
     padding: 14px 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .features-section,
+  .products-section,
+  .brands-section,
+  .cta-section {
+    padding: 40px 12px;
+  }
+
+  .brands-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .brand-card {
+    padding: 16px 10px;
+  }
+
+  .brand-card span {
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+  }
+
+  .cta-content h2 {
+    font-size: 1.4rem;
+  }
+
+  .cta-button {
+    padding: 12px 28px;
+    font-size: 0.9rem;
+    width: 100%;
+    text-align: center;
   }
 }

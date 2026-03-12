@@ -340,18 +340,60 @@
   box-shadow: 0 10px 30px rgba(218, 123, 147, 0.3);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+  .checkout-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
   .checkout-modal {
-    padding: 25px 20px;
-    margin: 10px;
+    padding: 30px 20px;
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    max-height: 90vh;
+    margin: 0;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
   }
 
   .checkout-modal-header h2 {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .checkout-items {
     max-height: 150px;
+  }
+
+  .credit-card {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    aspect-ratio: 380 / 240;
+  }
+
+  .checkout-steps {
+    gap: 8px;
+  }
+
+  .step-label {
+    font-size: 10px;
+  }
+
+  .step-line {
+    width: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-modal {
+    padding: 25px 16px;
+  }
+
+  .checkout-modal-header h2 {
+    font-size: 20px;
+  }
+
+  .checkout-items {
+    max-height: 120px;
   }
 }
 
@@ -425,7 +467,8 @@
 }
 
 .credit-card {
-  width: 380px;
+  width: 100%;
+  max-width: 380px;
   height: 240px;
   position: relative;
   transform-style: preserve-3d;
@@ -937,6 +980,7 @@
   font-size: 24px;
   background: linear-gradient(45deg, #DA7B93, #f14635);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700;
 }
@@ -988,6 +1032,24 @@
 
   .payment-method-icon {
     width: 48px;
-    height: 36px;
+    height: 48px;
+  }
+
+  .card-number {
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+
+  .card-holder-name {
+    font-size: 11px;
+  }
+
+  .card-form .form-row {
+    flex-direction: column;
+  }
+
+  .credit-card {
+    height: auto;
+    aspect-ratio: 380 / 240;
   }
 }

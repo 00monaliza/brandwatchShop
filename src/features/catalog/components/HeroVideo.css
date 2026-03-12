@@ -160,6 +160,7 @@
 @media (max-width: 768px) {
   .hero-video-container {
     height: 60vh;
+    min-height: 300px;
   }
   
   .hero-content h1 {
@@ -168,5 +169,26 @@
   
   .hero-content p {
     font-size: 1rem;
+    letter-spacing: 0.1em;
+  }
+
+  .hero-btn {
+    padding: 12px 30px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-video-container {
+    height: 50vh;
+    min-height: 280px;
+  }
+
+  .scroll-indicator {
+    display: none;
+  }
+
+  .hero-content p {
+    margin-bottom: 2rem;
   }
 }

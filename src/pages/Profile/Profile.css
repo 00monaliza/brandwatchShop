@@ -553,7 +553,11 @@
 }
 
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
+  .profile-page {
+    padding: 100px 16px 40px;
+  }
+
   .profile-container {
     grid-template-columns: 1fr;
   }
@@ -581,16 +585,22 @@
   .profile-stats {
     grid-template-columns: 1fr;
   }
+
+  .setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 }
 
 @media (max-width: 480px) {
   .profile-page {
-    padding: 100px 15px 40px;
+    padding: 80px 12px 30px;
   }
 
   .profile-sidebar,
   .profile-content {
-    padding: 20px;
+    padding: 16px;
   }
 
   .profile-nav-btn {
@@ -606,5 +616,20 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
+  }
+
+  .profile-section h2 {
+    font-size: 18px;
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .order-info {
+    flex-direction: column;
+    gap: 4px;
   }
 }

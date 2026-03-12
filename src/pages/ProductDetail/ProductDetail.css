@@ -133,7 +133,7 @@
 }
 
 .product-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   font-weight: 600;
   color: #fff;
   margin-bottom: 20px;
@@ -450,10 +450,6 @@
     margin-bottom: 20px;
   }
 
-  .product-title {
-    font-size: 1.8rem;
-  }
-
   .product-price {
     font-size: 1.5rem;
   }
@@ -483,5 +479,52 @@
   .thumbnail {
     width: 60px;
     height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-detail-page {
+    padding: 80px 12px 30px;
+  }
+
+  .product-price {
+    font-size: 1.3rem;
+  }
+
+  .product-old-price {
+    font-size: 1rem;
+  }
+
+  .product-description {
+    font-size: 0.9rem;
+  }
+
+  .product-specs {
+    padding: 18px;
+  }
+
+  .guarantee-item {
+    padding: 10px 14px;
+  }
+
+  .guarantee-item span {
+    font-size: 0.8rem;
+  }
+
+  .related-grid {
+    gap: 10px;
+  }
+
+  .related-info {
+    padding: 10px;
+  }
+
+  .related-title {
+    font-size: 0.8rem;
+  }
+
+  .thumbnail {
+    width: 50px;
+    height: 50px;
   }
 }

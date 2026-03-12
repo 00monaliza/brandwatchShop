@@ -309,9 +309,25 @@
   .filter-sidebar {
     width: 300px;
     left: -300px;
+    padding-left: max(1.5rem, env(safe-area-inset-left));
   }
   
   .filter-sidebar.open {
     left: 0;
+  }
+}
+
+@media (max-width: 375px) {
+  .filter-sidebar {
+    width: 280px;
+    left: -280px;
+  }
+
+  .filter-sidebar.open {
+    left: 0;
+  }
+
+  .filter-title-main {
+    font-size: 1.1rem;
   }
 }

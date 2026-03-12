@@ -210,7 +210,24 @@
 }
 
 @media (max-width: 480px) {
+  .sales-hero {
+    padding: 40px 12px;
+  }
+
+  .sales-section {
+    padding: 30px 12px;
+  }
+
   .sales-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .sales-empty {
+    padding: 40px 12px;
+  }
+
+  .sales-empty__title {
+    font-size: 1.3rem;
   }
 }

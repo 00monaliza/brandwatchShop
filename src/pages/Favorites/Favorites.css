@@ -105,3 +105,18 @@
     gap: 1rem;
   }
 }
+
+@media (max-width: 480px) {
+  .favorites-page {
+    padding: 0.75rem;
+  }
+
+  .favorites-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .favorites-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
