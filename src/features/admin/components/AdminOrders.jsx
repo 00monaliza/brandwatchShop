@@ -33,9 +33,13 @@ const AdminOrders = () => {
     });
   };
 
-  const handleStatusChange = (orderId, newStatus) => {
-    updateOrderStatus(orderId, newStatus);
-    showAdminToast.orderStatusChanged(orderId, newStatus);
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      await updateOrderStatus(orderId, newStatus);
+      showAdminToast.orderStatusChanged(orderId, newStatus);
+    } catch (err) {
+      showAdminToast.error('Ошибка при обновлении статуса');
+    }
   };
 
   return (
@@ -50,15 +54,15 @@ const AdminOrders = () => {
         >
           Все ({orders.length})
         </button>
-        {Object.entries(statusLabels).map(([status, { label, icon }]) => {
+        {Object.entries(statusLabels).map(([status, { label }]) => {
           const count = orders.filter(o => o.status === status).length;
           return (
-            <button 
+            <button
               key={status}
               className={`filter-btn ${filterStatus === status ? 'active' : ''}`}
               onClick={() => setFilterStatus(status)}
             >
-              {icon} {label} ({count})
+              {label} ({count})
             </button>
           );
         })}
@@ -83,7 +87,7 @@ const AdminOrders = () => {
                   className="order-status"
                   style={{ backgroundColor: statusLabels[order.status]?.color || '#888' }}
                 >
-                  {statusLabels[order.status]?.icon} {statusLabels[order.status]?.label}
+                  {statusLabels[order.status]?.label}
                 </div>
               </div>
 
@@ -189,7 +193,7 @@ const AdminOrders = () => {
                   <div>
                     <strong>Статус:</strong> 
                     <span style={{ color: statusLabels[selectedOrder.status]?.color, marginLeft: '8px' }}>
-                      {statusLabels[selectedOrder.status]?.icon} {statusLabels[selectedOrder.status]?.label}
+                      {statusLabels[selectedOrder.status]?.label}
                     </span>
                   </div>
                 </div>
