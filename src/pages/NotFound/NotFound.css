@@ -1,0 +1,64 @@
+.not-found-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+}
+
+.not-found-content {
+  text-align: center;
+  max-width: 500px;
+}
+
+.not-found-code {
+  font-size: 8rem;
+  font-weight: 700;
+  color: var(--gold, #d4af37);
+  line-height: 1;
+  margin: 0 0 1rem;
+}
+
+.not-found-title {
+  font-size: 1.5rem;
+  color: var(--text-primary, #fff);
+  margin: 0 0 0.75rem;
+}
+
+.not-found-text {
+  color: var(--text-secondary, #888);
+  margin: 0 0 2rem;
+  line-height: 1.5;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.not-found-home-btn,
+.not-found-catalog-btn {
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.not-found-home-btn {
+  background: var(--gold, #d4af37);
+  color: #000;
+}
+
+.not-found-catalog-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary, #fff);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.not-found-home-btn:hover,
+.not-found-catalog-btn:hover {
+  opacity: 0.85;
+}

@@ -11,6 +11,7 @@ import About from '../pages/About';
 import Contacts from '../pages/Contacts';
 import Sales from '../pages/Sales';
 import Premium from '../pages/Premium';
+import NotFound from '../pages/NotFound';
 
 export function AppRouter() {
   return (
@@ -26,7 +27,7 @@ export function AppRouter() {
       <Route path={ROUTES.SALES} element={<Sales />} />
       <Route path={ROUTES.PREMIUM} element={<Premium />} />
       <Route path={ROUTES.RESET_PASSWORD} element={<Navigate to={ROUTES.HOME} replace />} />
-      <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
