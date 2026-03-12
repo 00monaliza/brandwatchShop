@@ -21,7 +21,7 @@ const Header = memo(({ onOpenAdmin }) => {
   const [scrolled, setScrolled] = useState(false);
   const userMenuRef = useRef(null);
   const { cartCount, favoritesCount } = useCart();
-  const { user, profile, isAuthenticated, logout } = useAuth();
+  const { user, profile, isAuthenticated, isAdmin, logout } = useAuth();
   const { settings } = useSettings();
 
   const logoImage = useMemo(() => settings?.logo || defaultLogoImage, [settings?.logo]);
@@ -159,7 +159,7 @@ const Header = memo(({ onOpenAdmin }) => {
             </Link>
 
             {/* Кнопка админ-панели (видна только админам) */}
-            {user?.role === 'admin' && (
+            {isAdmin && (
               <button 
                 className="icon-btn admin-btn"
                 onClick={() => onOpenAdmin?.()}
