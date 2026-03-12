@@ -1,218 +1,144 @@
-/**
- * Утилита для работы с валютами и конвертацией
- * Базовая валюта: KZT (тенге)
- */
+export const CURRENCIES = Object.freeze({
+  KZT: { code: 'KZT', symbol: '₸', name: 'Тенге', isBase: true },
+  USD: { code: 'USD', symbol: '$', name: 'Доллар США', isBase: false },
+  EUR: { code: 'EUR', symbol: '€', name: 'Евро', isBase: false },
+  RUB: { code: 'RUB', symbol: '₽', name: 'Рубль', isBase: false },
+});
 
-// Маппинг валют
-export const CURRENCIES = {
-  KZT: {
-    code: 'KZT',
-    symbol: '₸',
-    name: 'Тенге',
-    isBase: true
-  },
-  USD: {
-    code: 'USD',
-    symbol: '$',
-    name: 'Доллар США',
-    isBase: false
-  },
-  EUR: {
-    code: 'EUR',
-    symbol: '€',
-    name: 'Евро',
-    isBase: false
-  },
-  RUB: {
-    code: 'RUB',
-    symbol: '₽',
-    name: 'Рубль',
-    isBase: false
+const BASE_CURRENCY = 'KZT';
+
+export const CODE_TO_SYMBOL = Object.fromEntries(
+  Object.values(CURRENCIES).map((c) => [c.code, c.symbol])
+);
+
+export const SYMBOL_TO_CODE = Object.fromEntries(
+  Object.values(CURRENCIES).map((c) => [c.symbol, c.code])
+);
+
+const DEFAULT_RATES = Object.freeze({
+  KZT: 1,
+  USD: 500,
+  EUR: 490,
+  RUB: 5,
+});
+
+let currentRates = { ...DEFAULT_RATES };
+
+// Подписчики на изменение курсов (Observer pattern)
+const ratesListeners = new Set();
+
+export const onRatesChange = (listener) => {
+  ratesListeners.add(listener);
+  return () => ratesListeners.delete(listener);
+};
+
+const notifyRatesListeners = () => {
+  const snapshot = getExchangeRates();
+  ratesListeners.forEach((fn) => fn(snapshot));
+};
+
+export const getExchangeRates = () => ({ ...currentRates });
+
+export const EXCHANGE_RATES = currentRates;
+
+export const getCurrencyCode = (input) => {
+  if (!input) return BASE_CURRENCY;
+  if (CURRENCIES[input]) return input;
+  return SYMBOL_TO_CODE[input] || BASE_CURRENCY;
+};
+
+export const getCurrencySymbol = (input) => {
+  if (!input) return CURRENCIES[BASE_CURRENCY].symbol;
+  if (CODE_TO_SYMBOL[input]) return CODE_TO_SYMBOL[input];
+  if (SYMBOL_TO_CODE[input]) return input;
+  return CURRENCIES[BASE_CURRENCY].symbol;
+};
+
+export const convertPrice = (priceInKZT, targetCurrency, rates = currentRates) => {
+  if (priceInKZT == null || priceInKZT === 0) return 0;
+  const code = getCurrencyCode(targetCurrency);
+  if (code === BASE_CURRENCY) return priceInKZT;
+  const rate = rates[code];
+  return rate ? priceInKZT / rate : priceInKZT;
+};
+
+export const convertToBase = (price, fromCurrency, rates = currentRates) => {
+  if (price == null || price === 0) return 0;
+  const code = getCurrencyCode(fromCurrency);
+  if (code === BASE_CURRENCY) return price;
+  const rate = rates[code];
+  return rate ? price * rate : price;
+};
+
+const formatterCache = new Map();
+
+const getFormatter = (locale, minDigits, maxDigits) => {
+  const key = `${locale}|${minDigits}|${maxDigits}`;
+  let formatter = formatterCache.get(key);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(locale, {
+      minimumFractionDigits: minDigits,
+      maximumFractionDigits: maxDigits,
+    });
+    formatterCache.set(key, formatter);
   }
+  return formatter;
 };
 
-// Курсы валют относительно базовой валюты (KZT)
-// Обновляйте эти курсы регулярно или получайте из API
-export const EXCHANGE_RATES = {
-  KZT: 1,      // Базовая валюта
-  USD: 500,    // 1 USD = 500 KZT (примерный курс)
-  EUR: 490,    // 1 EUR = 490 KZT (примерный курс)
-  RUB: 5       // 1 RUB = 5 KZT (примерный курс)
-};
+export const formatPrice = (priceInKZT, currency = BASE_CURRENCY, options = {}, rates = currentRates) => {
+  if (priceInKZT == null) return '';
 
-// Маппинг символа в код валюты
-export const SYMBOL_TO_CODE = {
-  '$': 'USD',
-  '€': 'EUR',
-  '₸': 'KZT',
-  '₽': 'RUB'
-};
-
-// Маппинг кода в символ
-export const CODE_TO_SYMBOL = {
-  'USD': '$',
-  'EUR': '€',
-  'KZT': '₸',
-  'RUB': '₽'
-};
-
-/**
- * Конвертировать цену из базовой валюты (KZT) в целевую
- * @param {number} priceInKZT - Цена в базовой валюте (KZT)
- * @param {string} targetCurrency - Целевая валюта (USD, EUR, KZT, RUB)
- * @returns {number} - Цена в целевой валюте
- */
-export const convertPrice = (priceInKZT, targetCurrency) => {
-  if (!priceInKZT || priceInKZT === 0) return 0;
-  if (!targetCurrency || targetCurrency === 'KZT') return priceInKZT;
-  
-  const rate = EXCHANGE_RATES[targetCurrency];
-  if (!rate) {
-    return priceInKZT;
-  }
-  
-  // Конвертируем из KZT в целевую валюту
-  return priceInKZT / rate;
-};
-
-/**
- * Конвертировать цену из любой валюты в базовую (KZT)
- * @param {number} price - Цена
- * @param {string} fromCurrency - Исходная валюта
- * @returns {number} - Цена в KZT
- */
-export const convertToBase = (price, fromCurrency) => {
-  if (!price || price === 0) return 0;
-  if (!fromCurrency || fromCurrency === 'KZT') return price;
-  
-  const rate = EXCHANGE_RATES[fromCurrency];
-  if (!rate) {
-    return price;
-  }
-  
-  // Конвертируем в KZT
-  return price * rate;
-};
-
-/**
- * Форматировать цену с учетом валюты
- * @param {number} priceInKZT - Цена в базовой валюте (KZT)
- * @param {string} currency - Валюта для отображения (символ или код)
- * @param {Object} options - Опции форматирования
- * @returns {string} - Отформатированная строка цены
- */
-export const formatPrice = (priceInKZT, currency = 'KZT', options = {}) => {
-  if (priceInKZT === null || priceInKZT === undefined) return '';
-  
-  // Определяем код валюты
-  let currencyCode = currency;
-  if (SYMBOL_TO_CODE[currency]) {
-    currencyCode = SYMBOL_TO_CODE[currency];
-  }
-  
-  // Конвертируем цену
-  const convertedPrice = convertPrice(priceInKZT, currencyCode);
-  
-  // Получаем символ валюты
+  const currencyCode = getCurrencyCode(currency);
+  const convertedPrice = convertPrice(priceInKZT, currencyCode, rates);
   const symbol = CODE_TO_SYMBOL[currencyCode] || currencyCode;
-  
-  // Опции форматирования
+
   const {
     showDecimals = false,
     locale = 'ru-RU',
     minimumFractionDigits = 0,
-    maximumFractionDigits = showDecimals ? 2 : 0
+    maximumFractionDigits = showDecimals ? 2 : 0,
   } = options;
-  
-  // Форматируем число
-  const formattedNumber = new Intl.NumberFormat(locale, {
-    minimumFractionDigits,
-    maximumFractionDigits
-  }).format(convertedPrice);
-  
-  // Возвращаем с символом валюты
-  return `${formattedNumber} ${symbol}`;
-};
 
-/**
- * Получить символ валюты по коду или символу
- * @param {string} currency - Код или символ валюты
- * @returns {string} - Символ валюты
- */
-export const getCurrencySymbol = (currency) => {
-  if (!currency) return '₸';
-  
-  // Если это уже символ
-  if (CODE_TO_SYMBOL[currency]) {
-    return CODE_TO_SYMBOL[currency];
-  }
-  
-  // Если это символ из маппинга
-  if (SYMBOL_TO_CODE[currency]) {
-    return currency;
-  }
-  
-  return '₸'; // По умолчанию
-};
+  const formatted = getFormatter(locale, minimumFractionDigits, maximumFractionDigits)
+    .format(convertedPrice);
 
-/**
- * Получить код валюты по символу
- * @param {string} symbol - Символ валюты
- * @returns {string} - Код валюты
- */
-export const getCurrencyCode = (symbol) => {
-  if (!symbol) return 'KZT';
-  
-  if (SYMBOL_TO_CODE[symbol]) {
-    return SYMBOL_TO_CODE[symbol];
-  }
-  
-  if (CODE_TO_SYMBOL[symbol]) {
-    return symbol;
-  }
-  
-  return 'KZT'; // По умолчанию
-};
+  return `${formatted} ${symbol}`;
+}
 
-/**
- * Обновить курсы валют (можно вызывать из API)
- * @param {Object} newRates - Новые курсы { USD: 450, EUR: 490, ... }
- */
+const STORAGE_KEY_RATES = 'exchangeRates';
+const STORAGE_KEY_TIMESTAMP = 'exchangeRatesTimestamp';
+const CACHE_TTL = 60 * 60 * 1000; // 1 час
+
 export const updateExchangeRates = (newRates) => {
-  Object.keys(newRates).forEach(currency => {
-    if (EXCHANGE_RATES.hasOwnProperty(currency)) {
-      EXCHANGE_RATES[currency] = newRates[currency];
+  let changed = false;
+  Object.keys(newRates).forEach((code) => {
+    if (code in currentRates && currentRates[code] !== newRates[code]) {
+      currentRates[code] = newRates[code];
+      changed = true;
     }
   });
-  
-  // Сохраняем в localStorage для кэширования
-  localStorage.setItem('exchangeRates', JSON.stringify(EXCHANGE_RATES));
+  if (changed) {
+    localStorage.setItem(STORAGE_KEY_RATES, JSON.stringify(currentRates));
+    notifyRatesListeners();
+  }
 };
 
-/**
- * Загрузить курсы из localStorage (при инициализации)
- */
 export const loadExchangeRates = () => {
   try {
-    const saved = localStorage.getItem('exchangeRates');
+    const saved = localStorage.getItem(STORAGE_KEY_RATES);
     if (saved) {
       const rates = JSON.parse(saved);
-      Object.assign(EXCHANGE_RATES, rates);
+      Object.assign(currentRates, rates);
     }
   } catch (error) {
     console.error('Ошибка загрузки курсов валют:', error);
   }
 };
 
-/**
- * Загрузить актуальные курсы с API (относительно KZT)
- * Вызывается автоматически при инициализации, обновляет не чаще раза в час
- */
 export const fetchExchangeRates = async () => {
   try {
-    const lastFetch = localStorage.getItem('exchangeRatesTimestamp');
-    const ONE_HOUR = 60 * 60 * 1000;
-    if (lastFetch && Date.now() - Number(lastFetch) < ONE_HOUR) return;
+    const lastFetch = localStorage.getItem(STORAGE_KEY_TIMESTAMP);
+    if (lastFetch && Date.now() - Number(lastFetch) < CACHE_TTL) return;
 
     const response = await fetch('https://open.er-api.com/v6/latest/KZT');
     if (!response.ok) return;
@@ -221,19 +147,20 @@ export const fetchExchangeRates = async () => {
     if (data.result !== 'success' || !data.rates) return;
 
     const newRates = {};
-    if (data.rates.USD) newRates.USD = Math.round(1 / data.rates.USD);
-    if (data.rates.EUR) newRates.EUR = Math.round(1 / data.rates.EUR);
-    if (data.rates.RUB) newRates.RUB = Math.round(1 / data.rates.RUB);
+    for (const code of Object.keys(CURRENCIES)) {
+      if (code === BASE_CURRENCY || !data.rates[code]) continue;
+      newRates[code] = Math.round(1 / data.rates[code]);
+    }
 
     if (Object.keys(newRates).length > 0) {
       updateExchangeRates(newRates);
-      localStorage.setItem('exchangeRatesTimestamp', String(Date.now()));
+      localStorage.setItem(STORAGE_KEY_TIMESTAMP, String(Date.now()));
     }
   } catch {
     // Используем захардкоженные/кэшированные курсы при ошибке сети
   }
 };
 
-// Загружаем кэш из localStorage, затем обновляем с API
+// Инициализация
 loadExchangeRates();
 fetchExchangeRates();

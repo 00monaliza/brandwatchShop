@@ -228,7 +228,7 @@
 .auth-switch button {
   background: none;
   border: none;
-  color: var(--secondary);
+  color: var(--accent-light);
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
@@ -344,6 +344,59 @@
 .country-dropdown::-webkit-scrollbar-thumb {
   background: rgba(55, 110, 111, 0.4);
   border-radius: 3px;
+}
+
+/* Login Identifier with Flag */
+.login-identifier-wrapper {
+  position: relative;
+}
+
+.login-country-flag {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.login-identifier-wrapper input {
+  width: 100%;
+}
+
+.login-identifier-wrapper input.with-flag {
+  padding-left: 42px;
+}
+
+/* Password Toggle */
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 46px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+  color: var(--accent-light);
 }
 
 @media (max-width: 480px) {

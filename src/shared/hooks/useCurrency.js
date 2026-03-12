@@ -1,78 +1,53 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { useSettings } from '../../features/admin/context/SettingsContext';
-import { formatPrice, convertPrice, getCurrencySymbol } from '../../services/currency';
+import {
+  formatPrice,
+  convertPrice,
+  getCurrencySymbol,
+  getExchangeRates,
+  onRatesChange,
+} from '../../services/currency';
 
 /**
- * Хук для работы с валютой
- * Предоставляет функции форматирования цен с учетом текущей валюты
- * Автоматически обновляется при изменении валюты
+ * Хук для работы с валютой.
+ * Подписывается на:
+ *  1) SettingsContext — текущая выбранная валюта
+ *  2) onRatesChange  — актуальные курсы с API
+ * Компоненты перерисовываются только при реальном изменении валюты или курсов.
  */
 export const useCurrency = () => {
   const { settings } = useSettings();
-  const [currency, setCurrency] = useState(settings?.currency || 'KZT');
-  
-  // Обновляем валюту при изменении настроек
+  const currency = settings?.currency || 'KZT';
+
+  // Подписка на обновление курсов из API
+  const [rates, setRates] = useState(getExchangeRates);
+
   useEffect(() => {
-    if (settings?.currency) {
-      setCurrency(settings.currency);
-    }
-  }, [settings?.currency]);
-  
-  // Слушаем события изменения валюты
-  useEffect(() => {
-    const handleCurrencyChange = (event) => {
-      if (event.detail?.currency) {
-        setCurrency(event.detail.currency);
-      }
-    };
-    
-    window.addEventListener('currencyChanged', handleCurrencyChange);
-    return () => {
-      window.removeEventListener('currencyChanged', handleCurrencyChange);
-    };
+    return onRatesChange(setRates);
   }, []);
 
-  /**
-   * Форматировать цену с учетом текущей валюты
-   * @param {number} priceInKZT - Цена в базовой валюте (KZT)
-   * @param {Object} options - Опции форматирования
-   * @returns {string} - Отформатированная строка цены
-   */
-  const formatPriceWithCurrency = (priceInKZT, options = {}) => {
-    return formatPrice(priceInKZT, currency, options);
-  };
+  const currencySymbol = useMemo(() => getCurrencySymbol(currency), [currency]);
 
-  /**
-   * Получить цену в текущей валюте (без форматирования)
-   * @param {number} priceInKZT - Цена в базовой валюте (KZT)
-   * @returns {number} - Цена в текущей валюте
-   */
-  const getPriceInCurrentCurrency = (priceInKZT) => {
-    return convertPrice(priceInKZT, currency);
-  };
+  const formatPriceWithCurrency = useCallback(
+    (priceInKZT, options = {}) => formatPrice(priceInKZT, currency, options, rates),
+    [currency, rates]
+  );
 
-  /**
-   * Получить символ текущей валюты
-   * @returns {string} - Символ валюты
-   */
-  const getCurrentCurrencySymbol = () => {
-    return getCurrencySymbol(currency);
-  };
+  const getPriceInCurrentCurrency = useCallback(
+    (priceInKZT) => convertPrice(priceInKZT, currency, rates),
+    [currency, rates]
+  );
 
-  /**
-   * Получить код текущей валюты
-   * @returns {string} - Код валюты
-   */
-  const getCurrentCurrencyCode = () => {
-    return currency;
-  };
+  const getSymbol = useCallback(() => getCurrencySymbol(currency), [currency]);
+  const getCode = useCallback(() => currency, [currency]);
 
-  return {
+  return useMemo(() => ({
     currency,
-    currencySymbol: getCurrentCurrencySymbol(),
+    currencySymbol,
+    rates,
     formatPrice: formatPriceWithCurrency,
     getPrice: getPriceInCurrentCurrency,
-    getSymbol: getCurrentCurrencySymbol,
-    getCode: getCurrentCurrencyCode
-  };
+    getSymbol,
+    getCode,
+  }), [currency, currencySymbol, rates, formatPriceWithCurrency, getPriceInCurrentCurrency, getSymbol, getCode]);
 };
