@@ -19,7 +19,7 @@ export const getProductImage = (product, index = 0) => {
     return product.image;
   }
   
-  return '';
+  return '/images/image.png';
 };
 
 export const getProductImages = (product) => {
