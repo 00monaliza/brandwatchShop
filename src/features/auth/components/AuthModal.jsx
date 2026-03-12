@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { showToast } from '../../../shared/utils/toast';
@@ -299,7 +300,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
     }
   };
 
-  return (
+  return createPortal(
     <div className="auth-modal-overlay" onClick={handleOverlayClick} role="dialog" aria-modal="true" aria-label={mode === 'login' ? 'Авторизация' : 'Регистрация'}>
       <div className="auth-modal" ref={modalRef}>
         <button className="auth-modal-close" onClick={onClose}>
@@ -572,7 +573,8 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

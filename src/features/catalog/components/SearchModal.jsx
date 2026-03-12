@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAdmin } from '../../admin/context/AdminContext';
@@ -147,7 +148,7 @@ const SearchModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="search-modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={t('search.placeholder')}>
       <div className="search-modal" onClick={(e) => e.stopPropagation()}>
         {/* Search Input */}
@@ -319,7 +320,8 @@ const SearchModal = ({ isOpen, onClose }) => {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
