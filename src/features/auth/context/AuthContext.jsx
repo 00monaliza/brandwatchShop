@@ -36,12 +36,15 @@ export const AuthProvider = ({ children }) => {
   const formatPhone = (phone) => {
     if (!phone) return null;
     const digits = phone.replace(/\D/g, '');
+    // 8XXXXXXXXXX → +7XXXXXXXXXX (замена 8 на +7 для КЗ/РУ)
     if (digits.startsWith('8') && digits.length === 11) {
       return '+7' + digits.slice(1);
     }
-    if (!digits.startsWith('7') && digits.length === 10) {
+    // 10 цифр — локальный номер без кода страны, добавляем +7
+    if (digits.length === 10) {
       return '+7' + digits;
     }
+    // 11+ цифр с кодом страны — просто добавляем +
     return '+' + digits;
   };
 
@@ -203,17 +206,26 @@ export const AuthProvider = ({ children }) => {
         const normalizedPhone = formatPhone(phoneOrEmail.replace(/[\s\-()]/g, ''));
 
         // Это телефон - ищем пользователя в profiles по телефону
-        const { data: profiles } = await supabase
-          .from('profiles')
-          .select('email')
-          .eq('phone', normalizedPhone)
-          .limit(1);
+        let foundEmail = null;
+        try {
+          const { data: profiles } = await supabase
+            .from('profiles')
+            .select('email')
+            .eq('phone', normalizedPhone)
+            .limit(1);
 
-        if (profiles && profiles.length > 0 && profiles[0].email) {
-          email = profiles[0].email;
+          if (profiles && profiles.length > 0 && profiles[0].email) {
+            foundEmail = profiles[0].email;
+          }
+        } catch (err) {
+          console.warn('Phone lookup failed (possibly RLS):', err);
+        }
+
+        if (foundEmail) {
+          email = foundEmail;
         } else {
-          // Пробуем фиктивный email (без + для совместимости)
-          const digits = phoneOrEmail.replace(/\D/g, '');
+          // Пробуем фиктивный email на основе нормализованного номера
+          const digits = normalizedPhone.replace(/\D/g, '');
           email = `${digits}@brandwatch.local`;
         }
       }
