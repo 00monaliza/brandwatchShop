@@ -200,7 +200,7 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
   }
 
   return (
-    <div className="checkout-modal-overlay" onClick={handleOverlayClick}>
+    <div className="checkout-modal-overlay" onClick={handleOverlayClick} role="dialog" aria-modal="true" aria-label={t('checkout.title')}>
       <div className="checkout-modal">
         <button className="checkout-modal-close" onClick={onClose}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

@@ -148,7 +148,7 @@ const SearchModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="search-modal-overlay" onClick={onClose}>
+    <div className="search-modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={t('search.placeholder')}>
       <div className="search-modal" onClick={(e) => e.stopPropagation()}>
         {/* Search Input */}
         <form className="search-form" onSubmit={handleSubmit}>

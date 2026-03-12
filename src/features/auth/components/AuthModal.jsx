@@ -274,7 +274,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
   };
 
   return (
-    <div className="auth-modal-overlay" onClick={handleOverlayClick}>
+    <div className="auth-modal-overlay" onClick={handleOverlayClick} role="dialog" aria-modal="true" aria-label={mode === 'login' ? 'Авторизация' : 'Регистрация'}>
       <div className="auth-modal">
         <button className="auth-modal-close" onClick={onClose}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
