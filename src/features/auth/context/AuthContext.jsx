@@ -137,10 +137,10 @@ export const AuthProvider = ({ children }) => {
         userEmail = `${phone.replace(/[^0-9]/g, '')}@brandwatch.local`;
       }
 
-      // Регистрация через Supabase Auth
+      // Регистрация через Supabase Auth (тримим пароль)
       const { data, error } = await auth.signUp(
         userEmail,
-        password,
+        password.trim(),
         {
           name: name,
           phone: phone
@@ -194,13 +194,14 @@ export const AuthProvider = ({ children }) => {
     setAuthError(null);
 
     try {
-      const normalizedPhone = phoneOrEmail.replace(/[\s\-()]/g, '');
-
       // Определяем, это email или телефон
       let email = phoneOrEmail;
-      
+
       // Если это похоже на телефон, пробуем найти пользователя по телефону
       if (/^[+]?[0-9\s\-()]+$/.test(phoneOrEmail)) {
+        // Нормализуем телефон в тот же формат, что хранится в БД (+7...)
+        const normalizedPhone = formatPhone(phoneOrEmail.replace(/[\s\-()]/g, ''));
+
         // Это телефон - ищем пользователя в profiles по телефону
         const { data: profiles } = await supabase
           .from('profiles')
@@ -211,13 +212,14 @@ export const AuthProvider = ({ children }) => {
         if (profiles && profiles.length > 0 && profiles[0].email) {
           email = profiles[0].email;
         } else {
-          // Пробуем фиктивный email
-          email = `${normalizedPhone}@brandwatch.local`;
+          // Пробуем фиктивный email (без + для совместимости)
+          const digits = phoneOrEmail.replace(/\D/g, '');
+          email = `${digits}@brandwatch.local`;
         }
       }
 
-      // Вход через Supabase Auth
-      const { data, error } = await auth.signIn(email, password);
+      // Вход через Supabase Auth (тримим пароль — мобильные клавиатуры часто добавляют пробелы)
+      const { data, error } = await auth.signIn(email, password.trim());
 
       if (error) {
         console.error('Supabase login error:', error);

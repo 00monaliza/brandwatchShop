@@ -75,16 +75,21 @@ function App() {
       }
     });
 
-    // Проверяем URL (hash или query) на наличие токена восстановления от Supabase
+    // Проверяем URL на наличие токена восстановления от Supabase
+    // Используем таймер, чтобы Supabase успел обработать токен и установить сессию
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const queryParams = new URLSearchParams(window.location.search);
     const accessToken = hashParams.get('access_token') || queryParams.get('access_token');
     const type = hashParams.get('type') || queryParams.get('type');
-    
-    if (accessToken && type === 'recovery') {
-      setShowResetPasswordModal(true);
-      // Очищаем URL от токенов (оставляем только путь)
-      window.history.replaceState(null, '', window.location.pathname || '/');
+    const code = queryParams.get('code');
+
+    if ((accessToken && type === 'recovery') || (code && type === 'recovery')) {
+      // Даём Supabase время обработать токен и установить сессию (важно для мобильных)
+      setTimeout(() => {
+        setShowResetPasswordModal(true);
+        // Очищаем URL от токенов только после того как Supabase обработал их
+        window.history.replaceState(null, '', window.location.pathname || '/');
+      }, 1000);
     }
 
     // Ripple эффект через делегирование — один обработчик на document

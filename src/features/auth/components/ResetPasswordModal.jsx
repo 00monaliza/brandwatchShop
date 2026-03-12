@@ -52,13 +52,23 @@ const ResetPasswordModal = ({ isOpen, onClose, onSuccess }) => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await auth.updatePassword(formData.password);
-      
+      // Тримим пароль — мобильные клавиатуры часто добавляют пробелы
+      const trimmedPassword = formData.password.trim();
+
+      const { error } = await auth.updatePassword(trimmedPassword);
+
       if (error) {
         console.error('Update password error:', error);
         showToast.error(t('auth.errors.updatePasswordFailed') || 'Ошибка обновления пароля');
         setIsSubmitting(false);
         return;
+      }
+
+      // Выходим из recovery-сессии, чтобы пользователь мог войти заново с новым паролем
+      try {
+        await auth.signOut();
+      } catch (signOutErr) {
+        console.error('Sign out after password reset:', signOutErr);
       }
 
       setIsSuccess(true);
