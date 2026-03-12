@@ -204,5 +204,36 @@ export const loadExchangeRates = () => {
   }
 };
 
-// Загружаем курсы при инициализации модуля
+/**
+ * Загрузить актуальные курсы с API (относительно KZT)
+ * Вызывается автоматически при инициализации, обновляет не чаще раза в час
+ */
+export const fetchExchangeRates = async () => {
+  try {
+    const lastFetch = localStorage.getItem('exchangeRatesTimestamp');
+    const ONE_HOUR = 60 * 60 * 1000;
+    if (lastFetch && Date.now() - Number(lastFetch) < ONE_HOUR) return;
+
+    const response = await fetch('https://open.er-api.com/v6/latest/KZT');
+    if (!response.ok) return;
+
+    const data = await response.json();
+    if (data.result !== 'success' || !data.rates) return;
+
+    const newRates = {};
+    if (data.rates.USD) newRates.USD = Math.round(1 / data.rates.USD);
+    if (data.rates.EUR) newRates.EUR = Math.round(1 / data.rates.EUR);
+    if (data.rates.RUB) newRates.RUB = Math.round(1 / data.rates.RUB);
+
+    if (Object.keys(newRates).length > 0) {
+      updateExchangeRates(newRates);
+      localStorage.setItem('exchangeRatesTimestamp', String(Date.now()));
+    }
+  } catch {
+    // Используем захардкоженные/кэшированные курсы при ошибке сети
+  }
+};
+
+// Загружаем кэш из localStorage, затем обновляем с API
 loadExchangeRates();
+fetchExchangeRates();
