@@ -32,11 +32,32 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const modalRef = useRef(null);
 
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [serverError, setServerError] = useState('');
+
+  // Блокировка прокрутки body при открытии модалки
+  useEffect(() => {
+    if (isOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isOpen]);
 
   // Закрытие дропдауна при клике вне
   useEffect(() => {
@@ -65,6 +86,10 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
     setErrors({});
     setServerError('');
     setResetSent(false);
+    // Прокрутка модалки наверх при смене режима
+    if (modalRef.current) {
+      modalRef.current.scrollTop = 0;
+    }
   }, [mode, selectedCountry.dial_code]);
 
   if (!isOpen) return null;
@@ -276,7 +301,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
 
   return (
     <div className="auth-modal-overlay" onClick={handleOverlayClick} role="dialog" aria-modal="true" aria-label={mode === 'login' ? 'Авторизация' : 'Регистрация'}>
-      <div className="auth-modal">
+      <div className="auth-modal" ref={modalRef}>
         <button className="auth-modal-close" onClick={onClose}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="18" y1="6" x2="6" y2="18"/>

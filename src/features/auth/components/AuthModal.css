@@ -405,6 +405,7 @@
     padding: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   .auth-modal {
@@ -415,6 +416,10 @@
     max-height: 90dvh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    /* Гарантируем видимость модалки */
+    min-height: 0;
+    flex-shrink: 0;
   }
 
   .country-dropdown {

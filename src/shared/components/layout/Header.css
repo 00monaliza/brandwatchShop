@@ -75,8 +75,7 @@
 .nav {
   display: flex;
   gap: 3rem;
-  flex: 1;
-  justify-content: center;
+  flex: wrap;
 }
 
 .nav-link {
