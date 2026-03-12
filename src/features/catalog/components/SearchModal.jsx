@@ -118,7 +118,7 @@ const SearchModal = ({ isOpen, onClose }) => {
       console.error('Error saving recently viewed:', error);
     }
     onClose();
-    navigate('/catalog');
+    navigate(`/catalog?search=${encodeURIComponent(searchQuery.trim())}`);
   };
 
   const handleAddToCart = (e, product) => {
@@ -141,7 +141,7 @@ const SearchModal = ({ isOpen, onClose }) => {
     if (searchQuery.trim()) {
       saveRecentSearch(searchQuery.trim());
       onClose();
-      navigate('/catalog');
+      navigate(`/catalog?search=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 

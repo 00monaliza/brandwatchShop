@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import FilterSidebar from '../../features/catalog/components/FilterSidebar';
 import SortDropdown from '../../features/catalog/components/SortDropdown';
 import ProductGrid from '../../features/catalog/components/ProductGrid';
@@ -10,6 +11,7 @@ import './Catalog.css';
 
 const Catalog = () => {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
   const { products: allProducts } = useAdmin();
   const [sortType, setSortType] = useState('popularity');
   const [filters, setFilters] = useState({
@@ -27,7 +29,33 @@ const Catalog = () => {
   });
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const filteredProducts = useProducts(allProducts, filters, sortType);
+  // Читаем URL-параметры при монтировании и при изменении URL
+  useEffect(() => {
+    const brandParam = searchParams.get('brand');
+    const searchParam = searchParams.get('search');
+
+    if (brandParam) {
+      setFilters(prev => ({ ...prev, brand: [brandParam] }));
+    }
+    if (searchParam !== null) {
+      setSearchQuery(searchParam);
+    } else {
+      setSearchQuery('');
+    }
+  }, [searchParams]);
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Применяем текстовый поиск поверх фильтров
+  const productsAfterFilters = useProducts(allProducts, filters, sortType);
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return productsAfterFilters;
+    const query = searchQuery.toLowerCase().trim();
+    return productsAfterFilters.filter(p => {
+      const text = [p.title, p.brand, p.dialColor, p.caseMaterial, p.movement].join(' ').toLowerCase();
+      return text.includes(query);
+    });
+  }, [productsAfterFilters, searchQuery]);
 
   const handleFilterChange = useCallback((filterName, value) => {
     setFilters(prev => ({
@@ -64,9 +92,9 @@ const Catalog = () => {
     setSidebarOpen(prev => !prev);
   }, []);
 
-  const hasActiveFilters = useMemo(() => 
-    Object.values(filters).some(arr => arr.length > 0), 
-    [filters]
+  const hasActiveFilters = useMemo(() =>
+    Object.values(filters).some(arr => arr.length > 0) || searchQuery.trim().length > 0,
+    [filters, searchQuery]
   );
 
   return (
