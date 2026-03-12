@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../auth/context/AuthContext';
 import { useCart } from '../../cart/context/CartContext';
@@ -27,6 +27,7 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const idempotencyKeyRef = useRef(null);
 
   // Загрузка сохраненных данных при открытии
   useEffect(() => {
@@ -111,6 +112,11 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
       return;
     }
 
+    // Генерируем idempotency key для защиты от двойной отправки
+    const key = `${user.id}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    if (idempotencyKeyRef.current === key) return;
+    idempotencyKeyRef.current = key;
+
     setIsSubmitting(true);
 
     try {
@@ -158,6 +164,8 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
       console.error('Error submitting order:', error);
       showToast.error('Произошла ошибка при оформлении заказа');
       setIsSuccess(false);
+      // Сбрасываем ключ чтобы можно было попробовать снова
+      idempotencyKeyRef.current = null;
     } finally {
       setIsSubmitting(false);
     }
