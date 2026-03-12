@@ -310,22 +310,33 @@ export const AdminProvider = ({ children }) => {
     setArchivedProducts(prev => prev.filter(p => p.id !== id));
   }, []);
 
-  // Установить скидку
-  const setProductDiscount = useCallback((id, discount) => {
+  // Установить скидку (сохраняет в Supabase)
+  const setProductDiscount = useCallback(async (id, discount) => {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+
+    const oldPrice = product.oldPrice || product.price;
+    const newPrice = Math.round(oldPrice * (1 - discount / 100));
+
+    // Оптимистичное обновление UI
     setProducts(prev => prev.map(p => {
       if (p.id === id) {
-        const oldPrice = p.oldPrice || p.price;
-        const newPrice = Math.round(oldPrice * (1 - discount / 100));
-        return { 
-          ...p, 
-          discount, 
+        return {
+          ...p,
+          discount,
           oldPrice: discount > 0 ? oldPrice : null,
           price: discount > 0 ? newPrice : oldPrice
         };
       }
       return p;
     }));
-  }, []);
+
+    // Сохраняем в Supabase
+    await db.products.update(id, {
+      price: discount > 0 ? newPrice : oldPrice,
+      old_price: discount > 0 ? oldPrice : null,
+    });
+  }, [products]);
 
   // ========== ЗАКАЗЫ ==========
 
