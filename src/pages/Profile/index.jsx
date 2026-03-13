@@ -290,11 +290,20 @@ const Profile = () => {
               ) : (
                 <div className="orders-list">
                   {orders.map(order => (
-                    <div key={order.id} className="order-card">
+                    <div
+                      key={order.id}
+                      className="order-card order-card-clickable"
+                      onClick={() => navigate(`/orders/${order.id}`)}
+                    >
                       <div className="order-header">
                         <span className="order-id">#{String(order.id).slice(-8)}</span>
                         <span className={`order-status status-${order.status}`}>
-                          {t(`profile.orderStatus.${order.status}`)}
+                          {order.status === 'pending' && 'Принят'}
+                          {order.status === 'processing' && 'Обрабатывается'}
+                          {order.status === 'shipped' && 'Отправлен'}
+                          {order.status === 'delivered' && 'Доставлен'}
+                          {order.status === 'cancelled' && 'Отменён'}
+                          {!['pending', 'processing', 'shipped', 'delivered', 'cancelled'].includes(order.status) && t(`profile.orderStatus.${order.status}`)}
                         </span>
                       </div>
                       <div className="order-info">
@@ -311,6 +320,19 @@ const Profile = () => {
                         ))}
                         {order.items?.length > 3 && (
                           <span className="order-more">+{order.items.length - 3} ещё</span>
+                        )}
+                      </div>
+                      <div className="order-action">
+                        {order.trackingUrl || order.tracking_url ? (
+                          <span className="track-order-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+                              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                            Отследить
+                          </span>
+                        ) : (
+                          <span className="view-order-btn">Подробнее &rarr;</span>
                         )}
                       </div>
                     </div>

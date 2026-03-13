@@ -2287,3 +2287,126 @@
     font-size: 20px;
   }
 }
+
+/* Tracking Section in Admin Orders */
+.tracking-section {
+  background: rgba(55, 110, 111, 0.1);
+  border: 1px solid rgba(55, 110, 111, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.tracking-input-group {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tracking-input {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.tracking-input:focus {
+  outline: none;
+  border-color: #DA7B93;
+}
+
+.tracking-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.tracking-save-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #DA7B93, #c56a82);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  white-space: nowrap;
+}
+
+.tracking-save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(218, 123, 147, 0.3);
+}
+
+.tracking-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.tracking-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tracking-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(52, 152, 219, 0.2);
+  border-radius: 6px;
+  color: #3498db;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tracking-link:hover {
+  background: rgba(52, 152, 219, 0.3);
+}
+
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(37, 211, 102, 0.2);
+  border-radius: 6px;
+  color: #25d366;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.whatsapp-btn:hover {
+  background: rgba(37, 211, 102, 0.3);
+}
+
+.tracking-hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .tracking-input-group {
+    flex-direction: column;
+  }
+
+  .tracking-save-btn {
+    width: 100%;
+  }
+
+  .tracking-actions {
+    flex-direction: column;
+  }
+}

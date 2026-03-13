@@ -6,10 +6,12 @@ import { getProductImage } from '../../../shared/utils/productImage';
 import './AdminPanel.css';
 
 const AdminOrders = () => {
-  const { orders, updateOrderStatus } = useAdmin();
+  const { orders, updateOrderStatus, updateOrderTracking } = useAdmin();
   const { formatPrice } = useCurrency();
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [trackingUrl, setTrackingUrl] = useState('');
+  const [isSavingTracking, setIsSavingTracking] = useState(false);
 
   const statusLabels = {
     pending: { label: 'Новый', color: '#f39c12' },
@@ -40,6 +42,54 @@ const AdminOrders = () => {
     } catch (err) {
       showAdminToast.error('Ошибка при обновлении статуса');
     }
+  };
+
+  const handleOpenOrder = (order) => {
+    setSelectedOrder(order);
+    setTrackingUrl(order.trackingUrl || order.tracking_url || '');
+  };
+
+  const handleCloseOrder = () => {
+    setSelectedOrder(null);
+    setTrackingUrl('');
+  };
+
+  const handleSaveTracking = async () => {
+    if (!trackingUrl.trim()) {
+      showAdminToast.error('Введите ссылку для отслеживания');
+      return;
+    }
+
+    setIsSavingTracking(true);
+    try {
+      await updateOrderTracking(selectedOrder.id, trackingUrl.trim());
+      showAdminToast.success('Ссылка сохранена, уведомление отправлено!');
+      // Обновляем selectedOrder с новыми данными
+      setSelectedOrder(prev => ({
+        ...prev,
+        trackingUrl: trackingUrl.trim(),
+        tracking_url: trackingUrl.trim(),
+        status: 'shipped'
+      }));
+    } catch (err) {
+      showAdminToast.error('Ошибка при сохранении ссылки');
+    } finally {
+      setIsSavingTracking(false);
+    }
+  };
+
+  const getWhatsAppUrl = (order) => {
+    const phone = order.customer?.phone?.replace(/[\s\-()+]/g, '');
+    if (!phone) return null;
+    const trackingLink = order.trackingUrl || order.tracking_url;
+    const name = order.customer?.name || 'Покупатель';
+    const message = encodeURIComponent(
+      `Здравствуйте, ${name}!\n\n` +
+      `Ваш заказ #${String(order.id).slice(-8)} в BrandWatch отправлен!\n\n` +
+      `Ссылка для отслеживания:\n${trackingLink}\n\n` +
+      `Спасибо за покупку!`
+    );
+    return `https://wa.me/${phone}?text=${message}`;
   };
 
   return (
@@ -123,9 +173,9 @@ const AdminOrders = () => {
               </div>
 
               <div className="order-card-actions">
-                <button 
+                <button
                   className="view-details-btn"
-                  onClick={() => setSelectedOrder(order)}
+                  onClick={() => handleOpenOrder(order)}
                 >
                   Подробнее
                 </button>
@@ -147,11 +197,11 @@ const AdminOrders = () => {
 
       {/* Модальное окно деталей заказа */}
       {selectedOrder && (
-        <div className="admin-modal-overlay" onClick={() => setSelectedOrder(null)}>
+        <div className="admin-modal-overlay" onClick={handleCloseOrder}>
           <div className="admin-modal order-details-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-header">
-              <h3>Заказ #{selectedOrder.id}</h3>
-              <button className="admin-modal-close" onClick={() => setSelectedOrder(null)}>×</button>
+              <h3>Заказ #{String(selectedOrder.id).slice(-8)}</h3>
+              <button className="admin-modal-close" onClick={handleCloseOrder}>x</button>
             </div>
 
             <div className="order-details-content">
@@ -160,6 +210,7 @@ const AdminOrders = () => {
                 <div className="detail-grid">
                   <div><strong>Имя:</strong> {selectedOrder.customer?.name}</div>
                   <div><strong>Телефон:</strong> {selectedOrder.customer?.phone}</div>
+                  <div><strong>Email:</strong> {selectedOrder.customer?.email || '—'}</div>
                   <div><strong>Адрес:</strong> {selectedOrder.customer?.address || '—'}</div>
                 </div>
               </div>
@@ -174,7 +225,7 @@ const AdminOrders = () => {
                         <span className="item-brand">{item.brand}</span>
                         <span className="item-title">{item.title}</span>
                         <span className="item-price">
-                          {formatPrice(item.priceInKZT || item.price || 0)} × {item.quantity}
+                          {formatPrice(item.priceInKZT || item.price || 0)} x {item.quantity}
                         </span>
                       </div>
                       <span className="item-total">
@@ -191,12 +242,58 @@ const AdminOrders = () => {
                   <div><strong>Способ оплаты:</strong> {selectedOrder.paymentMethod}</div>
                   <div><strong>Дата заказа:</strong> {formatDate(selectedOrder.createdAt)}</div>
                   <div>
-                    <strong>Статус:</strong> 
+                    <strong>Статус:</strong>
                     <span style={{ color: statusLabels[selectedOrder.status]?.color, marginLeft: '8px' }}>
                       {statusLabels[selectedOrder.status]?.label}
                     </span>
                   </div>
                 </div>
+              </div>
+
+              {/* Секция трек-ссылки */}
+              <div className="detail-section tracking-section">
+                <h4>Ссылка для отслеживания</h4>
+                <div className="tracking-input-group">
+                  <input
+                    type="url"
+                    placeholder="https://track.kazpost.kz/..."
+                    value={trackingUrl}
+                    onChange={(e) => setTrackingUrl(e.target.value)}
+                    className="tracking-input"
+                  />
+                  <button
+                    className="tracking-save-btn"
+                    onClick={handleSaveTracking}
+                    disabled={isSavingTracking}
+                  >
+                    {isSavingTracking ? 'Сохранение...' : 'Сохранить'}
+                  </button>
+                </div>
+                {(selectedOrder.trackingUrl || selectedOrder.tracking_url) && (
+                  <div className="tracking-actions">
+                    <a
+                      href={selectedOrder.trackingUrl || selectedOrder.tracking_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="tracking-link"
+                    >
+                      Открыть ссылку
+                    </a>
+                    {selectedOrder.customer?.phone && (
+                      <a
+                        href={getWhatsAppUrl(selectedOrder)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="whatsapp-btn"
+                      >
+                        WhatsApp
+                      </a>
+                    )}
+                  </div>
+                )}
+                <p className="tracking-hint">
+                  При сохранении пользователю автоматически отправится Email и WhatsApp уведомление
+                </p>
               </div>
 
               <div className="order-total-section">
@@ -206,9 +303,9 @@ const AdminOrders = () => {
             </div>
 
             <div className="admin-modal-actions">
-              <button 
-                className="admin-cancel-btn" 
-                onClick={() => setSelectedOrder(null)}
+              <button
+                className="admin-cancel-btn"
+                onClick={handleCloseOrder}
               >
                 Закрыть
               </button>

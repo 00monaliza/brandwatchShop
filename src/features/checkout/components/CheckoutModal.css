@@ -340,6 +340,37 @@
   box-shadow: 0 10px 30px rgba(218, 123, 147, 0.3);
 }
 
+.success-order-info {
+  font-size: 13px !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-bottom: 20px !important;
+}
+
+.success-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.track-order-btn {
+  padding: 14px 40px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, #DA7B93, #c56a82);
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.track-order-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(218, 123, 147, 0.4);
+}
+
 @media (max-width: 768px) {
   .checkout-modal-overlay {
     align-items: flex-end;

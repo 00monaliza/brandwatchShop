@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/context/AuthContext';
 import { useCart } from '../../cart/context/CartContext';
 import { useAdmin } from '../../admin/context/AdminContext';
@@ -11,6 +12,7 @@ import './CheckoutModal.css';
 
 const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { cartItems, cartTotal, clearCart } = useCart();
   const { addOrder } = useAdmin();
@@ -27,6 +29,7 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [createdOrderId, setCreatedOrderId] = useState(null);
   const idempotencyKeyRef = useRef(null);
 
   // Загрузка сохраненных данных при открытии
@@ -152,7 +155,12 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
       };
 
       // Сохраняем заказ в Supabase и уменьшаем сток
-      await addOrder(orderData);
+      const createdOrder = await addOrder(orderData);
+
+      // Сохраняем id созданного заказа
+      if (createdOrder?.id) {
+        setCreatedOrderId(createdOrder.id);
+      }
 
       // Отправляем уведомление в Telegram с символом валюты
       await sendTelegramNotification(orderData, '₸');
@@ -190,9 +198,25 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
             </div>
             <h2>{t('checkout.success.title')}</h2>
             <p>{t('checkout.success.message')}</p>
-            <button className="success-btn" onClick={onClose}>
-              {t('checkout.success.btn')}
-            </button>
+            <p className="success-order-info">
+              Следите за статусом заказа в личном кабинете
+            </p>
+            <div className="success-buttons">
+              {createdOrderId && (
+                <button
+                  className="track-order-btn"
+                  onClick={() => {
+                    onClose();
+                    navigate(`/orders/${createdOrderId}`);
+                  }}
+                >
+                  Отследить заказ
+                </button>
+              )}
+              <button className="success-btn" onClick={onClose}>
+                {t('checkout.success.btn')}
+              </button>
+            </div>
           </div>
         </div>
       </div>

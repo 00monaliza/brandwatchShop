@@ -10,6 +10,8 @@ export const ROUTES = {
   SALES: '/sales',
   PREMIUM: '/premium',
   RESET_PASSWORD: '/reset-password',
+  ORDER_TRACKING: '/orders/:id',
 };
 
 export const getProductRoute = (id) => `/product/${id}`;
+export const getOrderRoute = (id) => `/orders/${id}`;

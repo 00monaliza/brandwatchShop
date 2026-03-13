@@ -16,6 +16,7 @@ const Contacts = lazy(() => import('../pages/Contacts'));
 const Sales = lazy(() => import('../pages/Sales'));
 const Premium = lazy(() => import('../pages/Premium'));
 const NotFound = lazy(() => import('../pages/NotFound'));
+const OrderTracking = lazy(() => import('../pages/OrderTracking'));
 
 const PageLoader = () => (
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '40vh' }}>
@@ -37,6 +38,7 @@ export function AppRouter() {
         <Route path={ROUTES.CONTACTS} element={<Contacts />} />
         <Route path={ROUTES.SALES} element={<Sales />} />
         <Route path={ROUTES.PREMIUM} element={<Premium />} />
+        <Route path={ROUTES.ORDER_TRACKING} element={<OrderTracking />} />
         <Route path={ROUTES.RESET_PASSWORD} element={<Navigate to={ROUTES.HOME} replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

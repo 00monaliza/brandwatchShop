@@ -1,7 +1,3 @@
-/**
- * Нормализация данных из БД (snake_case → camelCase)
- */
-
 const isValidUUID = (id) => {
   if (!id || typeof id !== 'string') return false;
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -35,6 +31,10 @@ export const normalizeOrder = (o) => {
     paymentMethod: o.payment_method,
     cardLast4: o.card_last4,
     totalInKZT: o.total_in_kzt ?? o.total,
+    trackingUrl: o.tracking_url,
+    trackingAddedAt: o.tracking_added_at,
+    notifiedAt: o.notified_at,
+    whatsappNotifyUrl: o.whatsapp_notify_url,
   };
 };
 

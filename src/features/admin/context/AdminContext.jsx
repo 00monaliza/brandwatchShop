@@ -369,6 +369,23 @@ export const AdminProvider = ({ children }) => {
     if (data) setOrders(prev => prev.map(o => o.id === id ? data : o));
   }, []);
 
+  const updateOrderTracking = useCallback(async (id, trackingUrl) => {
+    const { data, error } = await db.orders.updateTracking(id, trackingUrl);
+    if (error) throw new Error(error.message);
+    if (data) setOrders(prev => prev.map(o => o.id === id ? data : o));
+
+    // Отправить уведомления через Edge Function
+    try {
+      await supabase.functions.invoke('notify-tracking', {
+        body: { orderId: id, trackingUrl }
+      });
+    } catch (funcError) {
+      console.error('Edge function error:', funcError);
+    }
+
+    return data;
+  }, []);
+
   const deleteOrder = useCallback(async (id) => {
     const { error } = await db.orders.delete(id);
     if (error) throw new Error(error.message);
@@ -508,13 +525,14 @@ export const AdminProvider = ({ children }) => {
     setProductDiscount,
     addOrder,
     updateOrderStatus,
+    updateOrderTracking,
     deleteOrder,
     updateSettings,
     updatePaymentMethod,
     addPaymentMethod,
     deletePaymentMethod,
     getStatistics
-  }), [admins, currentAdmin, products, archivedProducts, orders, settings, productsLoading, ordersLoading, loadProducts, loadOrders, loadAdmins, isAdmin, adminLogin, adminLogout, addAdmin, updateAdmin, deleteAdmin, addProduct, updateProduct, deleteProduct, updateProductStock, restoreFromArchive, deleteFromArchive, setProductDiscount, addOrder, updateOrderStatus, deleteOrder, updateSettings, updatePaymentMethod, addPaymentMethod, deletePaymentMethod, getStatistics]);
+  }), [admins, currentAdmin, products, archivedProducts, orders, settings, productsLoading, ordersLoading, loadProducts, loadOrders, loadAdmins, isAdmin, adminLogin, adminLogout, addAdmin, updateAdmin, deleteAdmin, addProduct, updateProduct, deleteProduct, updateProductStock, restoreFromArchive, deleteFromArchive, setProductDiscount, addOrder, updateOrderStatus, updateOrderTracking, deleteOrder, updateSettings, updatePaymentMethod, addPaymentMethod, deletePaymentMethod, getStatistics]);
 
   return (
     <AdminContext.Provider value={value}>

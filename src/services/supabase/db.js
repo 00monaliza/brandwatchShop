@@ -153,6 +153,21 @@ export const db = {
       return { data: normalizeOrder(data), error };
     },
 
+    updateTracking: async (id, trackingUrl) => {
+      const { data, error } = await supabase
+        .from('orders')
+        .update({
+          tracking_url: trackingUrl,
+          tracking_added_at: new Date().toISOString(),
+          status: 'shipped',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single();
+      return { data: normalizeOrder(data), error };
+    },
+
     delete: async (id) => {
       const { error } = await supabase.from('orders').delete().eq('id', id);
       return { error };

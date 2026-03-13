@@ -440,6 +440,35 @@
   color: #DA7B93;
 }
 
+.order-card-clickable {
+  cursor: pointer;
+}
+
+.order-action {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.track-order-btn,
+.view-order-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #DA7B93;
+}
+
+.track-order-btn svg {
+  opacity: 0.8;
+}
+
+.order-status.status-processing {
+  background: rgba(52, 152, 219, 0.2);
+  color: #3498db;
+}
+
 /* Favorites Redirect */
 .favorites-redirect {
   text-align: center;
