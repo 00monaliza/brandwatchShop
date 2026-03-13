@@ -18,7 +18,18 @@ const RIPPLE_DURATION_MS = 600;
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    // Prevent browser from restoring scroll position on SPA navigation
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    // Temporarily disable smooth scroll, jump to top, then restore
+    const html = document.documentElement;
+    const prevBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+    html.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo(0, 0);
+    html.style.scrollBehavior = prevBehavior;
   }, [pathname]);
   return null;
 }
