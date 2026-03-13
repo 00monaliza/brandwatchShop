@@ -121,10 +121,10 @@ const AdminSettings = () => {
   };
 
   const sections = [
-    { id: 'general', label: 'Общие', },
-    { id: 'contacts', label: 'Контакты', },
-    { id: 'payment', label: 'Оплата', },
-    { id: 'notifications', label: 'Уведомления', }
+    { id: 'general', label: 'Общие', icon: '🛠️' },
+    { id: 'contacts', label: 'Контакты', icon: '📞' },
+    { id: 'payment', label: 'Оплата', icon: '💳' },
+    { id: 'notifications', label: 'Уведомления', icon: '🔔' }
   ];
 
   if (loading) {

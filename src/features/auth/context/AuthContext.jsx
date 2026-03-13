@@ -205,28 +205,25 @@ export const AuthProvider = ({ children }) => {
         // Нормализуем телефон в тот же формат, что хранится в БД (+7...)
         const normalizedPhone = formatPhone(phoneOrEmail.replace(/[\s\-()]/g, ''));
 
-        // Это телефон - ищем пользователя в profiles по телефону
+        // Это телефон - ищем email через RPC с SECURITY DEFINER (обходит RLS безопасно)
         let foundEmail = null;
         try {
-          const { data: profiles } = await supabase
-            .from('profiles')
-            .select('email')
-            .eq('phone', normalizedPhone)
-            .limit(1);
+          const { data, error } = await supabase.rpc('get_profile_email_by_phone', {
+            p_phone: normalizedPhone
+          });
 
-          if (profiles && profiles.length > 0 && profiles[0].email) {
-            foundEmail = profiles[0].email;
+          if (!error && data) {
+            foundEmail = data;
           }
         } catch (err) {
-          console.warn('Phone lookup failed (possibly RLS):', err);
+          console.warn('Phone lookup RPC failed:', err);
         }
 
         if (foundEmail) {
           email = foundEmail;
         } else {
-          // Пробуем фиктивный email на основе нормализованного номера
-          const digits = normalizedPhone.replace(/\D/g, '');
-          email = `${digits}@brandwatch.local`;
+          // Если телефон не найден, не пытаемся входить с фоллбэком, чтобы не путать ошибки
+          return { success: false, error: 'userNotFound' };
         }
       }
 

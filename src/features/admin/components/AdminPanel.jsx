@@ -17,8 +17,8 @@ const AdminPanel = ({ onClose }) => {
     { id: 'statistics', label: 'Статистика', },
     { id: 'products', label: 'Товары', },
     { id: 'orders', label: 'Заказы', badge: newOrdersCount },
-    { id: 'settings', label: 'Настройки', },
-    { id: 'admins', label: 'Админы', }
+    { id: 'settings', label: 'Настройки'},
+    { id: 'admins', label: 'Админы' }
   ];
 
   const renderContent = () => {

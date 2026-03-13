@@ -109,9 +109,7 @@ CREATE TRIGGER update_cart_items_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
--- ============================================
 -- 7. AUTO-CREATE PROFILE ON USER SIGNUP
--- ============================================
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -126,9 +124,24 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW
   EXECUTE FUNCTION handle_new_user();
 
--- ============================================
+-- Phone login helper: resolve auth email by phone before sign-in.
+CREATE OR REPLACE FUNCTION public.get_profile_email_by_phone(p_phone text)
+RETURNS text
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT email
+  FROM public.profiles
+  WHERE phone = p_phone
+  LIMIT 1;
+$$;
+
+REVOKE ALL ON FUNCTION public.get_profile_email_by_phone(text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.get_profile_email_by_phone(text) TO anon;
+GRANT EXECUTE ON FUNCTION public.get_profile_email_by_phone(text) TO authenticated;
+
 -- 8. ROW LEVEL SECURITY (RLS)
--- ============================================
 
 -- Enable RLS on all tables
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
@@ -397,9 +410,7 @@ CREATE TRIGGER update_store_settings_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
--- ============================================
 -- 11. ATOMIC STOCK DECREMENT FUNCTION
--- ============================================
 -- Функция для атомарного уменьшения количества товара на складе
 -- Использование: SELECT decrement_stock('product-uuid', 2);
 CREATE OR REPLACE FUNCTION decrement_stock(product_id UUID, qty INTEGER)
