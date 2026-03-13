@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useAdmin } from '../context/AdminContext';
 import { useCurrency } from '../../../shared/hooks/useCurrency';
 import { showAdminToast } from '../../../shared/utils/toast';
@@ -21,6 +21,7 @@ const AdminProducts = () => {
   const { formatPrice } = useCurrency();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const modalOpenedAtRef = useRef(0);
   const [editingProduct, setEditingProduct] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('active'); // 'active' or 'archived'
@@ -31,7 +32,7 @@ const AdminProducts = () => {
     originalPrice: '',
     images: [], // Массив изображений вместо одного image
     category: '',
-    gender: 'унисекс',
+    gender: 'unisex',
     description: '',
     stock: 5
   });
@@ -47,6 +48,8 @@ const AdminProducts = () => {
   );
 
   const handleOpenModal = (product = null) => {
+    modalOpenedAtRef.current = Date.now();
+
     if (product) {
       setEditingProduct(product);
       // Преобразуем старый формат image в новый формат images
@@ -67,7 +70,7 @@ const AdminProducts = () => {
         originalPrice: product.originalPrice || '',
         images: images,
         category: product.category || '',
-        gender: product.gender || 'унисекс',
+        gender: product.gender || 'unisex',
         description: product.description || '',
         stock: product.stock !== undefined ? product.stock : 5
       });
@@ -80,7 +83,7 @@ const AdminProducts = () => {
         originalPrice: '',
         images: [],
         category: '',
-        gender: 'унисекс',
+        gender: 'unisex',
         description: '',
         stock: 5
       });
@@ -91,6 +94,13 @@ const AdminProducts = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingProduct(null);
+  };
+
+  const handleOverlayClick = (e) => {
+    // Ignore click-through immediately after opening modal on mobile browsers.
+    if (e.target !== e.currentTarget) return;
+    if (Date.now() - modalOpenedAtRef.current < 250) return;
+    handleCloseModal();
   };
 
   const handleChange = (e) => {
@@ -248,7 +258,7 @@ const AdminProducts = () => {
     <div className="admin-products">
       <div className="admin-products-header">
         <h2 className="admin-section-title">Управление товарами</h2>
-        <button className="admin-add-btn" onClick={() => handleOpenModal()}>
+        <button type="button" className="admin-add-btn" onClick={() => handleOpenModal()}>
           + Добавить товар
         </button>
       </div>
@@ -392,7 +402,7 @@ const AdminProducts = () => {
 
       {/* Модальное окно */}
       {isModalOpen && (
-        <div className="admin-modal-overlay" onClick={handleCloseModal}>
+        <div className="admin-modal-overlay" onClick={handleOverlayClick}>
           <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-header">
               <h3>{editingProduct ? 'Редактировать товар' : 'Добавить товар'}</h3>
@@ -495,9 +505,9 @@ const AdminProducts = () => {
                     value={formData.gender}
                     onChange={handleChange}
                   >
-                    <option value="унисекс">Унисекс</option>
-                    <option value="мужские">Мужские</option>
-                    <option value="женские">Женские</option>
+                    <option value="unisex">Унисекс</option>
+                    <option value="men">Мужские</option>
+                    <option value="women">Женские</option>
                   </select>
                 </div>
               </div>

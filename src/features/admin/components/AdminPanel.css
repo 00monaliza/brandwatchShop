@@ -1940,7 +1940,7 @@
   font-size: 14px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .admin-panel-overlay {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;

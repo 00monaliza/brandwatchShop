@@ -39,6 +39,14 @@ export const normalizeOrder = (o) => {
 };
 
 export const toDbProduct = (p) => ({
+  // Keep backward compatibility with older RU values in admin form/state.
+  // DB constraint allows only men|women|unisex.
+  gender: (() => {
+    const value = (p.gender || '').toString().toLowerCase();
+    if (value === 'men' || value === 'мужские') return 'men';
+    if (value === 'women' || value === 'женские') return 'women';
+    return 'unisex';
+  })(),
   brand: p.brand,
   name: p.title ?? p.name,
   price: p.priceInKZT ?? p.price,
@@ -47,7 +55,6 @@ export const toDbProduct = (p) => ({
   in_stock: (p.stock ?? 5) > 0,
   images: Array.isArray(p.images) ? p.images : [],
   category: p.category ?? '',
-  gender: p.gender ?? 'унисекс',
   description: p.description ?? '',
 });
 
