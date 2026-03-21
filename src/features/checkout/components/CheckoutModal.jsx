@@ -162,8 +162,14 @@ const CheckoutModal = ({ isOpen, onClose, onAuthRequired }) => {
         setCreatedOrderId(createdOrder.id);
       }
 
-      // Отправляем уведомление в Telegram с символом валюты
-      await sendTelegramNotification(orderData, '₸');
+      // Отправляем уведомление в Telegram
+      await sendTelegramNotification({
+        orderId: createdOrder?.id,
+        items: orderData.items,
+        total: orderData.total,
+        customerName: orderData.customer.name,
+        customerPhone: orderData.customer.phone
+      });
 
       clearCart(true);
       showToast.orderPaid();
