@@ -11,7 +11,7 @@ const AdminPanel = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState('statistics');
   const { orders, currentAdmin, adminLogout } = useAdmin();
 
-  const newOrdersCount = orders.filter(o => o.status === 'new').length;
+  const newOrdersCount = orders.filter(o => ['pending', 'new'].includes(o.status)).length;
 
   const tabs = [
     { id: 'statistics', label: 'Статистика', },

@@ -17,6 +17,13 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
 
+  const withTimeout = useCallback((promise, timeoutMs = 8000) => {
+    return Promise.race([
+      promise,
+      new Promise((resolve) => setTimeout(() => resolve(null), timeoutMs))
+    ]);
+  }, []);
+
   // Получение профиля пользователя из БД
   const fetchProfile = async (userId) => {
     try {
@@ -31,6 +38,25 @@ export const AuthProvider = ({ children }) => {
       return null;
     }
   };
+
+  // Быстро пытаемся получить профиль, но при таймауте продолжаем ждать в фоне.
+  const syncProfile = useCallback(async (userId) => {
+    const profilePromise = fetchProfile(userId);
+    const fastProfile = await withTimeout(profilePromise, 6000);
+
+    if (fastProfile) {
+      setProfile(fastProfile);
+      return fastProfile;
+    }
+
+    void profilePromise.then((slowProfile) => {
+      if (slowProfile) {
+        setProfile(slowProfile);
+      }
+    });
+
+    return null;
+  }, [withTimeout]);
 
   // Форматирование телефона в единый формат
   const formatPhone = (phone) => {
@@ -58,7 +84,6 @@ export const AuthProvider = ({ children }) => {
           email: profileData.email || '',
           phone: profileData.phone || null,
           first_name: profileData.name || profileData.first_name || '',
-          is_admin: false,
           created_at: new Date().toISOString()
         }, {
           onConflict: 'id'
@@ -86,8 +111,8 @@ export const AuthProvider = ({ children }) => {
         
         if (session?.user) {
           setUser(session.user);
-          const profileData = await fetchProfile(session.user.id);
-          setProfile(profileData);
+          setProfile(null);
+          await syncProfile(session.user.id);
         } else {
           // Проверяем localStorage для обратной совместимости
           const savedUser = localStorage.getItem('currentUser');
@@ -110,22 +135,26 @@ export const AuthProvider = ({ children }) => {
     initAuth();
 
     // Слушаем изменения авторизации Supabase
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const handleAuthStateChange = async (event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
         setUser(session.user);
-        const profileData = await fetchProfile(session.user.id);
-        setProfile(profileData);
+        setProfile(null);
+        await syncProfile(session.user.id);
       } else if (event === 'SIGNED_OUT') {
         setUser(null);
         setProfile(null);
         localStorage.removeItem('currentUser');
       }
+    };
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      void handleAuthStateChange(event, session);
     });
 
     return () => {
       subscription?.unsubscribe();
     };
-  }, []);
+  }, [syncProfile]);
 
   // Регистрация нового пользователя через Supabase
   const register = useCallback(async (userData) => {
@@ -163,16 +192,25 @@ export const AuthProvider = ({ children }) => {
       }
 
       if (data?.user) {
-        // Создаём профиль в таблице profiles
         const formattedPhone = formatPhone(phone);
-        const profileData = await createProfile(data.user.id, {
+        setUser(data.user);
+        setProfile((prev) => prev || {
+          id: data.user.id,
+          email: userEmail,
+          phone: formattedPhone,
+          first_name: name,
+          is_admin: false
+        });
+
+        void createProfile(data.user.id, {
           email: userEmail,
           phone: formattedPhone,
           name: name
+        }).then((createdProfile) => {
+          if (createdProfile) {
+            setProfile(createdProfile);
+          }
         });
-
-        setUser(data.user);
-        setProfile(profileData);
 
         const sessionUser = {
           id: data.user.id,
@@ -197,15 +235,10 @@ export const AuthProvider = ({ children }) => {
     setAuthError(null);
 
     try {
-      // Определяем, это email или телефон
       let email = phoneOrEmail;
 
-      // Если это похоже на телефон, пробуем найти пользователя по телефону
       if (/^[+]?[0-9\s\-()]+$/.test(phoneOrEmail)) {
-        // Нормализуем телефон в тот же формат, что хранится в БД (+7...)
         const normalizedPhone = formatPhone(phoneOrEmail.replace(/[\s\-()]/g, ''));
-
-        // Это телефон - ищем email через RPC с SECURITY DEFINER (обходит RLS безопасно)
         let foundEmail = null;
         try {
           const { data, error } = await supabase.rpc('get_profile_email_by_phone', {
