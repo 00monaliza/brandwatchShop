@@ -73,12 +73,6 @@ export const AdminProvider = ({ children }) => {
     loadOrders();
   }, [loadProducts, loadOrders]);
 
-  useEffect(() => {
-    if (!user?.id) return;
-    loadOrders();
-    loadAdmins();
-  }, [user?.id, loadOrders, loadAdmins]);
-
   // Загрузка списка админов из Supabase profiles
   const loadAdmins = useCallback(async () => {
     const { data, error } = await supabase
@@ -98,6 +92,12 @@ export const AdminProvider = ({ children }) => {
   useEffect(() => {
     loadAdmins();
   }, [loadAdmins]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    loadOrders();
+    loadAdmins();
+  }, [user?.id, loadOrders, loadAdmins]);
 
   useEffect(() => {
     localStorage.setItem('adminSettings', JSON.stringify(settings));
