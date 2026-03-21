@@ -64,7 +64,12 @@ export const AdminProvider = ({ children }) => {
   const loadOrders = useCallback(async () => {
     setOrdersLoading(true);
     const { data, error } = await db.orders.getAll();
-    if (!error) setOrders(data ?? []);
+    if (error) {
+      console.error('Failed to load admin orders:', error);
+      setOrders([]);
+    } else {
+      setOrders(data ?? []);
+    }
     setOrdersLoading(false);
   }, []);
 
