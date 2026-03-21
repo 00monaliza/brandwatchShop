@@ -149,7 +149,7 @@ export const db = {
         .update({ status, updated_at: new Date().toISOString() })
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
       return { data: normalizeOrder(data), error };
     },
 
@@ -164,7 +164,7 @@ export const db = {
         })
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
       return { data: normalizeOrder(data), error };
     },
 

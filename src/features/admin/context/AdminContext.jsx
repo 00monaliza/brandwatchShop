@@ -377,13 +377,27 @@ export const AdminProvider = ({ children }) => {
   const updateOrderStatus = useCallback(async (id, status) => {
     const { data, error } = await db.orders.updateStatus(id, status);
     if (error) throw new Error(error.message);
-    if (data) setOrders(prev => prev.map(o => o.id === id ? data : o));
+    setOrders(prev => prev.map(o => {
+      if (o.id !== id) return o;
+      return data ? data : { ...o, status, updatedAt: new Date().toISOString() };
+    }));
   }, []);
 
   const updateOrderTracking = useCallback(async (id, trackingUrl) => {
     const { data, error } = await db.orders.updateTracking(id, trackingUrl);
     if (error) throw new Error(error.message);
-    if (data) setOrders(prev => prev.map(o => o.id === id ? data : o));
+    setOrders(prev => prev.map(o => {
+      if (o.id !== id) return o;
+      return data ? data : {
+        ...o,
+        trackingUrl,
+        tracking_url: trackingUrl,
+        trackingAddedAt: new Date().toISOString(),
+        tracking_added_at: new Date().toISOString(),
+        status: 'shipped',
+        updatedAt: new Date().toISOString(),
+      };
+    }));
 
     // Отправить уведомления через Edge Function
     try {
